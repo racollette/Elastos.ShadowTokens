@@ -1,9 +1,9 @@
 {
-  "short_name": "WBTC Portal",
-  "name": "Wrapped Bitcoin Portal",
+  "short_name": "ShadowTokens",
+  "name": "ShadowTokens",
   "icons": [],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#fff",
+  "background_color": "#000"
 }

@@ -1,4 +1,3 @@
-import { getStore } from "../services/storeService";
 import ELA from "../assets/ela.png"
 import ETH from "../assets/eth.png";
 import TRX from "../assets/tron.png";

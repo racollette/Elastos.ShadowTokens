@@ -8,7 +8,6 @@ import { initLocalWeb3 } from "../utils/walletUtils";
 import ShadowtokensLogo from "../assets/shadowtokens.svg";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
@@ -112,7 +111,11 @@ class NavContainer extends React.Component<any> {
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={8}>
                                 <Grid container alignItems="center">
-                                    <img alt="Ren Logo" className={classes.logo} src={ShadowtokensLogo} />
+                                    <img
+                                        alt="Ren Logo"
+                                        className={classes.logo}
+                                        src={ShadowtokensLogo}
+                                    />
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sm={4}>
@@ -122,7 +125,7 @@ class NavContainer extends React.Component<any> {
                                             {selectedNetworkName}
                                         </Button>
                                         <Button
-                                            disableRipple={walletAddress.length}
+                                            disableRipple
                                             color={"default"}
                                             onClick={() => {
                                                 if (!walletAddress) {
@@ -151,10 +154,7 @@ class NavContainer extends React.Component<any> {
                                                     </span>
                                                 )}
                                         </Button>
-
                                     </Grid>
-
-
                                 </Grid>
                             </Grid>
                         </Grid>

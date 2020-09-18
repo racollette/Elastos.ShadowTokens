@@ -1,10 +1,8 @@
 import * as Sentry from "@sentry/react";
 
 import Web3 from "web3";
-import GatewayJS from "@renproject/gateway";
 // import Box from '3box'
 import Web3Modal from "web3modal";
-import firebase from "firebase";
 import MEWconnect from "@myetherwallet/mewconnect-web-client";
 
 import ELA from "../assets/ela.png"
@@ -13,10 +11,10 @@ import TRX from "../assets/tron.png";
 import USDT from "../assets/usdt.png";
 
 import { getStore } from "../services/storeService";
-import erc20ABI from "./erc20ABI.json";
-import {
-    USDT_ADDRESS_TEST,
-} from "./web3Utils";
+// import erc20ABI from "./erc20ABI.json";
+// import {
+//     USDT_ADDRESS_TEST,
+// } from "./web3Utils";
 
 // used for montoring balances
 let walletDataInterval: any = null;
@@ -157,7 +155,7 @@ export const updateBalance = async function() {
 
     const web3 = store.get("localWeb3");
     const walletAddress = store.get("localWeb3Address");
-    const USDTAddress = store.get("USDTAddress");
+    // const USDTAddress = store.get("USDTAddress");
 
     console.log(web3)
     console.log(walletAddress)
@@ -181,7 +179,6 @@ export const updateBalance = async function() {
 };
 
 export const watchWalletData = async function() {
-    const store = getStore();
     if (walletDataInterval) {
         clearInterval(walletDataInterval);
     }
@@ -297,10 +294,10 @@ export const initLocalWeb3 = async function(type: any) {
         return;
     }
 
-    const address = accounts[0];
-    const addressLowerCase = address.toLowerCase();
-    const db = store.get("db");
-    const fns = store.get("fns");
+    // const address = accounts[0];
+    // const addressLowerCase = address.toLowerCase();
+    // const db = store.get("db");
+    // const fns = store.get("fns");
 
     if (selectedNetwork !== network) {
         store.set("showNetworkModal", true);
@@ -309,124 +306,6 @@ export const initLocalWeb3 = async function(type: any) {
         store.set("walletConnecting", false);
         return;
     }
-
-    // try {
-    //     ///////////////////////////////////////////////////////
-    //     // Firebase Sign In or Sign Up
-    //     //////////////////////////////////////////////////////
-
-    //     let signature = "";
-    //     let rawSig = "";
-
-    //     // get from local storage if user has signed in already
-    //     const localSigMap = localStorage.getItem("sigMap");
-    //     const localRawSigMap = JSON.parse(
-    //         localStorage.getItem("rawSigMap") || "{}"
-    //     );
-    //     const localSigMapData = localSigMap ? JSON.parse(localSigMap) : {};
-    //     if (localSigMapData[addressLowerCase] && localRawSigMap[addressLowerCase]) {
-    //         signature = localSigMapData[addressLowerCase];
-    //         rawSig = localRawSigMap[addressLowerCase];
-    //     } else {
-    //         // get unique wallet signature for firebase backup
-    //         // @ts-ignore
-    //         rawSig = await web3.eth.personal.sign(
-    //             web3.utils.utf8ToHex("Signing in to RenBridge"),
-    //             addressLowerCase
-    //         );
-    //         signature = web3.utils.sha3(rawSig)!;
-    //         localSigMapData[addressLowerCase] = signature;
-    //         localStorage.setItem("sigMap", JSON.stringify(localSigMapData));
-
-    //         localRawSigMap[addressLowerCase] = rawSig;
-    //         localStorage.setItem("rawSigMap", JSON.stringify(localRawSigMap));
-    //     }
-
-    //     store.set("fsSignature", signature);
-
-    //     let token: string | null = null;
-    //     try {
-    //         const res = await fns.httpsCallable("authenticate")({
-    //             signed: rawSig,
-    //             account: addressLowerCase,
-    //         });
-
-    //         token = res.data.token;
-    //         if (!token) {
-    //             throw new Error("missing token");
-    //         }
-    //     } catch (e) {
-    //         console.log("No token auth, falling back to email / sig");
-    //     }
-
-    //     // auth with firestore
-    //     const bridgeId = `${addressLowerCase}@renproject.io`;
-    //     const currentFsUser = firebase.auth().currentUser;
-    //     let fsUser;
-
-    //     if (!currentFsUser || currentFsUser.email !== bridgeId) {
-    //         try {
-    //             fsUser = token
-    //                 ? (await firebase.auth().signInWithCustomToken(token)).user
-    //                 : (
-    //                     await firebase
-    //                         .auth()
-    //                         .signInWithEmailAndPassword(bridgeId, signature)
-    //                 ).user;
-    //         } catch (e) {
-    //             console.error(e);
-    //             // We can register this user as they do not exist
-    //             if (e.message.includes("There is no user record")) {
-    //                 fsUser = (
-    //                     await firebase
-    //                         .auth()
-    //                         .createUserWithEmailAndPassword(bridgeId, signature)
-    //                 ).user;
-    //             } else {
-    //                 console.error(e);
-    //                 Sentry.withScope(function(scope) {
-    //                     scope.setTag("error-hint", "web3 init");
-    //                     Sentry.captureException(e);
-    //                 });
-    //             }
-    //         }
-    //     } else {
-    //         fsUser = currentFsUser;
-    //     }
-
-    //     store.set("fsUser", fsUser);
-
-    //     if (fsUser) {
-    //         // update user collection
-    //         const doc = await db.collection("users").doc(fsUser.uid);
-    //         const docData = await doc.get();
-
-    //         if (docData.exists) {
-    //             const data = docData.data();
-    //             if (data.signatures.indexOf(signature) < 0) {
-    //                 // add a new signature if needed
-    //                 await doc.update({
-    //                     signatures: data.signatures.concat([signature]),
-    //                     updated: firebase.firestore.Timestamp.fromDate(
-    //                         new Date(Date.now())
-    //                     ),
-    //                 });
-    //             }
-    //         } else {
-    //             // create user
-    //             await doc.set({
-    //                 uid: fsUser.uid,
-    //                 updated: firebase.firestore.Timestamp.fromDate(new Date(Date.now())),
-    //                 signatures: [signature],
-    //             });
-    //         }
-    //     }
-
-    //     store.set("fsEnabled", true);
-
-    ///////////////////////////////////////////////////////
-    // Recover Transactions
-    //////////////////////////////////////////////////////
 
     store.set("localWeb3", web3);
     store.set("localWeb3Address", accounts[0]);
@@ -496,14 +375,6 @@ export const setNetwork = async function(network: any) {
         store.set("selectedNetworkName", "No Network");
     }
 
-    store.set(
-        "gjs",
-        new GatewayJS(network, {
-            // If we want to test against gatewayjs staging, we should change the endpoint
-            // manually in a PR, which does not get merged, and check the preview build
-            // endpoint: "https://ren-gatewayjs-staging.netlify.app/",
-        })
-    );
     // @ts-ignore
     setAddresses.bind(this)();
 };

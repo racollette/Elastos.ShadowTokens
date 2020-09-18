@@ -9,32 +9,53 @@ import Typography from "@material-ui/core/Typography";
 import MetaMask from "../assets/metamask-fox.svg";
 import Elaphant from "../assets/elaphant.png";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import BackArrow from "../assets/back-arrow.svg";
 
 import theme from "../theme/theme";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(20,20,20)",
+    background: "rgb(25,25,25)",
     borderRadius: "40px",
     boxShadow:
-      " #FFF 0 -5px 4px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
-    maxWidth: 600,
+      "#FFF 0 -5px 4px, #ff0 0 -3px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
+    maxWidth: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
-    padding: theme.spacing(3),
+    padding: theme.spacing(2.5),
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100%",
+    },
+  },
+  headerText: {
+    textAlign: "center",
+    position: "relative",
+  },
+  navTitle: {
+    color: "#fff",
+    fontSize: "12",
+  },
+  back: {
+    position: "absolute",
+    top: 4,
+    left: 10,
+    height: "auto",
+    width: 20,
+    cursor: "pointer",
+    zIndex: 100000,
+    "&:hover": {
+      opacity: 0.75,
     },
   },
   metamask: {
     paddingTop: theme.spacing(6),
     paddingBottom: theme.spacing(3),
     "& div": {
-      background: "#fff",
-      borderRadius: "50%",
+      background: "rgb(255,255,255,0.1)",
+      borderRadius: "10px",
       border: "1px solid transparent",
-      width: 90,
-      height: 90,
+      width: 110,
+      height: 110,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -43,6 +64,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       transition: "all 0.2s ease-in-out",
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
+      padding: theme.spacing(2),
       boxShadow:
         "0px 3px 3px -2px rgba(0,0,0,0.1),0px 3px 4px 0px rgba(0,0,0,0.07),0px 1px 8px 0px rgba(0,0,0,0.06)",
       "&:hover": {
@@ -52,15 +74,23 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       },
       "&.selected": {
         opacity: 1,
-        borderColor: theme.palette.primary.light,
+        borderColor: theme.palette.primary.contrastText,
         boxShadow: theme.shadows[0],
       },
     },
     "& img": {
-      width: 35,
-      height: "auto",
-      // paddingLeft: theme.spacing(1),
-      // paddingRight: theme.spacing(1),
+      height: 60,
+      width: "auto",
+    },
+  },
+  walletLabel: {
+    paddingTop: theme.spacing(1),
+    color: "#fff",
+    textTransform: "uppercase",
+    fontSize: 12.5,
+    fontWeight: "bold",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 11,
     },
   },
   selectedWallet: {
@@ -72,9 +102,21 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       display: "none",
     },
   },
-  button: {
+  actionButtonContainer: {
+    // paddingBottom: theme.spacing(2),
+    marginTop: theme.spacing(3),
+
+    "& button": {
+      "&.Mui-disabled": {},
+      margin: "0px auto",
+      fontSize: 12,
+      minWidth: 175,
+      padding: theme.spacing(1),
+    },
+  },
+  actionButton: {
     width: "100%",
-    maxWidth: 230,
+    borderRadius: "16px",
     // [theme.breakpoints.down('sm')]: {
     //     display: 'none'
     // }
@@ -113,12 +155,17 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
 });
 
-class IntroContainer extends React.Component<any> {
+const NoCapsButton = withStyles({
+  root: {
+    textTransform: "none",
+  },
+})(Button);
+
+class WalletContainer extends React.Component<any> {
   state = {};
 
   goBack() {
     const { store } = this.props;
-
     store.set("showGatewayModal", false);
     store.set("gatewayModalTx", null);
   }
@@ -128,12 +175,13 @@ class IntroContainer extends React.Component<any> {
 
     const walletConnecting = store.get("walletConnecting");
     const requesting = store.get("spaceRequesting");
+
     const error = store.get("spaceError");
     const box = store.get("box");
     const walletType = store.get("selectedWalletType");
 
     let text =
-      "Connect " + (walletType === "injected" ? "MetaMask" : "Elaphant");
+      "Connect to " + (walletType === "injected" ? "MetaMask" : "Elaphant");
     if (requesting) {
       if (!box) {
         text = "Connecting to 3box";
@@ -144,47 +192,68 @@ class IntroContainer extends React.Component<any> {
 
     return (
       <div className={classes.container}>
+        <div className={classes.headerText}>
+          <img
+            className={classes.back}
+            src={BackArrow}
+            alt="Back"
+            onClick={() => {
+              store.set("confirmBridge", false);
+            }}
+          />
+          <Typography className={classes.navTitle}>
+            Select a wallet provider
+          </Typography>
+        </div>
         <Grid className={classes.metamask} container justify="center">
-          <div
+          <Grid
+            container
             className={walletType === "injected" ? "selected" : ""}
             onClick={() => store.set("selectedWalletType", "injected")}
           >
             <img src={MetaMask} alt="MetaMask" />
-          </div>
+            <Typography className={classes.walletLabel}>Metamask</Typography>
+          </Grid>
+
           {/* <div
                         className={walletType === "mew-connect" ? "selected" : ""}
                         onClick={() => store.set("selectedWalletType", "mew-connect")}
                     >
                         <img src={Mew} alt="Mew" />
                     </div> */}
-          <div
+          <Grid
+            container
             className={walletType === "elaphant" ? "selected" : ""}
             onClick={() => store.set("selectedWalletType", "elaphant")}
           >
             <img src={Elaphant} alt="Elaphant" />
-          </div>
+            <Typography className={classes.walletLabel}>Elaphant</Typography>
+          </Grid>
         </Grid>
-        <Grid container justify="center">
+        {/* <Grid container justify="center">
           <Typography className={classes.message} variant="body1">
             To mint or release assets, connect to a wallet provider.
           </Typography>
-        </Grid>
+        </Grid> */}
         <Grid
           container
           justify="flex-start"
           direction="column"
           alignItems="center"
+          className={classes.actionButtonContainer}
         >
-          <Button
+          {/* <Grid item xs={12}> */}
+          <NoCapsButton
             onClick={() => {
               initLocalWeb3(walletType);
             }}
             disabled={walletConnecting || requesting}
-            className={classes.button}
+            className={classes.actionButton}
             size="large"
-            color="primary"
+            color="secondary"
             disableRipple
             variant="contained"
+            fullWidth
           >
             {requesting && (
               <div className={classes.spinner}>
@@ -205,10 +274,8 @@ class IntroContainer extends React.Component<any> {
               </div>
             )}
             {text}
-          </Button>
-          <Typography variant="body1" className={classes.mobileMessage}>
-            RenBridge is currently only supported on desktop&nbsp;browsers.
-          </Typography>
+          </NoCapsButton>
+          {/* </Grid> */}
 
           {!requesting && error && (
             <Typography variant="caption" className={classes.error}>
@@ -231,4 +298,4 @@ class IntroContainer extends React.Component<any> {
   }
 }
 
-export default withStyles(styles)(withStore(IntroContainer));
+export default withStyles(styles)(withStore(WalletContainer));
