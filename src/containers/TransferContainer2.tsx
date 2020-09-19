@@ -47,15 +47,15 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   headerText: {
     textAlign: "center",
     position: "relative",
+    marginBottom: theme.spacing(2),
   },
   navTitle: {
     color: "#fff",
     fontSize: "12",
-    marginBottom: theme.spacing(2),
   },
   back: {
     position: "absolute",
-    top: 4,
+    top: 8,
     left: 10,
     height: "auto",
     width: 20,
@@ -81,8 +81,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     width: "100%",
   },
   actionButtonContainer: {
-    paddingTop: theme.spacing(2),
-    // paddingBottom: theme.spacing(2),
     marginTop: theme.spacing(3),
 
     "& button": {
@@ -179,11 +177,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   option: {
     color: "#fff",
-    // borderBottom: "1px solid #EDEFF3",
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    padding: theme.spacing(1),
     minHeight: 60,
     fontSize: 16,
     "& img": {
@@ -516,7 +510,7 @@ class TransferContainer2 extends React.Component<any> {
                 store.set("spaceRequesting", false);
               }}
             />
-            <Typography className={classes.navTitle}>
+            <Typography variant="overline" className={classes.navTitle}>
               Build Transaction
             </Typography>
           </div>
@@ -589,6 +583,7 @@ class TransferContainer2 extends React.Component<any> {
                       </Grid>
                       <Grid container justify="center">
                         <SwapCalls
+                          color="primary"
                           fontSize="large"
                           onClick={this.switchOriginChain.bind(this)}
                         />
@@ -697,6 +692,7 @@ class TransferContainer2 extends React.Component<any> {
                       </Grid>
                       <Grid container justify="center">
                         <SwapCalls
+                          color="secondary"
                           fontSize="large"
                           onClick={this.switchOriginChain.bind(this)}
                         />
@@ -766,10 +762,7 @@ class TransferContainer2 extends React.Component<any> {
                       color={selectedDirection ? "secondary" : "primary"}
                       size="large"
                       fullWidth
-                      className={classNames(
-                        classes.margin,
-                        classes.actionButton
-                      )}
+                      className={classNames(classes.actionButton)}
                       onClick={this.newDeposit.bind(this)}
                     >
                       Next

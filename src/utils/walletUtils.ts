@@ -10,6 +10,9 @@ import ETH from "../assets/eth.png";
 import TRX from "../assets/tron.png";
 import USDT from "../assets/usdt.png";
 
+import MetaMask from "../assets/metamask-fox.svg";
+import Elaphant from "../assets/elaphant.png";
+
 import { getStore } from "../services/storeService";
 // import erc20ABI from "./erc20ABI.json";
 // import {
@@ -38,6 +41,12 @@ export const BRIDGE_ICON_MAP: { [key in string]: string } = {
     trx: TRX
 }
 /////////////////////////////////////
+
+// Supported wallets
+export const WALLET_ICON_MAP: { [key in string]: string } = {
+    MetaMask: MetaMask,
+    Elaphant: Elaphant,
+};
 
 export const NAME_MAP = {
     ela: "Elastos",
@@ -230,7 +239,8 @@ export const initLocalWeb3 = async function(type: any) {
     let network = "";
 
     try {
-        if (type === "injected" || !type) {
+        // if (type === "injected" || !type) {
+        if (type === "MetaMask" || !type) {
             const providerOptions = {};
             const web3Modal = new Web3Modal({
                 network: selectedNetwork === "testnet" ? "rinkeby" : "mainnet",

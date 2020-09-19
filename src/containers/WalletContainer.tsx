@@ -6,10 +6,9 @@ import { initLocalWeb3 } from "../utils/walletUtils";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import MetaMask from "../assets/metamask-fox.svg";
-import Elaphant from "../assets/elaphant.png";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import BackArrow from "../assets/back-arrow.svg";
+import { WALLET_ICON_MAP } from "../utils/walletUtils";
 
 import theme from "../theme/theme";
 
@@ -30,6 +29,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   headerText: {
     textAlign: "center",
     position: "relative",
+    marginBottom: theme.spacing(2),
   },
   navTitle: {
     color: "#fff",
@@ -37,7 +37,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   back: {
     position: "absolute",
-    top: 4,
+    top: 8,
     left: 10,
     height: "auto",
     width: 20,
@@ -48,7 +48,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   metamask: {
-    paddingTop: theme.spacing(6),
+    paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
     "& div": {
       background: "rgb(255,255,255,0.1)",
@@ -103,7 +103,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   actionButtonContainer: {
-    // paddingBottom: theme.spacing(2),
     marginTop: theme.spacing(3),
 
     "& button": {
@@ -180,8 +179,7 @@ class WalletContainer extends React.Component<any> {
     const box = store.get("box");
     const walletType = store.get("selectedWalletType");
 
-    let text =
-      "Connect to " + (walletType === "injected" ? "MetaMask" : "Elaphant");
+    let text = "Connect to " + walletType;
     if (requesting) {
       if (!box) {
         text = "Connecting to 3box";
@@ -201,17 +199,17 @@ class WalletContainer extends React.Component<any> {
               store.set("confirmBridge", false);
             }}
           />
-          <Typography className={classes.navTitle}>
+          <Typography variant="overline" className={classes.navTitle}>
             Select a wallet provider
           </Typography>
         </div>
         <Grid className={classes.metamask} container justify="center">
           <Grid
             container
-            className={walletType === "injected" ? "selected" : ""}
-            onClick={() => store.set("selectedWalletType", "injected")}
+            className={walletType === "MetaMask" ? "selected" : ""}
+            onClick={() => store.set("selectedWalletType", "MetaMask")}
           >
-            <img src={MetaMask} alt="MetaMask" />
+            <img src={WALLET_ICON_MAP["MetaMask"]} alt="MetaMask" />
             <Typography className={classes.walletLabel}>Metamask</Typography>
           </Grid>
 
@@ -223,10 +221,10 @@ class WalletContainer extends React.Component<any> {
                     </div> */}
           <Grid
             container
-            className={walletType === "elaphant" ? "selected" : ""}
-            onClick={() => store.set("selectedWalletType", "elaphant")}
+            className={walletType === "Elaphant" ? "selected" : ""}
+            onClick={() => store.set("selectedWalletType", "Elaphant")}
           >
-            <img src={Elaphant} alt="Elaphant" />
+            <img src={WALLET_ICON_MAP["Elaphant"]} alt="Elaphant" />
             <Typography className={classes.walletLabel}>Elaphant</Typography>
           </Grid>
         </Grid>
