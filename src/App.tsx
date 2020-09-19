@@ -1,7 +1,6 @@
 import React from "react";
 import { createStore, withStore } from "@spyna/react-store";
 import queryString from "query-string";
-import firebase from "firebase";
 import { ThemeProvider, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 
@@ -22,23 +21,6 @@ import { BRIDGE_SYMBOL_MAP } from "./utils/bridgeUtils";
 import { USDT_ADDRESS_TEST } from "./utils/web3Utils";
 
 require("dotenv").config();
-
-// Instanitate Firebase
-firebase.initializeApp({
-  apiKey: process.env.REACT_APP_FB_KEY,
-  authDomain: window.location.hostname,
-  projectId: process.env.REACT_APP_FB_PROJECT || "ren-bridge",
-});
-const db = firebase.firestore();
-const fns = firebase.functions();
-
-if (process.env.REACT_APP_FB_EMULATOR === "true") {
-  fns.useFunctionsEmulator("http://localhost:5001");
-  db.settings({
-    host: "localhost:8080",
-    ssl: false,
-  });
-}
 
 const styles = () => ({
   container: {
