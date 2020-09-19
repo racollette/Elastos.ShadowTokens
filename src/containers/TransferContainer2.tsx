@@ -17,9 +17,11 @@ import {
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 import CurrencySelect from "../components/CurrencySelect";
 import BigCurrencyInput from "../components/BigCurrencyInput";
-// import ActionLink from "../components/ActionLink";
+// import AddressInput from "../components/BigCurrencyInput";
+import AddressValidator from "wallet-address-validator";
 import Numeral from "numeral";
 import theme from "../theme/theme";
 
@@ -81,7 +83,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     width: "100%",
   },
   actionButtonContainer: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
 
     "& button": {
       "&.Mui-disabled": {},
@@ -170,14 +172,16 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingBottom: theme.spacing(3),
   },
   optionsContainer: {
-    border: "1px solid #EDEFF3",
     borderBottom: "none",
     borderRadius: 4,
     boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
   },
   option: {
     color: "#fff",
-    padding: theme.spacing(1),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
     minHeight: 60,
     fontSize: 16,
     "& img": {
@@ -191,14 +195,18 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   standaloneOption: {
-    border: "1px solid #DBE0E8",
+    border: "1px solid" + theme.palette.divider,
     borderRadius: 12,
     boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
   },
   addressInput: {
-    width: "100%",
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: 4,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    borderRadius: 12,
+    border: "1px solid" + theme.palette.divider,
   },
   currencySelect: {
     marginLeft: theme.spacing(-1),
@@ -350,7 +358,12 @@ class TransferContainer2 extends React.Component<any> {
     const { store } = this.props;
 
     const amount = store.get("convert.amount");
+    const inputAddress = store.get("convert.destination");
     const localWeb3Address = store.get("localWeb3Address");
+    let receiveAddress = localWeb3Address;
+    if (inputAddress.length > 0) {
+      receiveAddress = inputAddress;
+    }
     const network = store.get("selectedNetwork");
     const format: keyof typeof NETWORK_MAP = store.get(
       "convert.selectedFormat"
@@ -365,7 +378,8 @@ class TransferContainer2 extends React.Component<any> {
       sourceAsset: asset,
       sourceNetwork: NETWORK_MAP[asset],
       sourceNetworkVersion: network,
-      destAddress: localWeb3Address,
+      destAddress:
+        receiveAddress.length > 0 ? receiveAddress : localWeb3Address,
       destNetwork: NETWORK_MAP[format],
       destNetworkVersion: network,
       destAsset: format,
@@ -454,7 +468,7 @@ class TransferContainer2 extends React.Component<any> {
       "selectedAsset"
     );
     const destAsset = selectedFormat;
-    // const localWeb3Address = store.get("localWeb3Address");
+    const localWeb3Address = store.get("localWeb3Address");
     const balance = store.get(SYMBOL_MAP[selectedAsset] + "Balance");
     const amount = store.get("convert.amount");
     const total = Number(store.get("convert.conversionTotal")).toFixed(4);
@@ -465,15 +479,15 @@ class TransferContainer2 extends React.Component<any> {
     // const allowanceRequesting = store.get(
     //     "convert.adapterWbtcAllowanceRequesting"
     // );
-
     // const canConvertTo = amount >= MIN_TX_AMOUNTS[selectedAsset];
     // const canConvertFrom =
     //     Number(amount) >= MIN_TX_AMOUNTS[selectedAsset] &&
     //     amount <= Number(balance) &&
     //     convertAddressValid;
     // const showAmountError = store.get("convert.showAmountError");
-    // const showDestinationError = store.get("convert.showDestinationError");
-    // const destAsset = selectedDirection ? selectedAsset : selectedFormat;
+
+    const showDestinationError = store.get("convert.showDestinationError");
+    const destinationValid = store.get("convert.destinationValid");
 
     // Replace 'w' to retrieve price of native asset, assuming they are equivalent
     // Careful if asset ticket contains a w
@@ -491,6 +505,13 @@ class TransferContainer2 extends React.Component<any> {
       size = "smallest";
     }
 
+    let enableButton = false;
+    if (destinationValid) {
+      if (parseFloat(amount) > 0.0000001) {
+        enableButton = true;
+      }
+    }
+
     return (
       <React.Fragment>
         <div
@@ -506,6 +527,7 @@ class TransferContainer2 extends React.Component<any> {
               alt="Back"
               onClick={() => {
                 store.set("selectedWallet", false);
+                store.set("localWeb3Address", "");
                 store.set("walletConnecting", false);
                 store.set("spaceRequesting", false);
               }}
@@ -556,7 +578,7 @@ class TransferContainer2 extends React.Component<any> {
                           value={amount}
                           balance={balance}
                           direction={selectedDirection}
-                          placeholder={"Convert Amount"}
+                          placeholder={"Amount"}
                           onChange={(event: any) => {
                             const value = event.value || "";
                             console.log("Send amount input", value);
@@ -575,18 +597,17 @@ class TransferContainer2 extends React.Component<any> {
                     </Grid>
 
                     {/* Network direction indicator */}
-                    <Grid className={classes.switchDirection}>
+                    <Grid
+                      className={classes.switchDirection}
+                      onClick={this.switchOriginChain.bind(this)}
+                    >
                       <Grid container justify="center">
                         <Typography className={classes.switchNetworkLabels}>
                           From {NETWORK_MAP[selectedAsset]}
                         </Typography>
                       </Grid>
                       <Grid container justify="center">
-                        <SwapCalls
-                          color="primary"
-                          fontSize="large"
-                          onClick={this.switchOriginChain.bind(this)}
-                        />
+                        <SwapCalls color="primary" fontSize="large" />
                       </Grid>
                       <Grid container justify="center">
                         <Typography className={classes.switchNetworkLabels}>
@@ -603,7 +624,7 @@ class TransferContainer2 extends React.Component<any> {
                       )}
                       justify="center"
                     >
-                      <Grid item xs={4}>
+                      <Grid item className={classes.grayText} xs={4}>
                         You will receive
                       </Grid>
                       <Grid
@@ -638,7 +659,6 @@ class TransferContainer2 extends React.Component<any> {
                   </React.Fragment>
                   /// End ETH to ELA
                 )}
-
                 {selectedDirection === 1 && (
                   /// ELA to ETH
                   <React.Fragment>
@@ -672,7 +692,7 @@ class TransferContainer2 extends React.Component<any> {
                           value={amount}
                           balance={balance}
                           direction={selectedDirection}
-                          placeholder={"Convert Amount"}
+                          placeholder={"Amount"}
                           onChange={(event: any) => {
                             const value = event.value || "";
                             console.log("Send amount input", value);
@@ -684,18 +704,17 @@ class TransferContainer2 extends React.Component<any> {
                     </Grid>
 
                     {/* Network direction indicator */}
-                    <Grid className={classes.switchDirection}>
+                    <Grid
+                      className={classes.switchDirection}
+                      onClick={this.switchOriginChain.bind(this)}
+                    >
                       <Grid container justify="center">
                         <Typography className={classes.switchNetworkLabels}>
                           From {NETWORK_MAP[selectedAsset]}
                         </Typography>
                       </Grid>
                       <Grid container justify="center">
-                        <SwapCalls
-                          color="secondary"
-                          fontSize="large"
-                          onClick={this.switchOriginChain.bind(this)}
-                        />
+                        <SwapCalls color="secondary" fontSize="large" />
                       </Grid>
                       <Grid container justify="center">
                         <Typography className={classes.switchNetworkLabels}>
@@ -712,7 +731,7 @@ class TransferContainer2 extends React.Component<any> {
                       )}
                       justify="center"
                     >
-                      <Grid item xs={4}>
+                      <Grid item className={classes.grayText} xs={4}>
                         You will receive
                       </Grid>
                       <Grid
@@ -747,16 +766,64 @@ class TransferContainer2 extends React.Component<any> {
                   </React.Fragment>
                   /// End ELA to ETH
                 )}
-
+                {/* Destination Address input */}
+                <Grid>
+                  <div className={classes.addressInput}>
+                    <TextField
+                      color={selectedDirection ? "secondary" : "primary"}
+                      label="Destination Address"
+                      placeholder={
+                        localWeb3Address.length > 0
+                          ? localWeb3Address
+                          : `Enter ${NETWORK_MAP[destAsset]} Address`
+                      }
+                      size="medium"
+                      fullWidth={true}
+                      error={showDestinationError}
+                      helperText={
+                        showDestinationError
+                          ? `Please enter a valid ${NETWORK_MAP[destAsset]} address`
+                          : ""
+                      }
+                      InputProps={{ disableUnderline: true }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        onFocus: () => {
+                          store.set("convert.destinationInputFocused", true);
+                        },
+                        onBlur: () => {
+                          store.set("convert.destinationInputFocused", false);
+                        },
+                      }}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        let address = value;
+                        if (value.length > 0) {
+                          store.set("convert.destination", value);
+                          // Address validator hard coded to ethereum
+                        } else {
+                          address = localWeb3Address;
+                          store.set("convert.destination", localWeb3Address);
+                        }
+                        store.set(
+                          "convert.destinationValid",
+                          AddressValidator.validate(address, "ETH", "prod")
+                        );
+                      }}
+                    />
+                  </div>
+                </Grid>
+                {/* /// */}
                 <Grid
                   container
                   justify="center"
                   className={classes.actionButtonContainer}
                 >
-                  {/* {selectedDirection === 0 && ( */}
                   <Grid item xs={12}>
                     <Button
-                      disabled={!total || parseFloat(total) < 0.0000001}
+                      disabled={!enableButton}
                       variant={"contained"}
                       disableRipple
                       color={selectedDirection ? "secondary" : "primary"}
@@ -768,26 +835,6 @@ class TransferContainer2 extends React.Component<any> {
                       Next
                     </Button>
                   </Grid>
-                  {/* )} */}
-                  {/* {selectedDirection === 1 && (
-                    <Grid item xs={12}>
-                      <Button
-                        disabled={!total || parseFloat(total) < 0.0000001}
-                        variant={"contained"}
-                        disableRipple
-                        color="primary"
-                        fullWidth
-                        size="large"
-                        className={classNames(
-                          classes.margin,
-                          classes.actionButton
-                        )}
-                        onClick={this.newWithdraw.bind(this)}
-                      >
-                        Next
-                      </Button>
-                    </Grid>
-                  )} */}
                 </Grid>
               </Grid>
             </div>

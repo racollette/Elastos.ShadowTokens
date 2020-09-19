@@ -131,21 +131,21 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     fontWeight: "bold",
     color: "#3F3F48",
   },
-  spinner: {
-    position: "relative",
-    marginRight: theme.spacing(1),
-    marginTop: theme.spacing(0.5),
-    width: 18,
-  },
-  spinnerTop: {
-    color: "#eee",
-  },
-  spinnerBottom: {
-    color: "#a4a4a4",
-    animationDuration: "550ms",
-    position: "absolute",
-    left: 0,
-  },
+  // spinner: {
+  //   position: "relative",
+  //   marginRight: theme.spacing(1),
+  //   marginTop: theme.spacing(0.5),
+  //   width: 18,
+  // },
+  // spinnerTop: {
+  //   color: "#eee",
+  // },
+  // spinnerBottom: {
+  //   color: "#a4a4a4",
+  //   animationDuration: "550ms",
+  //   position: "absolute",
+  //   left: 0,
+  // },
   mobileMessage: {
     display: "none",
     // [theme.breakpoints.down('sm')]: {

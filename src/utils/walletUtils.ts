@@ -323,6 +323,8 @@ export const initLocalWeb3 = async function(type: any) {
     store.set("spaceRequesting", false);
     store.set("walletConnecting", false);
 
+    store.set("convert.destinationValid", true);
+
     updateBalance();
 
     if ((!currentProvider as any).on) return;
@@ -372,7 +374,6 @@ export const setAddresses = async function() {
 
 export const setNetwork = async function(network: any) {
     const store = getStore();
-    console.log('NETWORK CONNECTION')
     store.set("selectedNetwork", network);
 
     if (network === "mainnet") {

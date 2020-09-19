@@ -79,15 +79,14 @@ const styles = () => ({
     borderRadius: "16px",
   },
   bridgeSelectionBox: {
-    border: "0.5px solid " + theme.palette.primary.contrastText,
+    border: "0.5px solid " + theme.palette.divider,
     borderRadius: "10px",
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
   bridgeSelectionLabel: {
     color: "#848994",
-    marginBottom: theme.spacing(1),
-    fontSize: 16,
+    fontSize: 15,
     [theme.breakpoints.down("sm")]: {
       fontSize: 12,
     },
@@ -294,9 +293,9 @@ class BridgeContainer extends React.Component<Props> {
                 <Grid item xs={6}>
                   <Grid container justify="center">
                     {/* Bridge Chain */}
-                    <div className={classes.bridgeSelectionLabel}>
+                    <Typography className={classes.bridgeSelectionLabel}>
                       Supported Bridges
-                    </div>
+                    </Typography>
                     <NoCapsButton
                       fullWidth
                       className={(classes.button, classes.bridgeSelectionBox)}
@@ -370,9 +369,9 @@ class BridgeContainer extends React.Component<Props> {
                 <Grid item xs={6}>
                   <Grid container justify="center">
                     {/* Pair Chain */}
-                    <div className={classes.bridgeSelectionLabel}>
+                    <Typography className={classes.bridgeSelectionLabel}>
                       Pair Networks
-                    </div>
+                    </Typography>
                     <NoCapsButton
                       fullWidth
                       className={(classes.button, classes.bridgeSelectionBox)}

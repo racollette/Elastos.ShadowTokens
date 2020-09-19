@@ -311,6 +311,7 @@ class ConfirmContainer extends React.Component<any> {
                 onClick={() => {
                   store.set("confirmTx", null);
                   store.set("confirmAction", "");
+                  store.set("convert.destination", "");
                 }}
               />
               <Typography variant="overline" className={classes.navTitle}>

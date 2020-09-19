@@ -33,7 +33,7 @@ export default createMuiTheme({
             dark: "#404040",
             contrastText: "#fff",
         },
-        divider: "#848994",
+        divider: "#606060",
     },
     overrides: {
         MuiButtonBase: {

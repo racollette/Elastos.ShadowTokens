@@ -1,12 +1,12 @@
 import { getStore } from "../services/storeService";
 
 export const MIN_TX_AMOUNTS = {
-    ela: 0.00035036,
-    eth: 0.00035036,
-    usdt: 0.00035036,
-    wela: 0.00035036,
-    weth: 0.00035036,
-    wusdt: 0.00035036,
+    ela: 0.035036,
+    eth: 0.035036,
+    usdt: 0.035036,
+    wela: 0.035036,
+    weth: 0.035036,
+    wusdt: 0.035036,
 };
 
 // Percentage fees
