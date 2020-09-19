@@ -1,1 +1,1 @@
-# Elastos.Shadowtokens
+# Shadowtokens bridge interface
