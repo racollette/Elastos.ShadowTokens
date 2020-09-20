@@ -148,6 +148,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       alignItems: "center",
     },
   },
+  fade: {
+    color: theme.palette.info.contrastText,
+  },
   totalOption: {
     minHeight: 60,
     fontSize: 16,
@@ -270,7 +273,7 @@ class ConfirmContainer extends React.Component<any> {
       Number(store.get("convert.networkFee")) * Number(amount)
     ).toFixed(4);
     // const networkFee = store.get("convert.networkFee");
-    const total = Number(store.get("convert.conversionTotal")).toFixed(4);
+    const total = Number(store.get("convert.conversionTotal")).toFixed(2);
     const canConvertTo = amount > 0.00010001;
 
     const confirmationError = store.get("confirmationError");
@@ -341,7 +344,7 @@ class ConfirmContainer extends React.Component<any> {
                       direction="column"
                     >
                       <Grid container className={classes.option}>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} className={classes.fade}>
                           Destination
                         </Grid>
                         <Grid item xs={6}>
@@ -350,7 +353,7 @@ class ConfirmContainer extends React.Component<any> {
                       </Grid>
 
                       <Grid container className={classes.option}>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} className={classes.fade}>
                           Destination Asset
                         </Grid>
                         <Grid item xs={6}>
@@ -360,7 +363,7 @@ class ConfirmContainer extends React.Component<any> {
                       </Grid>
 
                       <Grid container className={classes.option}>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} className={classes.fade}>
                           Target Address
                         </Grid>
                         <Grid item xs={6}>
@@ -378,7 +381,7 @@ class ConfirmContainer extends React.Component<any> {
                       </Grid>
 
                       <Grid container className={classes.option}>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} className={classes.fade}>
                           Service Fee
                         </Grid>
                         <Grid item xs={6} className={classes.amountCell}>
@@ -393,7 +396,7 @@ class ConfirmContainer extends React.Component<any> {
 
                       <div className={classes.totalContainer}>
                         <Grid container className={classNames(classes.option)}>
-                          <Grid item xs={6}>
+                          <Grid item xs={6} className={classes.fade}>
                             You will receive
                           </Grid>
                           <Grid item xs={6} className={classes.amountCell}>

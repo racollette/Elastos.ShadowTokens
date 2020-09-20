@@ -4,8 +4,8 @@ import NumberFormat from "react-number-format";
 import classNames from "classnames";
 import { Styles, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
-import ActionLink from "../components/ActionLink";
-import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import theme from "../theme/theme";
 
 const styles: Styles<any, any> = () => ({
   container: {
@@ -42,13 +42,16 @@ const styles: Styles<any, any> = () => ({
     outline: "none",
     textAlign: "center",
     background: "rgb(20,20,20)",
-    color: "#fff",
+    color: theme.palette.info.contrastText,
     border: "none",
   },
   balanceContainer: {
     fontSize: 18,
     display: "flex",
     alignItems: "flex-end",
+  },
+  balanceButton: {
+    borderRadius: 8,
   },
 });
 
@@ -79,7 +82,6 @@ class BigCurrencyInput extends React.PureComponent<any> {
       classes,
       className,
       onChange,
-      symbol,
       value,
       balance,
       placeholder,
@@ -91,20 +93,19 @@ class BigCurrencyInput extends React.PureComponent<any> {
     const ref = this.ref;
     const change = onChange || (() => {});
 
-    const chars = val.replace(".", "").replace(` ${symbol}`, "");
-
-    let size = "large";
-    if (chars.length > 7 && chars.length <= 9) {
-      size = "medium";
-    } else if (chars.length > 9 && chars.length <= 12) {
-      size = "small";
-    } else if (chars.length > 12) {
-      size = "smallest";
-    }
+    // const chars = val.replace(".", "").replace(` ${symbol}`, "");
+    // let size = "large";
+    // if (chars.length > 7 && chars.length <= 9) {
+    //   size = "medium";
+    // } else if (chars.length > 9 && chars.length <= 12) {
+    //   size = "small";
+    // } else if (chars.length > 12) {
+    //   size = "smallest";
+    // }
 
     return (
       // <div className={classNames(classes.container, classes[size])}>
-      <div className={classNames(classes.container, classes[size])}>
+      <div className={classNames(classes.container)}>
         <React.Fragment>
           <Grid container justify="flex-end">
             <Grid item xs={8}>
@@ -129,16 +130,16 @@ class BigCurrencyInput extends React.PureComponent<any> {
                 justify="flex-end"
                 className={classes.balanceContainer}
               >
-                <Typography>
-                  <ActionLink
-                    direction={direction}
-                    onClick={() => {
-                      store.set("convert.amount", balance);
-                    }}
-                  >
-                    Max: {balance || "0.0000"}
-                  </ActionLink>
-                </Typography>
+                <Button
+                  variant="outlined"
+                  color={direction ? "secondary" : "primary"}
+                  className={(classes.small, classes.balanceButton)}
+                  onClick={() => {
+                    store.set("convert.amount", balance);
+                  }}
+                >
+                  Max {balance || "0.0000"}
+                </Button>
               </Grid>
               {/* <Grid
                 container

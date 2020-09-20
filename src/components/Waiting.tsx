@@ -63,7 +63,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingBottom: theme.spacing(1),
   },
   assetText: {
-    color: "#848994",
+    color: theme.palette.info.contrastText,
     fontSize: 18,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
@@ -90,7 +90,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     justifyContent: "center",
   },
   waitingText: {
-    color: "#848994",
+    color: theme.palette.info.contrastText,
     fontSize: 16,
     paddingTop: theme.spacing(1),
   },
@@ -138,7 +138,7 @@ const Waiting: React.FC<Props> = function (props) {
       </div>
       <div className={classes.tokenMapContainer}>
         <div className={classes.assetText}>
-          <Typography>{amount}</Typography>
+          <Typography>{Number(amount).toFixed(2)}</Typography>
           <Typography>
             {SYMBOL_MAP[sourceAsset as keyof typeof SYMBOL_MAP]}
           </Typography>
@@ -155,7 +155,7 @@ const Waiting: React.FC<Props> = function (props) {
           alt={destAsset}
         />
         <div className={classes.assetText}>
-          <Typography>~{Math.round(Number(total))}</Typography>
+          <Typography>{Number(total).toFixed(2)}</Typography>
           <Typography>
             {SYMBOL_MAP[destAsset as keyof typeof SYMBOL_MAP]}
           </Typography>

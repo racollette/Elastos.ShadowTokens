@@ -46,9 +46,7 @@ export const gatherFeeData = async function() {
     const store = getStore();
     const amount = store.get("convert.amount");
     const fees = FEE_STRUCTURE
-    console.log(fees)
     let selectedAsset = store.get("selectedAsset");
-    console.log(selectedAsset)
 
     // const selectedDirection = store.get("convert.selectedDirection");
     // const fixedFeeKey = selectedDirection ? "release" : "lock";
@@ -71,4 +69,4 @@ export const gatherFeeData = async function() {
     store.set("convert.conversionTotal", total);
 };
 
-export default {};
+// export default {};

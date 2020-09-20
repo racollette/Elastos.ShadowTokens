@@ -50,7 +50,7 @@ const styles = () => ({
     },
   },
   gray: {
-    color: "#848994",
+    color: theme.palette.info.contrastText,
   },
   subtitle: {
     paddingRight: theme.spacing(2),
@@ -85,7 +85,7 @@ const styles = () => ({
     marginRight: theme.spacing(1),
   },
   bridgeSelectionLabel: {
-    color: "#848994",
+    color: theme.palette.info.contrastText,
     fontSize: 15,
     [theme.breakpoints.down("sm")]: {
       fontSize: 12,
@@ -148,7 +148,7 @@ const styles = () => ({
   balance: {
     fontSize: 12,
     marginTop: -2,
-    color: "#585861",
+    color: theme.palette.info.main,
   },
   standaloneOption: {
     border: "1px solid #DBE0E8",

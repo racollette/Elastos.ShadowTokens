@@ -70,7 +70,7 @@ const styles = () => ({
   balance: {
     fontSize: 12,
     marginTop: -2,
-    color: "#585861",
+    color: "#797986",
   },
   menu: {},
 });

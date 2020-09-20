@@ -1,19 +1,14 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-// import blueGrey from "@material-ui/core/colors/blueGrey";
-// import grey from "@material-ui/core/colors/grey";
 
 export default createMuiTheme({
     typography: {
         fontFamily: [
-            // 'Roboto Mono',
-            "Suisse Intl",
-            "-apple-system",
-            "BlinkMacSystemFont",
+            'BlinkMacSystemFont',
             '"Segoe UI"',
-            "Roboto",
+            'Roboto',
             '"Helvetica Neue"',
-            "Arial",
-            "sans-serif",
+            'Arial',
+            'sans-serif',
             '"Apple Color Emoji"',
             '"Segoe UI Emoji"',
             '"Segoe UI Symbol"',
@@ -33,15 +28,29 @@ export default createMuiTheme({
             dark: "#404040",
             contrastText: "#fff",
         },
+        info: {
+            light: "#9ca0b0",
+            main: "#797986",
+            dark: "#404040",
+            contrastText: "rgba(255, 255, 255, 0.5)",
+        },
         divider: "#606060",
     },
     overrides: {
+        // MuiCssBaseline: {
+        //     '@global': {
+        //         '@font-face': [WorkSans],
+        //     },
+        // },
         MuiButtonBase: {
             root: {
                 textTransform: "none",
                 borderRadius: 4,
                 "&.MuiButton-outlined": {
-                    border: "1px solid #DCE0E3",
+                    paddingTop: 3,
+                    paddingBottom: 3,
+                    paddingLeft: 9,
+                    paddingRight: 9,
                     "&.Mui-disabled": {
                         // backgroundColor: 'rgba(255, 255, 255, 0.1) !important',
                         border: "1px solid transparent",
@@ -59,13 +68,6 @@ export default createMuiTheme({
                 },
             },
         },
-        //@ts-ignore
-        // PrivateNotchedOutline: {
-        //   root: {},
-        // },
-        // '.MuiOutlinedInput-root:hover':{
-        //     borderColor: '#EBEBEB !important'
-        // },
         MuiOutlinedInput: {
             root: {
                 fontSize: 14,
@@ -107,11 +109,6 @@ export default createMuiTheme({
                 },
             },
         },
-        MuiTableCell: {
-            root: {
-                // borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)',
-            },
-        },
         MuiMenu: {
             paper: {
                 boxShadow: "0px 1px 3px rgba(0, 27, 58, 0.1)",
@@ -123,14 +120,11 @@ export default createMuiTheme({
         // .MuiToggleButtonGroup-grouped:not(:first-child)
         MuiToggleButton: {
             root: {
-                // border: '1px solid rgba(255, 255, 255, 0.23)',
                 backgroundColor: "#eeeeee2e !important",
                 "& img": {
                     opacity: 0.75,
                 },
-                // backgroundColor: '#fff',
                 "&.Mui-selected": {
-                    // back
                     backgroundColor: "rgba(255, 255, 255, 0.1) !important",
                     color: "#000",
                     fontWeight: "500",

@@ -10,6 +10,7 @@ import {
   SYMBOL_MAP,
   CONVERT_MAP,
   NETWORK_MAP,
+  ASSET_CONVERSION_TYPES,
   // abbreviateAddress,
   // updateBalance,
 } from "../utils/walletUtils";
@@ -187,7 +188,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& img": {
       height: "auto",
       width: 24,
-      marginRight: theme.spacing(1),
+      marginRight: 4,
     },
     "& .MuiGrid-root": {
       display: "flex",
@@ -234,7 +235,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   switchNetworkLabels: {
     fontSize: 14,
-    color: "#b8bbc6",
+    color: theme.palette.info.contrastText,
   },
   disclosure: {
     width: "100%",
@@ -258,7 +259,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   grayText: {
-    color: "#b8bbc6",
+    color: theme.palette.info.contrastText,
   },
   usd: {
     fontSize: 16,
@@ -266,16 +267,16 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     wordBreak: "break-word",
   },
   large: {
-    fontSize: 17,
+    fontSize: 16,
   },
   medium: {
-    fontSize: 15,
+    fontSize: 14.5,
   },
   small: {
     fontSize: 13,
   },
   smallest: {
-    fontSize: 11,
+    fontSize: 11.5,
   },
 });
 
@@ -468,10 +469,18 @@ class TransferContainer2 extends React.Component<any> {
       "selectedAsset"
     );
     const destAsset = selectedFormat;
+    let assetConvertType = "Mint";
+    if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
+      assetConvertType = "Release";
+    }
     const localWeb3Address = store.get("localWeb3Address");
     const balance = store.get(SYMBOL_MAP[selectedAsset] + "Balance");
     const amount = store.get("convert.amount");
-    const total = Number(store.get("convert.conversionTotal")).toFixed(4);
+    let total = Number(store.get("convert.conversionTotal")).toFixed(2);
+
+    if (amount.length < 1) {
+      total = "0.00";
+    }
 
     // const allowance = store.get("convert.adapterWbtcAllowance");
     // const convertAddressValid = store.get("convert.destinationValid");
@@ -496,12 +505,16 @@ class TransferContainer2 extends React.Component<any> {
     ).toFixed(2);
     const chars = total ? String(total) : "";
 
+    let output = `${total} ${SYMBOL_MAP[destAsset]}  (${Numeral(
+      usdValue
+    ).format("$0,0.00")})`;
+
     let size = "large";
     if (chars.length > 8 && chars.length <= 10) {
       size = "medium";
-    } else if (chars.length > 10 && chars.length <= 12) {
+    } else if (chars.length > 10 && chars.length <= 13) {
       size = "small";
-    } else if (chars.length > 12) {
+    } else if (chars.length > 13) {
       size = "smallest";
     }
 
@@ -578,7 +591,7 @@ class TransferContainer2 extends React.Component<any> {
                           value={amount}
                           balance={balance}
                           direction={selectedDirection}
-                          placeholder={"Amount"}
+                          placeholder={"0.00"}
                           onChange={(event: any) => {
                             const value = event.value || "";
                             console.log("Send amount input", value);
@@ -625,35 +638,34 @@ class TransferContainer2 extends React.Component<any> {
                       justify="center"
                     >
                       <Grid item className={classes.grayText} xs={4}>
-                        You will receive
+                        {assetConvertType}
                       </Grid>
                       <Grid
                         item
-                        xs={5}
+                        xs={8}
                         className={classNames(
                           classes.totalCell,
                           classes.currencySelect,
                           classes[size]
                         )}
                       >
-                        <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />{" "}
-                        {total || ""} {SYMBOL_MAP[destAsset]}
-                      </Grid>
-                      <Grid
-                        item
-                        xs={3}
-                        className={classNames(
-                          usdValue ? classes.grayText : "",
-                          classes.usd
-                        )}
-                      >
-                        <Grid
-                          container
-                          justify="flex-end"
+                        <TextField
                           className={classNames(classes[size])}
-                        >
-                          ({Numeral(usdValue).format("$0,0.00")})
-                        </Grid>
+                          value={output}
+                          InputProps={{
+                            disableUnderline: true,
+                            startAdornment: (
+                              <img
+                                src={MINI_ICON_MAP[destAsset]}
+                                alt={destAsset}
+                              />
+                            ),
+                          }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          fullWidth
+                        />
                       </Grid>
                     </Grid>
                   </React.Fragment>
@@ -692,7 +704,7 @@ class TransferContainer2 extends React.Component<any> {
                           value={amount}
                           balance={balance}
                           direction={selectedDirection}
-                          placeholder={"Amount"}
+                          placeholder={"0.00"}
                           onChange={(event: any) => {
                             const value = event.value || "";
                             console.log("Send amount input", value);
@@ -732,35 +744,34 @@ class TransferContainer2 extends React.Component<any> {
                       justify="center"
                     >
                       <Grid item className={classes.grayText} xs={4}>
-                        You will receive
+                        {assetConvertType}
                       </Grid>
                       <Grid
                         item
-                        xs={5}
+                        xs={8}
                         className={classNames(
                           classes.totalCell,
                           classes.currencySelect,
                           classes[size]
                         )}
                       >
-                        <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />{" "}
-                        {total || ""} {SYMBOL_MAP[destAsset]}
-                      </Grid>
-                      <Grid
-                        item
-                        xs={3}
-                        className={classNames(
-                          usdValue ? classes.grayText : "",
-                          classes.usd
-                        )}
-                      >
-                        <Grid
-                          container
-                          justify="flex-end"
+                        <TextField
                           className={classNames(classes[size])}
-                        >
-                          ({Numeral(usdValue).format("$0,0.00")})
-                        </Grid>
+                          value={output}
+                          InputProps={{
+                            disableUnderline: true,
+                            startAdornment: (
+                              <img
+                                src={MINI_ICON_MAP[destAsset]}
+                                alt={destAsset}
+                              />
+                            ),
+                          }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          fullWidth
+                        />
                       </Grid>
                     </Grid>
                   </React.Fragment>

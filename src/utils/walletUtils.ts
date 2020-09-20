@@ -84,6 +84,15 @@ export const NETWORK_MAP = {
     wusdt: "Elastos",
 };
 
+export const ASSET_CONVERSION_TYPES = {
+    ela: "mint",
+    eth: "mint",
+    usdt: "mint",
+    wela: "release",
+    weth: "release",
+    wusdt: "release",
+};
+
 export const MINI_ICON_MAP: { [key in string]: string } = {
     ela: ELA,
     eth: ETH,
