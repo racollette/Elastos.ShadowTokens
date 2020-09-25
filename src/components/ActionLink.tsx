@@ -26,20 +26,19 @@ const styles = () => ({
 interface Props {
     className?: string;
     classes: { [key in string]: string };
-    onClick: any;
-    direction?: any;
+    url: any;
 }
 
 const ActionLink: React.FC<Props> = function(props) {
-    const { children, classes, direction } = props;
+    const { children, classes, url } = props;
 
-    let color = classes.lunarLink;
-    if (direction === 1) {
-        color = classes.solarLink;
-    }
+    // let color = classes.lunarLink;
+    // if (direction === 1) {
+    //     color = classes.solarLink;
+    // }
 
     return (
-        <a className={classNames(classes.link, color)} {...props}>
+        <a className={classNames(classes.link)} target="_blank" rel="noopener noreferrer" href={url}>
             {children}
         </a>
     );

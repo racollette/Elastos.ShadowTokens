@@ -41,7 +41,7 @@ const styles: Styles<any, any> = () => ({
     width: "100%",
     outline: "none",
     textAlign: "center",
-    background: "rgb(20,20,20)",
+    background: "rgb(32,32,32)",
     color: theme.palette.info.contrastText,
     border: "none",
   },

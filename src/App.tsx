@@ -4,16 +4,13 @@ import queryString from "query-string";
 import { ThemeProvider, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 
-// import Github from "./assets/github.svg";
-// import Reddit from "./assets/reddit.svg";
-// import Telegram from "./assets/telegram.svg";
-// import Twitter from "./assets/twitter.svg";
 import BridgeContainer from "./containers/BridgeContainer";
-import ConfirmContainer from "./containers/ConfirmContainer";
-import WalletContainer from "./containers/WalletContainer";
-// import NavContainer from "./containers/NavContainer";
+import NavContainer from "./containers/NavContainer";
+import FooterContainer from "./containers/FooterContainer";
 // import NetworkModalContainer from "./containers/NetworkModalContainer";
+import WalletModal from "./components/WalletModal";
 import TransferContainer2 from "./containers/TransferContainer2";
+import ConfirmContainer from "./containers/ConfirmContainer";
 import { storeListener } from "./services/storeService";
 import theme from "./theme/theme";
 import { setNetwork } from "./utils/walletUtils";
@@ -25,11 +22,20 @@ require("dotenv").config();
 const styles = () => ({
   container: {
     minHeight: "100vh",
-    background: "rgb(0,0,0)",
+    // background: "rgb(32,32,32)",
     // backgroundImage:
-    // "radial-gradient(circle, rgba(28,28,28,1) 30%, rgba(239,239,239,1) 33%, rgba(64,102,120,1) 38%, rgba(28,28,28,1) 45%);",
-    backgroundImage: "radial-gradient( rgba(75,78,78,1) 0%, rgba(0,0,0,1) 70%)",
-    backgroundPosition: "0 -7.5vh",
+    //   "radial-gradient(circle, rgba(28,28,28,1) 30%, rgba(239,239,239,1) 33%, rgba(64,102,120,1) 38%, rgba(28,28,28,1) 45%);",
+    // backgroundImage: "radial-gradient( rgba(75,78,78,1) 0%, rgba(0,0,0,1) 70%)",
+    // background:
+    // "linear-gradient(111.63deg, rgb(255, 195, 171) 0%, rgb(250, 250, 226) 49.48%, rgb(203, 243, 239) 100%)",
+    // backgroundImage:
+    //   "linear-gradient(90deg, rgba(114,188,219,1) 0%, rgba(72,134,161,1) 10%, rgba(24,39,43,1) 20%, rgba(40,40,40,1) 50%, rgba(78,61,21,1) 80%, rgba(194,151,58,1) 90%, rgba(244,202,108,1) 100%);",
+
+    // backgroundImage: "linear-gradient(315deg, #000000 0%, #414141 74%)",
+    backgroundImage: "linear-gradient(115deg, #263040 0%, #2c2123 80%)",
+    // backgroundImage: "linear-gradient(315deg, #130f40 0%, #000000 74%)",
+
+    // backgroundPosition: "0 -30vh",
     backgroundRepeat: "no-repeat",
     // alignItems: "center",
   },
@@ -39,25 +45,7 @@ const styles = () => ({
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
     },
-    alignItems: "center",
-  },
-  footerContainer: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    fontSize: 10,
-    "& a": {
-      color: "#333",
-      marginRight: theme.spacing(2),
-      textDecoration: "none",
-      "&:hover": {
-        opacity: 0.75,
-      },
-    },
-  },
-  footerLogo: {
-    height: 12,
-    width: "auto",
-    marginLeft: theme.spacing(0.5),
+    // alignItems: "start",
   },
   transfersContainer: {
     padding: theme.spacing(3),
@@ -67,7 +55,6 @@ const styles = () => ({
 const initialState = {
   // networking
   USDTAddress: USDT_ADDRESS_TEST,
-
   selectedNetwork: "testnet",
   queryParams: {},
 
@@ -86,20 +73,16 @@ const initialState = {
   fees: null,
   selectedWalletType: "MetaMask",
 
-  // navigation
-  selectedBridge: "eth",
-  selectedPair: "ela",
+  // bridge/wallet selection
+  selectedBridge: "",
+  selectedPair: "",
   confirmBridge: false,
   selectedWallet: false,
   selectedTab: 1,
   selectedAsset: "eth",
-  confirmTx: null,
-  confirmAction: "",
-
-  // awaiting user
-  waitingApproval: false,
 
   // modals
+  showWalletModal: false,
   showNetworkMenu: false,
   showDepositModal: false,
   depositDisclosureChecked: false,
@@ -109,8 +92,19 @@ const initialState = {
   gatewayModalTx: null,
   showAboutModal: false,
 
-  // confirmation error
+  // awaiting user
+  waitingApproval: false,
+
+  // confirmations
+  confirmTx: null,
+  confirmAction: "",
+  confirmationNumber: 0,
+  confirmationTotal: 6,
   confirmationError: null as string | null,
+  confirmationProgress: false,
+  validatorStep: false,
+  validatorProgress: 0,
+  transferSuccess: false,
 
   // conversions
   // 'convert.adapterAddress': ADAPTER_TEST,
@@ -148,9 +142,7 @@ class AppWrapper extends React.Component<Props> {
 
     store.set("queryParams", params);
 
-    setNetwork(params.network === "testnet" ? "testnet" : "mainnet");
-    // setBridge("eth", "ela");
-    // setNetwork((params.network = "testnet"));
+    setNetwork("mainnet");
     // initLocalWeb3("injected");
   }
 
@@ -165,33 +157,38 @@ class AppWrapper extends React.Component<Props> {
 
     const confirmBridge = store.get("confirmBridge");
     const selectedBridge = store.get("selectedBridge");
-    // console.log("SELECTED BRIDGE", selectedBridge);
     const selectedPair = store.get("selectedPair");
-    // console.log("SELECTED PAIR", selectedPair);
 
     // const localWeb3Address = store.get("localWeb3Address");
-    const selectedWallet = store.get("selectedWallet");
+    const showWalletModal = store.get("showWalletModal");
     // const localWeb3Address = false;
     const confirmAction = store.get("confirmAction");
     const confirmTx = store.get("confirmTx");
-
-    // console.log("confirmbridge", confirmBridge);
-    // console.log("selectedwallet", selectedWallet);
-    // console.log("confirmation", confirmAction);
-    // console.log("confirmTx", confirmTx);
 
     return (
       <ThemeProvider theme={theme}>
         {/* <NetworkModalContainer /> */}
         <Grid container className={classes.container}>
-          {/* <NavContainer /> */}
           <Grid container className={classes.contentContainer}>
+            <Grid container alignItems="flex-start">
+              <NavContainer />
+            </Grid>
             <Grid container justify="center" alignItems="center">
+              {showWalletModal && (
+                // <Grid item xs={12} sm={8} md={6}>
+                <WalletModal />
+                // </Grid>
+              )}
+
               {!confirmBridge && (
                 <Grid item xs={12} sm={8} md={6}>
                   <BridgeContainer
-                    active={BRIDGE_SYMBOL_MAP[selectedBridge]}
-                    pair={BRIDGE_SYMBOL_MAP[selectedPair]}
+                    active={
+                      selectedBridge ? BRIDGE_SYMBOL_MAP[selectedBridge] : "ETH"
+                    }
+                    pair={
+                      selectedPair ? BRIDGE_SYMBOL_MAP[selectedPair] : "ELA"
+                    }
                     items={["ELA", "ETH", "TRX"]}
                     onBridgeChange={(v: string) => {
                       const bridge = v.toLowerCase();
@@ -216,12 +213,22 @@ class AppWrapper extends React.Component<Props> {
                   />
                 </Grid>
               )}
-              {confirmBridge && !selectedWallet && (
-                <Grid item xs={12} sm={8} md={6}>
-                  <WalletContainer />
-                </Grid>
-              )}
-              {confirmBridge && selectedWallet && (
+              {/* {confirmBridge && !selectedWallet && (
+                                <Grid item xs={12} sm={8} md={6}>
+                                    <WalletContainer />
+                                </Grid>
+                            )} */}
+              {/* {confirmBridge && selectedWallet && (
+                                <Grid item xs={12} sm={8} md={6}>
+                                    {confirmTx && confirmAction ? (
+                                        <ConfirmContainer />
+                                    ) : (
+                                            <TransferContainer2 />
+                                        )}
+                                </Grid>
+                            )} */}
+
+              {confirmBridge && (
                 <Grid item xs={12} sm={8} md={6}>
                   {confirmTx && confirmAction ? (
                     <ConfirmContainer />
@@ -231,103 +238,11 @@ class AppWrapper extends React.Component<Props> {
                 </Grid>
               )}
             </Grid>
+            <Grid container alignItems="flex-end">
+              {" "}
+              <FooterContainer />
+            </Grid>
           </Grid>
-
-          {/* <Grid
-            container
-            className={classes.footerContainer}
-            alignItems="flex-end"
-          >
-            <Container fixed maxWidth="lg">
-              <Grid container alignItems="center" justify="space-between">
-                <Typography className={classes.footerLinks} variant="caption">
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://renproject.io/"}
-                  >
-                    Ren Project Site
-                  </a>{" "}
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://renproject.io/renvm"}
-                  >
-                    About RenVM
-                  </a>{" "}
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={
-                      "https://docs.renproject.io/darknodes/faq/renbridge-faq"
-                    }
-                  >
-                    FAQs
-                  </a>{" "}
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://docs.renproject.io/developers/"}
-                  >
-                    Docs
-                  </a>{" "}
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://github.com/renproject/ren/wiki/Introduction"}
-                  >
-                    Wiki
-                  </a>
-                </Typography>
-                <Typography className={classes.footerLinks} variant="caption">
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://twitter.com/renprotocol"}
-                  >
-                    <img
-                      alt="Twitter"
-                      className={classes.footerLogo}
-                      src={Twitter}
-                    />
-                  </a>
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://github.com/renproject"}
-                  >
-                    <img
-                      alt="Github"
-                      className={classes.footerLogo}
-                      src={Github}
-                    />
-                  </a>
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://t.me/renproject"}
-                  >
-                    <img
-                      alt="Telegram"
-                      className={classes.footerLogo}
-                      src={Telegram}
-                    />
-                  </a>
-                  <a
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    href={"https://www.reddit.com/r/renproject"}
-                  >
-                    <img
-                      alt="Reddit"
-                      className={classes.footerLogo}
-                      src={Reddit}
-                    />
-                  </a>
-                </Typography>
-              </Grid>
-            </Container>
-          </Grid> */}
         </Grid>
       </ThemeProvider>
     );

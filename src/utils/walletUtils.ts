@@ -57,7 +57,7 @@ export const NAME_MAP = {
     wusdt: "Wrapped Tether",
 };
 
-export const SYMBOL_MAP = {
+export const SYMBOL_MAP: { [key in string]: string } = {
     ela: "ELA",
     eth: "ETH",
     usdt: "USDT",
@@ -75,7 +75,7 @@ export const CONVERT_MAP: { [key in string]: string } = {
     wusdt: "usdt",
 };
 
-export const NETWORK_MAP = {
+export const NETWORK_MAP: { [key in string]: string } = {
     ela: "Elastos",
     eth: "Ethereum",
     usdt: "Ethereum",
@@ -173,10 +173,12 @@ export const updateBalance = async function() {
 
     const web3 = store.get("localWeb3");
     const walletAddress = store.get("localWeb3Address");
+    const walletNetwork = store.get("localWeb3Network");
     // const USDTAddress = store.get("USDTAddress");
 
     console.log(web3)
     console.log(walletAddress)
+    console.log(walletNetwork)
 
     if (!web3 || !walletAddress) {
         return;
@@ -185,11 +187,16 @@ export const updateBalance = async function() {
     // const usdt = new web3.eth.Contract(erc20ABI, USDTAddress);
     // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
 
-    const ethBal = await web3.eth.getBalance(walletAddress);
-    console.log('ETH BALANACE', ethBal)
+    if (walletNetwork === "mainnet") {
+        const ethBal = await web3.eth.getBalance(walletAddress);
+        console.log('ETH BALANACE', ethBal)
+        store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(4));
+    } else if (walletNetwork === "private") {
+        const elaBal = await web3.eth.getBalance(walletAddress);
+        console.log('ELA BALANACE', elaBal)
+        store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(4));
+    }
 
-
-    store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(4));
     // store.set("USDTBalance", Number(parseInt(usdtBal.toString()) / 10 ** 8).toFixed(8));
     store.set("loadingBalances", false);
 
@@ -252,7 +259,7 @@ export const initLocalWeb3 = async function(type: any) {
         if (type === "MetaMask" || !type) {
             const providerOptions = {};
             const web3Modal = new Web3Modal({
-                network: selectedNetwork === "testnet" ? "rinkeby" : "mainnet",
+                network: selectedNetwork === "mainnet" ? "mainnet" : "private",
                 cacheProvider: false,
                 providerOptions,
             });
@@ -263,13 +270,22 @@ export const initLocalWeb3 = async function(type: any) {
             if (typeof currentProvider === "string") return;
             if (!currentProvider) return;
             accounts = await web3.eth.getAccounts();
-            const netId = await web3.eth.net.getId();
-            if (netId === 1) {
+            // const netId = await web3.eth.net.getId();
+            const networkId = await web3.eth.net.getNetworkType()
+            console.log(networkId)
+            // if (netId === 1) {
+            //     network = "mainnet";
+            // } else if (netId === 4) {
+            //     network = "rinkeby"; //testnet
+            // } else {
+            //     network = "elastos";
+            // }
+            if (networkId === "main") {
                 network = "mainnet";
-            } else if (netId === 4) {
-                network = "mainnet"; //testnet
+            } else if (networkId === "rinkeby") {
+                network = "testnet"; //testnet
             } else {
-                network = "mainnet";
+                network = "private";
             }
         } else if (type === "mew-connect") {
             const chainId = selectedNetwork === "testnet" ? 42 : 1;

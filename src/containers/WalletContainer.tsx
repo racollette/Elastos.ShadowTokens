@@ -15,10 +15,11 @@ import theme from "../theme/theme";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(25,25,25)",
+    background: "rgb(32,32,32)",
+
     borderRadius: "40px",
     boxShadow:
-      "#FFF 0 -5px 4px, #ff0 0 -3px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
+      "#FFF 0 -2px 3px, #ff0 0 -1px 10px, #ff8000 0 -10px 20px, red 0 -9px 20px, 5px 5px 10px 5px rgba(0,0,0,0)",
     maxWidth: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),
@@ -154,12 +155,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
 });
 
-const NoCapsButton = withStyles({
-  root: {
-    textTransform: "none",
-  },
-})(Button);
-
 class WalletContainer extends React.Component<any> {
   state = {};
 
@@ -241,7 +236,7 @@ class WalletContainer extends React.Component<any> {
           className={classes.actionButtonContainer}
         >
           {/* <Grid item xs={12}> */}
-          <NoCapsButton
+          <Button
             onClick={() => {
               initLocalWeb3(walletType);
             }}
@@ -272,7 +267,7 @@ class WalletContainer extends React.Component<any> {
               </div>
             )}
             {text}
-          </NoCapsButton>
+          </Button>
           {/* </Grid> */}
 
           {!requesting && error && (

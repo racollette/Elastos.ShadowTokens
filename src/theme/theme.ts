@@ -18,13 +18,13 @@ export default createMuiTheme({
         type: "dark",
         primary: {
             light: "#8DFEFF",
-            main: "#428cd7",
+            main: "#4e92ffff",
             dark: "#404040",
             contrastText: "#fff",
         },
         secondary: {
             light: "#ff0",
-            main: "#bd660f",
+            main: "#ff566eff",
             dark: "#404040",
             contrastText: "#fff",
         },
@@ -42,6 +42,11 @@ export default createMuiTheme({
         //         '@font-face': [WorkSans],
         //     },
         // },
+        MuiButton: {
+            root: {
+                textTransform: "none",
+            }
+        },
         MuiButtonBase: {
             root: {
                 textTransform: "none",
@@ -114,7 +119,7 @@ export default createMuiTheme({
                 boxShadow: "0px 1px 3px rgba(0, 27, 58, 0.1)",
                 border: "1px solid #DCE0E3",
                 minWidth: 190,
-                backgroundColor: "rgb(20,20,20)",
+                backgroundColor: "rgb(32,32,32)",
             },
         },
         // .MuiToggleButtonGroup-grouped:not(:first-child)

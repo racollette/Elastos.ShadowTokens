@@ -19,6 +19,22 @@ export const FEE_STRUCTURE: { [key in string]: number } = {
     wusdt: 0.3,
 }
 
+export const EXPLORER_URLS: { [key in string]: string } = {
+    ela: "https://explorer.elaeth.io/",
+    eth: "https://etherscan.io",
+    usdt: "https://etherscan.io",
+    wela: "https://etherscan.io",
+    weth: "https://explorer.elaeth.io/",
+    wusdt: "https://explorer.elaeth.io/",
+}
+
+export const issueTx = function() {
+    const store = getStore();
+    store.set("confirmationError", null);
+    store.set("waitingApproval", true);
+    // const confirmTx = store.get("confirmTx");
+}
+
 export const windowBlocker = function(event: any) {
     // Cancel the event as stated by the standard.
     event.preventDefault();
@@ -69,4 +85,33 @@ export const gatherFeeData = async function() {
     store.set("convert.conversionTotal", total);
 };
 
-// export default {};
+export function getExplorerLink(network: 'source' | 'dest', type: 'transaction' | 'token' | 'address', txInputs: any, id: string): string {
+    const symbol = txInputs[`${network}Asset`]
+    const prefix = EXPLORER_URLS[symbol]
+    switch (type) {
+        case 'transaction': {
+            return `${prefix}/tx/${id}`
+        }
+        case 'token': {
+            return `${prefix}/token/${id}`
+        }
+        case 'address':
+        default: {
+            return `${prefix}/address/${id}`
+        }
+    }
+}
+
+export function restoreInitialState() {
+    const store = getStore();
+    store.set("confirmBridge", false)
+    store.set("confirmTx", false)
+    store.set("confirmAction", "")
+    store.set("waitingApproval", false)
+    store.set("confirmationProgress", false)
+    store.set("confirmationNumber", 0)
+    store.set("validatorStep", false)
+    store.set("validatorProgress", 0)
+    store.set("transferSuccess", false)
+
+}

@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Menu from "@material-ui/core/Menu";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
+import ShadowtokensTitle from "../assets/logo_title5.svg";
 
 import {
   BRIDGE_SYMBOL_MAP,
@@ -16,24 +17,13 @@ import {
   BRIDGE_ICON_MAP,
 } from "../utils/bridgeUtils";
 
-const NoCapsButton = withStyles({
-  root: {
-    textTransform: "none",
-  },
-})(Button);
-
 const styles = () => ({
   container: {
-    background: "rgb(20,20,20)",
-    // border: "0.5px solid " + theme.palette.primary.contrastText,
+    background: "rgb(32,32,32)",
     borderRadius: "40px",
-    // boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
-    // boxShadow: "0px 0px 10px 5px rgba(255,255,255,0.78)",
-    boxShadow:
-      " #FFF 0 -5px 4px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
+    // boxShadow:
+    //   " #FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
     maxWidth: 500,
-    // width: "100%",
-    // minHeight: "50vh",
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),
     [theme.breakpoints.down("sm")]: {
@@ -41,6 +31,7 @@ const styles = () => ({
     },
   },
   title: {
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
     fontSize: 34,
     fontWeight: 700,
@@ -48,6 +39,10 @@ const styles = () => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: 24,
     },
+  },
+  titleImage: {
+    width: "60%",
+    height: "auto",
   },
   gray: {
     color: theme.palette.info.contrastText,
@@ -201,12 +196,11 @@ class BridgeContainer extends React.Component<Props> {
     this.pairsEl = React.createRef();
   }
 
-  setBridge() {
+  setBridge(selectedBridge: string, selectedPair: string) {
     const { store } = this.props;
     store.set("confirmBridge", true);
-    console.log(store.get("confirmBridge"));
-    // store.set("selectedBridge", bridge);
-    // store.set("selectedPair", pair);
+    store.set("selectedBridge", selectedBridge);
+    store.set("selectedPair", selectedPair);
   }
 
   handleBridgeOpen() {
@@ -264,19 +258,26 @@ class BridgeContainer extends React.Component<Props> {
                             Introducing&nbsp;
             </Typography>
                     </span> */}
-          <span>
-            <Typography
-              className={classNames(classes.title, classes.gray)}
-              variant="h3"
-            >
-              Shadow
+          {/* <span>
+                        <Typography
+                            className={classNames(classes.title, classes.gray)}
+                            variant="h3"
+                        >
+                            Shadow
             </Typography>
-          </span>
-          <span>
-            <Typography className={classes.title} variant="h3">
-              Tokens
+                    </span>
+                    <span>
+                        <Typography className={classes.title} variant="h3">
+                            Tokens
             </Typography>
-          </span>
+                    </span> */}
+          <Grid container justify="center" className={classes.title}>
+            <img
+              src={ShadowtokensTitle}
+              alt="ShadowTokens"
+              className={classes.titleImage}
+            />
+          </Grid>
           <Typography
             align="center"
             className={classes.subtitle}
@@ -296,7 +297,7 @@ class BridgeContainer extends React.Component<Props> {
                     <Typography className={classes.bridgeSelectionLabel}>
                       Supported Bridges
                     </Typography>
-                    <NoCapsButton
+                    <Button
                       fullWidth
                       className={(classes.button, classes.bridgeSelectionBox)}
                       // size="large"
@@ -306,17 +307,21 @@ class BridgeContainer extends React.Component<Props> {
                       onClick={this.handleBridgeOpen.bind(this)}
                     >
                       <img
-                        src={BRIDGE_ICON_MAP[selected.toLowerCase()]}
+                        src={
+                          BRIDGE_ICON_MAP[selected.toLowerCase()] ||
+                          BRIDGE_ICON_MAP["eth"]
+                        }
                         alt={selected}
                         className={classes.icon}
                       />
                       <span className={classes.assetSymbol}>
-                        {BRIDGE_NAME_MAP[selected.toLowerCase()]}
+                        {BRIDGE_NAME_MAP[selected.toLowerCase()] ||
+                          BRIDGE_NAME_MAP["eth"]}
                       </span>
                       <div className={classes.arrow}>
                         <ArrowDropDown />
                       </div>
-                    </NoCapsButton>
+                    </Button>
                     <Menu
                       id="bridgeMenu"
                       anchorEl={this.bridgeEl.current}
@@ -372,7 +377,7 @@ class BridgeContainer extends React.Component<Props> {
                     <Typography className={classes.bridgeSelectionLabel}>
                       Pair Networks
                     </Typography>
-                    <NoCapsButton
+                    <Button
                       fullWidth
                       className={(classes.button, classes.bridgeSelectionBox)}
                       // size="large"
@@ -392,7 +397,7 @@ class BridgeContainer extends React.Component<Props> {
                       <div className={classes.arrow}>
                         <ArrowDropDown />
                       </div>
-                    </NoCapsButton>
+                    </Button>
                     <Menu
                       id="pairsMenu"
                       anchorEl={this.pairsEl.current}
@@ -455,7 +460,12 @@ class BridgeContainer extends React.Component<Props> {
                       size="large"
                       fullWidth
                       className={classNames(classes.actionButton)}
-                      onClick={this.setBridge.bind(this)}
+                      onClick={() => {
+                        this.setBridge.bind(this)(
+                          selected.toLowerCase(),
+                          chainPair.toLowerCase()
+                        );
+                      }}
                     >
                       Proceed
                     </Button>

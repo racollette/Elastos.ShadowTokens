@@ -2,6 +2,7 @@ import React from "react";
 import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
 import { SwapCalls } from "@material-ui/icons";
+// import SwitchLogo from "../assets/logo2.svg";
 import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
 import { gatherFeeData, MIN_TX_AMOUNTS } from "../utils/txUtils";
@@ -29,8 +30,10 @@ import theme from "../theme/theme";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(20,20,20)",
+    background: "rgb(32,32,32)",
+
     borderRadius: "40px",
+
     // boxShadow: "#FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
     maxWidth: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
@@ -40,12 +43,14 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   lunar: {
-    boxShadow:
-      "#FFF 0 -5px 4px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
+    // border: "1px solid #3596DD",
+    // boxShadow:
+    //   "#FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
   },
   solar: {
-    boxShadow:
-      "#FFF 0 -5px 4px, #ff0 0 -3px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
+    // border: "1px solid #ff8000",
+    // boxShadow:
+    //   "#FFF 0 -2px 3px, #ff0 0 -3px 10px, #ff8000 0 -10px 20px, red 0 -9px 20px, 5px 5px 10px 5px rgba(0,0,0,0)",
   },
   headerText: {
     textAlign: "center",
@@ -63,7 +68,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     height: "auto",
     width: 20,
     cursor: "pointer",
-    zIndex: 100000,
     "&:hover": {
       opacity: 0.75,
     },
@@ -233,9 +237,17 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1),
   },
-  switchNetworkLabels: {
+  sourceLabel: {
+    fontSize: 14,
+    color: theme.palette.primary.contrastText,
+  },
+  destLabel: {
     fontSize: 14,
     color: theme.palette.info.contrastText,
+  },
+  switchLogo: {
+    height: 20,
+    width: "auto",
   },
   disclosure: {
     width: "100%",
@@ -279,7 +291,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     fontSize: 11.5,
   },
 });
-
+//
 class TransferContainer2 extends React.Component<any> {
   burnInputRef = React.createRef();
   constructor(props: any) {
@@ -327,9 +339,7 @@ class TransferContainer2 extends React.Component<any> {
     const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
       "selectedAsset"
     );
-    const selectedFormat: keyof typeof SYMBOL_MAP = store.get(
-      "convert.selectedFormat"
-    );
+    const selectedFormat = store.get("convert.selectedFormat");
     const balance = store.get(SYMBOL_MAP[selectedFormat] + "Balance");
 
     const amountValid =
@@ -394,7 +404,7 @@ class TransferContainer2 extends React.Component<any> {
     }
 
     store.set("confirmTx", tx);
-    store.set("confirmAction", "deposit");
+    store.set("confirmAction", "release");
   }
 
   async newWithdraw() {
@@ -429,7 +439,7 @@ class TransferContainer2 extends React.Component<any> {
     }
 
     store.set("confirmTx", tx);
-    store.set("confirmAction", "withdraw");
+    store.set("confirmAction", "mint");
   }
 
   async switchOriginChain() {
@@ -461,6 +471,8 @@ class TransferContainer2 extends React.Component<any> {
   render() {
     const { classes, store } = this.props;
 
+    const selectedWallet = store.get("selectedWallet");
+    console.log("selected Wallet?", selectedWallet);
     const selectedDirection = store.get("convert.selectedDirection");
     const selectedFormat: keyof typeof SYMBOL_MAP = store.get(
       "convert.selectedFormat"
@@ -539,8 +551,9 @@ class TransferContainer2 extends React.Component<any> {
               src={BackArrow}
               alt="Back"
               onClick={() => {
-                store.set("selectedWallet", false);
-                store.set("localWeb3Address", "");
+                // store.set("selectedWallet", false);
+                store.set("confirmBridge", false);
+                // store.set("localWeb3Address", "");
                 store.set("walletConnecting", false);
                 store.set("spaceRequesting", false);
               }}
@@ -615,15 +628,20 @@ class TransferContainer2 extends React.Component<any> {
                       onClick={this.switchOriginChain.bind(this)}
                     >
                       <Grid container justify="center">
-                        <Typography className={classes.switchNetworkLabels}>
+                        <Typography className={classes.sourceLabel}>
                           From {NETWORK_MAP[selectedAsset]}
                         </Typography>
                       </Grid>
                       <Grid container justify="center">
                         <SwapCalls color="primary" fontSize="large" />
+                        {/* <img
+                          src={SwitchLogo}
+                          className={classes.switchLogo}
+                          alt="Switch Direction"
+                        /> */}
                       </Grid>
                       <Grid container justify="center">
-                        <Typography className={classes.switchNetworkLabels}>
+                        <Typography className={classes.destLabel}>
                           To {NETWORK_MAP[destAsset]}
                         </Typography>
                       </Grid>
@@ -721,15 +739,20 @@ class TransferContainer2 extends React.Component<any> {
                       onClick={this.switchOriginChain.bind(this)}
                     >
                       <Grid container justify="center">
-                        <Typography className={classes.switchNetworkLabels}>
+                        <Typography className={classes.sourceLabel}>
                           From {NETWORK_MAP[selectedAsset]}
                         </Typography>
                       </Grid>
                       <Grid container justify="center">
                         <SwapCalls color="secondary" fontSize="large" />
+                        {/* <img
+                          src={SwitchLogo}
+                          className={classes.switchLogo}
+                          alt="Switch Direction"
+                        /> */}
                       </Grid>
                       <Grid container justify="center">
-                        <Typography className={classes.switchNetworkLabels}>
+                        <Typography className={classes.destLabel}>
                           To {NETWORK_MAP[destAsset]}
                         </Typography>
                       </Grid>
@@ -833,18 +856,34 @@ class TransferContainer2 extends React.Component<any> {
                   className={classes.actionButtonContainer}
                 >
                   <Grid item xs={12}>
-                    <Button
-                      disabled={!enableButton}
-                      variant={"contained"}
-                      disableRipple
-                      color={selectedDirection ? "secondary" : "primary"}
-                      size="large"
-                      fullWidth
-                      className={classNames(classes.actionButton)}
-                      onClick={this.newDeposit.bind(this)}
-                    >
-                      Next
-                    </Button>
+                    {!selectedWallet ? (
+                      <Button
+                        variant={"contained"}
+                        disableRipple
+                        color={selectedDirection ? "secondary" : "primary"}
+                        size="large"
+                        fullWidth
+                        className={classNames(classes.actionButton)}
+                        onClick={() => {
+                          store.set("showWalletModal", true);
+                        }}
+                      >
+                        Connect Wallet
+                      </Button>
+                    ) : (
+                      <Button
+                        disabled={!enableButton}
+                        variant={"contained"}
+                        disableRipple
+                        color={selectedDirection ? "secondary" : "primary"}
+                        size="large"
+                        fullWidth
+                        className={classNames(classes.actionButton)}
+                        onClick={this.newDeposit.bind(this)}
+                      >
+                        Next
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
