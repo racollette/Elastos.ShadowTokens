@@ -93,7 +93,11 @@ export default createMuiTheme({
                 paddingBottom: 11.5,
             },
         },
-        MuiTextField: {},
+        MuiInputBase: {
+            input: {
+                textAlign: "center"
+            }
+        },
         //@ts-ignore
         MuiToggleButtonGroup: {
             root: {

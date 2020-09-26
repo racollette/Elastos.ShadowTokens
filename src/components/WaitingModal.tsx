@@ -1,124 +1,124 @@
-import React from "react";
-import { Styles, withStyles } from "@material-ui/styles";
-import Typography from "@material-ui/core/Typography";
-import theme from "../theme/theme";
-import DoubleArrow from "../assets/double-arrow.svg";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import React from 'react'
+import { Styles, withStyles } from '@material-ui/styles'
+import Typography from '@material-ui/core/Typography'
+import theme from '../theme/theme'
+import DoubleArrow from '../assets/double-arrow.svg'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import {
   MINI_ICON_MAP,
   WALLET_ICON_MAP,
-  SYMBOL_MAP,
-} from "../utils/walletUtils";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
+  SYMBOL_MAP
+} from '../utils/walletUtils'
+import Modal from '@material-ui/core/Modal'
+import Backdrop from '@material-ui/core/Backdrop'
+import Fade from '@material-ui/core/Fade'
 
-const styles: Styles<typeof theme, any> = (theme) => ({
+const styles: Styles<typeof theme, any> = theme => ({
   container: {
-    textAlign: "center",
-    background: "rgb(32,32,32)",
+    textAlign: 'center',
+    background: 'rgb(32,32,32)',
 
-    borderRadius: "40px",
+    borderRadius: '40px',
     // border: "1px solid #3596DD",
     // boxShadow:
     //   "#FFF 0 -5px 4px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
     maxWidth: 350,
     // margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "100%",
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '85%'
     },
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)",
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)'
   },
   actionButton: {
-    borderRadius: "16px",
+    borderRadius: '16px'
   },
   close: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
     left: 10,
-    height: "auto",
+    height: 'auto',
     width: 20,
-    cursor: "pointer",
+    cursor: 'pointer',
     zIndex: 100000,
-    "&:hover": {
-      opacity: 0.75,
-    },
+    '&:hover': {
+      opacity: 0.75
+    }
   },
   header: {
-    position: "relative",
-    marginBottom: theme.spacing(2),
+    position: 'relative',
+    marginBottom: theme.spacing(2)
   },
   walletIconContainer: {
     paddingTop: theme.spacing(1),
     // display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
     // opacity: 0.6,
-    transition: "all 0.2s ease-in-out",
-    "& img": {
+    transition: 'all 0.2s ease-in-out',
+    '& img': {
       height: 50,
-      width: "auto",
-    },
+      width: 'auto'
+    }
   },
   walletText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(1)
   },
   assetText: {
     color: theme.palette.info.contrastText,
     fontSize: 18,
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingRight: theme.spacing(2)
   },
   tokenMapContainer: {
     paddingTop: theme.spacing(3),
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   assetIcon: {
     height: 50,
-    width: "auto",
+    width: 'auto'
   },
   fromToIcon: {
     height: 40,
-    width: "auto",
+    width: 'auto',
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   spinnerContainer: {
     paddingTop: theme.spacing(4),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   waitingText: {
     color: theme.palette.info.contrastText,
     fontSize: 16,
-    paddingTop: theme.spacing(1),
-  },
-});
+    paddingTop: theme.spacing(1)
+  }
+})
 
 interface Props {
-  className?: string;
-  classes: { [key in string]: string };
-  onClick: any;
-  wallet: any;
-  sourceAsset: any;
-  destAsset: any;
-  sourceNetwork: any;
-  destNetwork: any;
-  amount: any;
-  total: any;
-  open: any;
+  className?: string
+  classes: { [key in string]: string }
+  onClick: any
+  wallet: any
+  sourceAsset: any
+  destAsset: any
+  sourceNetwork: any
+  destNetwork: any
+  amount: any
+  total: any
+  open: any
 }
 
 const WaitingModal: React.FC<Props> = function (props) {
@@ -131,15 +131,7 @@ const WaitingModal: React.FC<Props> = function (props) {
 
   // const [open, setOpen] = React.useState(false);
 
-  const {
-    classes,
-    wallet,
-    sourceAsset,
-    destAsset,
-    amount,
-    total,
-    open,
-  } = props;
+  const { classes, wallet, sourceAsset, destAsset, amount, total, open } = props
 
   // const handleOpen = () => {
   //   setOpen(true);
@@ -153,15 +145,15 @@ const WaitingModal: React.FC<Props> = function (props) {
     <div>
       <React.Fragment>
         <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
+          aria-labelledby='transition-modal-title'
+          aria-describedby='transition-modal-description'
           className={classes.modal}
           open={open}
           // onClose={handleClose}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
-            timeout: 500,
+            timeout: 500
           }}
         >
           <Fade in={open}>
@@ -195,7 +187,7 @@ const WaitingModal: React.FC<Props> = function (props) {
                 <img
                   className={classes.fromToIcon}
                   src={DoubleArrow}
-                  alt="To"
+                  alt='To'
                 />
                 <img
                   className={classes.assetIcon}
@@ -211,7 +203,7 @@ const WaitingModal: React.FC<Props> = function (props) {
               </div>
 
               <div className={classes.spinnerContainer}>
-                <LinearProgress color="primary" />
+                <LinearProgress color='primary' />
                 <Typography className={classes.waitingText}>
                   Waiting for user response...
                 </Typography>
@@ -221,7 +213,7 @@ const WaitingModal: React.FC<Props> = function (props) {
         </Modal>
       </React.Fragment>
     </div>
-  );
-};
+  )
+}
 
-export default withStyles(styles)(WaitingModal);
+export default withStyles(styles)(WaitingModal)

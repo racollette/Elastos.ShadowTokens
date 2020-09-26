@@ -1,25 +1,25 @@
-import React from "react";
-import { Styles, withStyles } from "@material-ui/styles";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import classNames from "classnames";
-import theme from "../theme/theme";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import Button from "@material-ui/core/Button";
-import LinearDeterminate from "./LinearDeterminate";
-import ActionLink from "../components/ActionLink";
-import { SYMBOL_MAP } from "../utils/walletUtils";
-import { getExplorerLink, restoreInitialState } from "../utils/txUtils";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import Success from "../assets/success.svg";
+import React from 'react'
+import { Styles, withStyles } from '@material-ui/styles'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import classNames from 'classnames'
+import theme from '../theme/theme'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import Button from '@material-ui/core/Button'
+import LinearDeterminate from './LinearDeterminate'
+import ActionLink from '../components/ActionLink'
+import { SYMBOL_MAP } from '../utils/walletUtils'
+import { getExplorerLink, restoreInitialState } from '../utils/txUtils'
+import Modal from '@material-ui/core/Modal'
+import Backdrop from '@material-ui/core/Backdrop'
+import Fade from '@material-ui/core/Fade'
+import Success from '../assets/success.svg'
 
-const styles: Styles<typeof theme, any> = (theme) => ({
+const styles: Styles<typeof theme, any> = theme => ({
   container: {
-    textAlign: "center",
-    background: "rgb(20,20,20)",
-    borderRadius: "40px",
+    textAlign: 'center',
+    background: 'rgb(20,20,20)',
+    borderRadius: '40px',
     // border: "1px solid #3596DD",
     // boxShadow:
     //     "#FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
@@ -27,81 +27,80 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     minWidth: 350,
     // margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(3),
-    [theme.breakpoints.down("xs")]: {
-      maxWidth: "90%",
-      minWidth: "80%",
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '85%'
     },
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)",
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)'
   },
   successContainer: {
     paddingTop: theme.spacing(1),
     // display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
     // opacity: 0.6,
-    transition: "all 0.2s ease-in-out",
-    "& img": {
+    transition: 'all 0.2s ease-in-out',
+    '& img': {
       height: 75,
-      width: "auto",
-      marginBottom: theme.spacing(1),
-    },
+      width: 'auto',
+      marginBottom: theme.spacing(1)
+    }
   },
   successText: {
-    color: "#fff",
-    fontSize: 18,
+    color: '#fff',
+    fontSize: 18
   },
   walletText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(1)
   },
   generalContainer: {
     paddingTop: theme.spacing(4),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   confirmationText: {
     // color: theme.palette.info.contrastText,
-    color: "#fff",
-    fontSize: 16,
+    color: '#fff',
+    fontSize: 16
   },
   confirmationCount: {
-    color: "#fff",
-    fontSize: 16,
+    color: '#fff',
+    fontSize: 16
   },
   dismissContainer: {
-    paddingTop: theme.spacing(2),
+    paddingTop: theme.spacing(2)
   },
   actionButton: {
-    borderRadius: "16px",
-  },
-});
+    borderRadius: '16px'
+  }
+})
 
 const ExplorerButton = withStyles({
   root: {
-    textTransform: "none",
-    color: theme.palette.info.contrastText,
-  },
-})(Button);
+    textTransform: 'none',
+    color: theme.palette.info.contrastText
+  }
+})(Button)
 
 interface Props {
-  className?: string;
-  classes: { [key in string]: string };
-  onClick: any;
-  open: any;
-  confirmation: any;
-  total: any;
-  txInput: any;
-  validatorStep: boolean;
-  validatorProgress: number;
-  transferSuccess: boolean;
+  className?: string
+  classes: { [key in string]: string }
+  onClick: any
+  open: any
+  confirmation: any
+  total: any
+  txInput: any
+  validatorStep: boolean
+  validatorProgress: number
+  transferSuccess: boolean
 }
 
 const TxProgressModal: React.FC<Props> = function (props) {
@@ -113,14 +112,14 @@ const TxProgressModal: React.FC<Props> = function (props) {
     txInput,
     validatorStep,
     validatorProgress,
-    transferSuccess,
-  } = props;
+    transferSuccess
+  } = props
 
   // Dummy tx id, instead return from wallet provider
   let txId1 =
-    "0xf6c69955e79c17962aeffde498688bd749511ff4591fc78319fd6c5e235fddea";
+    '0xf6c69955e79c17962aeffde498688bd749511ff4591fc78319fd6c5e235fddea'
   let txId2 =
-    "0x8f17ac71a470ab41f945c488a1636ee9af96c7949e5efd9814f72e60ccb0a831";
+    '0x8f17ac71a470ab41f945c488a1636ee9af96c7949e5efd9814f72e60ccb0a831'
 
   return (
     <div>
@@ -134,25 +133,25 @@ const TxProgressModal: React.FC<Props> = function (props) {
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
-            timeout: 500,
+            timeout: 500
           }}
         >
           <Fade in={open}>
             {transferSuccess ? (
               <div className={classes.container}>
                 <div className={classes.successContainer}>
-                  <img src={Success} alt="Transfer Complete" />
+                  <img src={Success} alt='Transfer Complete' />
                   <Typography className={classes.successText}>
                     Success
                   </Typography>
                 </div>
                 <div className={classes.generalContainer}>
                   <Typography className={classes.confirmationText}>
-                    {SYMBOL_MAP[txInput.destAsset]} received on{" "}
+                    {SYMBOL_MAP[txInput.destAsset]} received on{' '}
                     {txInput.destNetwork} blockchain
                   </Typography>
                   <ActionLink
-                    url={getExplorerLink("dest", "transaction", txInput, txId2)}
+                    url={getExplorerLink('dest', 'transaction', txInput, txId2)}
                   >
                     <ExplorerButton startIcon={<OpenInNewIcon />}>
                       View in explorer
@@ -161,17 +160,17 @@ const TxProgressModal: React.FC<Props> = function (props) {
                 </div>
                 <Grid
                   container
-                  justify="flex-end"
+                  justify='flex-end'
                   className={classes.dismissContainer}
                 >
                   <Button
-                    variant={"outlined"}
-                    color="primary"
+                    variant={'outlined'}
+                    color='primary'
                     disableRipple
                     fullWidth
                     className={classNames(classes.actionButton)}
                     onClick={() => {
-                      restoreInitialState();
+                      restoreInitialState()
                     }}
                   >
                     Okay
@@ -186,8 +185,8 @@ const TxProgressModal: React.FC<Props> = function (props) {
                   </Typography>
                   <ActionLink
                     url={getExplorerLink(
-                      "source",
-                      "transaction",
+                      'source',
+                      'transaction',
                       txInput,
                       txId1
                     )}
@@ -236,7 +235,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
         </Modal>
       </React.Fragment>
     </div>
-  );
-};
+  )
+}
 
-export default withStyles(styles)(TxProgressModal);
+export default withStyles(styles)(TxProgressModal)
