@@ -11,9 +11,10 @@ import FooterContainer from "./containers/FooterContainer";
 import WalletModal from "./components/WalletModal";
 import TransferContainer2 from "./containers/TransferContainer2";
 import ConfirmContainer from "./containers/ConfirmContainer";
+import ErrorModal from "./components/ErrorModal";
 import { storeListener } from "./services/storeService";
 import theme from "./theme/theme";
-import { setNetwork } from "./utils/walletUtils";
+// import { setNetwork } from "./utils/walletUtils";
 import { BRIDGE_SYMBOL_MAP } from "./utils/bridgeUtils";
 import { USDT_ADDRESS_TEST } from "./utils/web3Utils";
 
@@ -55,7 +56,7 @@ const styles = () => ({
 const initialState = {
   // networking
   USDTAddress: USDT_ADDRESS_TEST,
-  selectedNetwork: "testnet",
+  selectedNetwork: "",
   queryParams: {},
 
   // wallet & web3
@@ -91,6 +92,10 @@ const initialState = {
   showGatewayModal: false,
   gatewayModalTx: null,
   showAboutModal: false,
+
+  // errors
+  noWeb3: false,
+  wrongNetwork: false,
 
   // awaiting user
   waitingApproval: false,
@@ -141,8 +146,7 @@ class AppWrapper extends React.Component<Props> {
     const params = queryString.parse(window.location.search);
 
     store.set("queryParams", params);
-
-    setNetwork("mainnet");
+    // setNetwork("mainnet");
     // initLocalWeb3("injected");
   }
 
@@ -159,11 +163,11 @@ class AppWrapper extends React.Component<Props> {
     const selectedBridge = store.get("selectedBridge");
     const selectedPair = store.get("selectedPair");
 
-    // const localWeb3Address = store.get("localWeb3Address");
     const showWalletModal = store.get("showWalletModal");
-    // const localWeb3Address = false;
     const confirmAction = store.get("confirmAction");
     const confirmTx = store.get("confirmTx");
+
+    const noWeb3 = store.get("noWeb3");
 
     return (
       <ThemeProvider theme={theme}>
@@ -236,6 +240,12 @@ class AppWrapper extends React.Component<Props> {
                     <TransferContainer2 />
                   )}
                 </Grid>
+              )}
+
+              {noWeb3 && (
+                <div>
+                  <ErrorModal store={store} errorType={"noWeb3"} />
+                </div>
               )}
             </Grid>
             <Grid container alignItems="flex-end">

@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/react";
 import Web3 from "web3";
 // import Box from '3box'
 import Web3Modal from "web3modal";
-import MEWconnect from "@myetherwallet/mewconnect-web-client";
+// import MEWconnect from "@myetherwallet/mewconnect-web-client";
 
 import ELA from "../assets/ela.png"
 import ETH from "../assets/eth.png";
@@ -84,6 +84,15 @@ export const NETWORK_MAP: { [key in string]: string } = {
     wusdt: "Elastos",
 };
 
+export const NETWORK_TYPE: { [key in string]: string } = {
+    ela: "Elastos mainnet",
+    eth: "Ethereum mainnet",
+    usdt: "Ethereum mainnet",
+    wela: "Ethereum mainnet",
+    weth: "Elastos mainnet",
+    wusdt: "Elastos mainnet",
+};
+
 export const ASSET_CONVERSION_TYPES = {
     ela: "mint",
     eth: "mint",
@@ -102,23 +111,153 @@ export const MINI_ICON_MAP: { [key in string]: string } = {
     wusdt: USDT,
 };
 
-export const SUPPORTED_NETWORKS = {
-    1: 'MAINNET',
-    3: 'ROPSTEN',
-    4: 'RINKEBY',
-    42: 'KOVAN',
-};
+export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
+    1: 'Ethereum mainnet',
+    3: 'Ropsten',
+    4: 'Rinkeby',
+    30: 'RSK mainnet',
+    31: 'RSK testnet',
+    42: 'Kovan testnet',
+    61: 'Ethereum classic',
+    77: 'Sokol testnet',
+    99: 'POA network',
+    100: 'xDai chain'
+}
 
-export const abbreviateAddress = function(walletAddress: string) {
-    if (!walletAddress || typeof walletAddress !== "string") {
-        return "";
-    } else {
-        return (
-            walletAddress.slice(0, 5) +
-            "..." +
-            walletAddress.slice(walletAddress.length - 5)
-        );
+export const SUPPORTED_NETWORK_NAMES: { [key in string]: string } = {
+    main: 'Ethereum mainnet',
+    private: 'Unknown',
+    elastos: 'Elastos mainnet'
+}
+
+export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
+    ela: "https://mainrpc.elaeth.io",
+}
+
+export const getNetworkName = function(id: any, type: string) {
+    switch (type) {
+        case "id":
+            return SUPPORTED_NETWORK_IDS[id] || 'Unknown'
+        case "name":
+            return SUPPORTED_NETWORK_NAMES[id] || 'Unknown'
     }
+}
+
+/**
+ * Connecting to Local Web3 Wallet
+ */
+export const initLocalWeb3 = async function(type: any) {
+    const store = getStore();
+    store.set("walletConnecting", true);
+    store.set("spaceError", false);
+
+    // already connected
+    if (store.get("localWeb3Address")) {
+        return;
+    }
+
+    let web3;
+    let accounts: string[] = [];
+    let network: any = "";
+
+    try {
+        // if (type === "injected" || !type) {
+        if (type === "MetaMask" || !type) {
+            // Check if user has web3 installed
+            if (typeof window.ethereum !== 'undefined'
+                || (typeof window.web3 !== 'undefined')) {
+                // Web3 browser user detected. You can now use the provider.
+            } else {
+                store.set("noWeb3", true)
+                return
+            }
+
+            const providerOptions = {};
+            const web3Modal = new Web3Modal({
+                // network: selectedNetwork === "mainnet" ? "mainnet" : "private", // optional
+                cacheProvider: false, //optional
+                providerOptions,
+            });
+            const web3Provider = await web3Modal.connect();
+
+            web3 = new Web3(web3Provider);
+            setListener(web3)
+
+            if (typeof web3.currentProvider === "string") return;
+            if (!web3.currentProvider) return;
+            accounts = await web3.eth.getAccounts();
+            const netId = await web3.eth.net.getId();
+            // network = getNetworkName(netId, "id")
+            let networkId = await web3.eth.net.getNetworkType()
+            if (netId === 1 && networkId === "private") {
+                networkId = "elastos"
+                network = getNetworkName(networkId, "name")
+            } else {
+                network = getNetworkName(netId, "id")
+            }
+            // } else if (type === "mew-connect") {
+            //     const chainId = selectedNetwork === "testnet" ? 42 : 1;
+            //     const jsonRpcUrl = `wss://${
+            //         selectedNetwork === "testnet" ? "rinkeby" : "mainnet"
+            //         }.infura.io/ws/v3/7117ca7a3c7b4b94b24944c1ef0ecec9`;
+            //     const mewConnect = new MEWconnect.Provider({
+            //         windowClosedError: true,
+            //     });
+            //     const web3Provider = mewConnect.makeWeb3Provider(
+            //         chainId,
+            //         jsonRpcUrl,
+            //         true
+            //     );
+            //     web3 = new Web3(web3Provider);
+            //     currentProvider = web3.currentProvider;
+            //     if (typeof currentProvider === "string") return;
+            //     if (!currentProvider) return;
+            //     accounts = await web3Provider.enable();
+            //     network = selectedNetwork;
+        } else if (type === "Elaphant") {
+            console.log('Elaphant wallet not yet supported')
+        } else {
+            console.error("Invalid wallet type.");
+            store.set("spaceError", true);
+            store.set("spaceRequesting", false);
+            store.set("walletConnecting", false);
+            return;
+        }
+    } catch (e) {
+        console.error(e);
+        Sentry.withScope(function(scope) {
+            scope.setTag("error-hint", "web3 init");
+            Sentry.captureException(e);
+        });
+        store.set("spaceError", true);
+        store.set("spaceRequesting", false);
+        store.set("walletConnecting", false);
+        return;
+    }
+
+    // const address = accounts[0];
+    // const addressLowerCase = address.toLowerCase();
+    // const db = store.get("db");
+    // const fns = store.get("fns");
+
+    // if (selectedNetwork !== network) {
+    //     store.set("showNetworkModal", true);
+    //     store.set("spaceError", true);
+    //     store.set("spaceRequesting", false);
+    //     store.set("walletConnecting", false);
+    //     return;
+    // }
+
+    store.set("localWeb3", web3);
+    store.set("localWeb3Address", accounts[0]);
+    store.set("localWeb3Network", network);
+    store.set("spaceRequesting", false);
+    store.set("walletConnecting", false);
+    store.set("selectedWallet", true);
+    store.set("convert.destinationValid", true);
+
+    updateBalance();
+    return;
 };
 
 export const updateMarketData = async function() {
@@ -176,22 +315,17 @@ export const updateBalance = async function() {
     const walletNetwork = store.get("localWeb3Network");
     // const USDTAddress = store.get("USDTAddress");
 
-    console.log(web3)
-    console.log(walletAddress)
-    console.log(walletNetwork)
-
     if (!web3 || !walletAddress) {
         return;
     }
-
     // const usdt = new web3.eth.Contract(erc20ABI, USDTAddress);
     // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
 
-    if (walletNetwork === "mainnet") {
+    if (walletNetwork === "Ethereum mainnet") {
         const ethBal = await web3.eth.getBalance(walletAddress);
         console.log('ETH BALANACE', ethBal)
         store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(4));
-    } else if (walletNetwork === "private") {
+    } else if (walletNetwork === "Elastos mainnet") {
         const elaBal = await web3.eth.getBalance(walletAddress);
         console.log('ELA BALANACE', elaBal)
         store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(4));
@@ -229,132 +363,16 @@ export const initDataWeb3 = async function() {
 
 };
 
-/**
- * Connecting to Local Web3 Wallet
- */
-export const initLocalWeb3 = async function(type: any) {
-    console.log("Init Local Web3")
-    const store = getStore();
-    store.set("walletConnecting", true);
+// export const setNetwork = async function(network: any) {
+//     const store = getStore();
+//     setAddresses.bind(this)();
+// };
 
-    // Temporary passage condition
-    store.set("selectedWallet", true);
-    /////
-
-    // already connected
-    if (store.get("localWeb3Address")) {
-        return;
-    }
-
-    store.set("spaceError", false);
-    const selectedNetwork = store.get("selectedNetwork");
-
-    let web3;
-    let currentProvider;
-    let accounts = [];
-    let network = "";
-
-    try {
-        // if (type === "injected" || !type) {
-        if (type === "MetaMask" || !type) {
-            const providerOptions = {};
-            const web3Modal = new Web3Modal({
-                network: selectedNetwork === "mainnet" ? "mainnet" : "private",
-                cacheProvider: false,
-                providerOptions,
-            });
-            const web3Provider = await web3Modal.connect();
-
-            web3 = new Web3(web3Provider);
-            currentProvider = web3.currentProvider;
-            if (typeof currentProvider === "string") return;
-            if (!currentProvider) return;
-            accounts = await web3.eth.getAccounts();
-            // const netId = await web3.eth.net.getId();
-            const networkId = await web3.eth.net.getNetworkType()
-            console.log(networkId)
-            // if (netId === 1) {
-            //     network = "mainnet";
-            // } else if (netId === 4) {
-            //     network = "rinkeby"; //testnet
-            // } else {
-            //     network = "elastos";
-            // }
-            if (networkId === "main") {
-                network = "mainnet";
-            } else if (networkId === "rinkeby") {
-                network = "testnet"; //testnet
-            } else {
-                network = "private";
-            }
-        } else if (type === "mew-connect") {
-            const chainId = selectedNetwork === "testnet" ? 42 : 1;
-            const jsonRpcUrl = `wss://${
-                selectedNetwork === "testnet" ? "rinkeby" : "mainnet"
-                }.infura.io/ws/v3/7117ca7a3c7b4b94b24944c1ef0ecec9`;
-
-            const mewConnect = new MEWconnect.Provider({
-                windowClosedError: true,
-            });
-            const web3Provider = mewConnect.makeWeb3Provider(
-                chainId,
-                jsonRpcUrl,
-                true
-            );
-
-            web3 = new Web3(web3Provider);
-            currentProvider = web3.currentProvider;
-
-            if (typeof currentProvider === "string") return;
-            if (!currentProvider) return;
-
-            accounts = await web3Provider.enable();
-            network = selectedNetwork;
-        } else {
-            console.error("Invalid wallet type.");
-            store.set("spaceError", true);
-            store.set("spaceRequesting", false);
-            store.set("walletConnecting", false);
-            return;
-        }
-    } catch (e) {
-        console.error(e);
-        Sentry.withScope(function(scope) {
-            scope.setTag("error-hint", "web3 init");
-            Sentry.captureException(e);
-        });
-        store.set("spaceError", true);
-        store.set("spaceRequesting", false);
-        store.set("walletConnecting", false);
-        return;
-    }
-
-    // const address = accounts[0];
-    // const addressLowerCase = address.toLowerCase();
-    // const db = store.get("db");
-    // const fns = store.get("fns");
-
-    if (selectedNetwork !== network) {
-        store.set("showNetworkModal", true);
-        store.set("spaceError", true);
-        store.set("spaceRequesting", false);
-        store.set("walletConnecting", false);
-        return;
-    }
-
-    store.set("localWeb3", web3);
-    store.set("localWeb3Address", accounts[0]);
-    store.set("localWeb3Network", network);
-    store.set("spaceRequesting", false);
-    store.set("walletConnecting", false);
-
-    store.set("convert.destinationValid", true);
-
-    updateBalance();
-
-    if ((!currentProvider as any).on) return;
-    // FIXME: provide propper provider type
-    const listeningProvider: any = currentProvider;
+export const setListener = async function(web3: any) {
+    // @ts-ignore
+    if ((!web3.currentProvider as any).on) return;
+    // @ts-ignore FIXME: provide propper provider type
+    const listeningProvider: any = web3.currentProvider;
     if (listeningProvider.on) {
         // listen for changes
         listeningProvider.on("accountsChanged", async () => {
@@ -365,55 +383,16 @@ export const initLocalWeb3 = async function(type: any) {
             window.location.reload();
         });
 
-        // listeningProvider.on("networkChanged", async () => {
-        //     window.location.reload();
-        // });
+        listeningProvider.on("networkChanged", async () => {
+            window.location.reload();
+            // initLocalWeb3(store.get("selectedWalletType"))
+        });
 
         listeningProvider.on("disconnected", async () => {
             window.location.reload();
         });
     }
-    // } catch (e) {
-    //     console.error(e);
-    //     Sentry.withScope(function(scope) {
-    //         scope.setTag("error-hint", "main initialization");
-    //         Sentry.captureException(e);
-    //     });
-    //     store.set("spaceError", true);
-    //     store.set("spaceRequesting", false);
-    //     store.set("walletConnecting", false);
-    // }
-
-    return;
-};
-
-export const setAddresses = async function() {
-    const store = getStore();
-    const network = store.get("selectedNetwork");
-    if (network === "testnet") {
-        // store.set("renELAAddress", RENELA_TEST);
-    } else {
-        // store.set("renELAAddress", RENELA_MAIN);
-    }
-};
-
-export const setNetwork = async function(network: any) {
-    const store = getStore();
-    store.set("selectedNetwork", network);
-
-    if (network === "mainnet") {
-        store.set("selectedNetworkName", "Ethereum");
-    } else if (network === "testnet") {
-        store.set("selectedNetworkName", "Rinkeby");
-    } else if (network === "private") {
-        store.set("selectedNetworkName", "Elastos");
-    } else {
-        store.set("selectedNetworkName", "No Network");
-    }
-
-    // @ts-ignore
-    setAddresses.bind(this)();
-};
+}
 
 // export async function getEthereumNetwork() {
 // 	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
@@ -435,5 +414,17 @@ export const setNetwork = async function(network: any) {
 // 		return { name: 'MAINNET', networkId };
 // 	}
 // }
+
+export const abbreviateAddress = function(walletAddress: string) {
+    if (!walletAddress || typeof walletAddress !== "string") {
+        return "";
+    } else {
+        return (
+            walletAddress.slice(0, 5) +
+            "..." +
+            walletAddress.slice(walletAddress.length - 5)
+        );
+    }
+};
 
 export default {};
