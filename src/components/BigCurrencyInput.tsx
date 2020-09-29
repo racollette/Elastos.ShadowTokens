@@ -1,84 +1,84 @@
-import React from 'react'
-import { withStore } from '@spyna/react-store'
-import NumberFormat from 'react-number-format'
-import classNames from 'classnames'
-import { Styles, withStyles } from '@material-ui/styles'
-import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
-import Hidden from '@material-ui/core/Hidden'
-import theme from '../theme/theme'
+import React from "react";
+import { withStore } from "@spyna/react-store";
+import NumberFormat from "react-number-format";
+import classNames from "classnames";
+import { Styles, withStyles } from "@material-ui/styles";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import Hidden from "@material-ui/core/Hidden";
+import theme from "../theme/theme";
 
 const styles: Styles<any, any> = () => ({
   container: {
-    width: '100%',
-    '& input': {
-      fontFamily: 'inherit',
-      color: '#fff',
-      fontSize: 18
-    }
+    width: "100%",
+    "& input": {
+      fontFamily: "inherit",
+      color: "#fff",
+      // fontSize: 18
+    },
   },
   large: {
-    '& input': {
-      fontSize: 18
-    }
+    "& input": {
+      fontSize: 18,
+    },
   },
   medium: {
-    '& input': {
-      fontSize: 16
-    }
+    "& input": {
+      fontSize: 16,
+    },
   },
   small: {
-    '& input': {
-      fontSize: 14
-    }
+    "& input": {
+      fontSize: 14,
+    },
   },
   smallest: {
-    '& input': {
-      fontSize: 12
-    }
+    "& input": {
+      fontSize: 12,
+    },
   },
   input: {
-    fontSize: 18,
-    width: '100%',
-    outline: 'none',
-    textAlign: 'center',
-    background: 'rgb(32,32,32)',
+    fontSize: 16,
+    width: "100%",
+    outline: "none",
+    textAlign: "center",
+    background: "rgb(32,32,32)",
     color: theme.palette.info.contrastText,
-    border: 'none'
+    border: "none",
   },
   balanceContainer: {
-    fontSize: 18,
-    display: 'flex',
-    alignItems: 'flex-end'
+    fontSize: 16,
+    display: "flex",
+    alignItems: "flex-end",
   },
   balanceButton: {
-    borderRadius: 8
-  }
-})
+    borderRadius: 8,
+  },
+});
 
 class BigCurrencyInput extends React.PureComponent<any> {
-  ref: React.RefObject<any>
-  input: any
+  ref: React.RefObject<any>;
+  input: any;
 
-  constructor (props: any) {
-    super(props)
-    this.ref = React.createRef()
-    this.input = null
-    this.state = props.store.getState()
+  constructor(props: any) {
+    super(props);
+    this.ref = React.createRef();
+    this.input = null;
+    this.state = props.store.getState();
   }
 
-  componentDidMount () {
-    const inputRef = this.props.inputRef
+  componentDidMount() {
+    const inputRef = this.props.inputRef;
     if (this.props.inputRef) {
-      this.ref = inputRef
+      this.ref = inputRef;
     }
 
     if (this.input) {
-      this.input.focus()
+      this.input.focus();
     }
   }
 
-  render () {
+  render() {
     const {
       classes,
       className,
@@ -87,12 +87,12 @@ class BigCurrencyInput extends React.PureComponent<any> {
       balance,
       placeholder,
       store,
-      direction
-    } = this.props
+      direction,
+    } = this.props;
 
-    const val = value ? String(value) : ''
-    const ref = this.ref
-    const change = onChange || (() => {})
+    const val = value ? String(value) : "";
+    const ref = this.ref;
+    const change = onChange || (() => {});
 
     // const chars = val.replace(".", "").replace(` ${symbol}`, "");
     // let size = "large";
@@ -108,7 +108,7 @@ class BigCurrencyInput extends React.PureComponent<any> {
       // <div className={classNames(classes.container, classes[size])}>
       <div className={classNames(classes.container)}>
         <React.Fragment>
-          <Grid container justify='flex-end'>
+          <Grid container justify="flex-end">
             <Grid item xs={8}>
               <NumberFormat
                 value={val}
@@ -119,7 +119,7 @@ class BigCurrencyInput extends React.PureComponent<any> {
                 // suffix={" {" + Numeral(usdValue).format("$0,0.00") + "}"}
                 onValueChange={change}
                 getInputRef={(input: any) => {
-                  this.input = input
+                  this.input = input;
                 }}
                 className={classNames(classes.input, className)}
                 placeholder={placeholder}
@@ -128,18 +128,18 @@ class BigCurrencyInput extends React.PureComponent<any> {
             <Grid item xs={4}>
               <Grid
                 container
-                justify='flex-end'
+                justify="flex-end"
                 className={classes.balanceContainer}
               >
                 <Button
-                  variant='outlined'
-                  color={direction ? 'secondary' : 'primary'}
+                  variant="outlined"
+                  color={direction ? "secondary" : "primary"}
                   className={(classes.small, classes.balanceButton)}
                   onClick={() => {
-                    store.set('convert.amount', balance)
+                    store.set("convert.amount", balance);
                   }}
                 >
-                  Max <Hidden xsDown>{balance || '0.0000'}</Hidden>
+                  Max <Hidden xsDown>{balance || "0.00"}</Hidden>
                 </Button>
               </Grid>
               {/* <Grid
@@ -156,8 +156,8 @@ class BigCurrencyInput extends React.PureComponent<any> {
           </Grid>
         </React.Fragment>
       </div>
-    )
+    );
   }
 }
 
-export default withStyles(styles)(withStore(BigCurrencyInput))
+export default withStyles(styles)(withStore(BigCurrencyInput));

@@ -15,17 +15,12 @@ import Alert from "../assets/alert.svg";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(20,20,20)",
+    background: "rgb(37,37,37)",
     borderRadius: "40px",
-    // border: "1px solid #3596DD",
-    // boxShadow:
-    //     "#FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
-    maxWidth: 350,
-    minWidth: 350,
-    // margin: "0px auto " + theme.spacing(1) + "px",
+    width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
-      maxWidth: "85%",
+      width: "80%",
     },
     position: "absolute",
     left: "50%",
@@ -34,11 +29,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   successContainer: {
     paddingTop: theme.spacing(1),
-    // display: "flex",
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
-    // opacity: 0.6,
     transition: "all 0.2s ease-in-out",
     "& img": {
       height: 75,
@@ -91,10 +84,7 @@ interface Props {
 
 const ErrorModal: React.FC<Props> = function (props) {
   const { classes, targetNetwork, errorType, store } = props;
-
-  console.log(errorType);
   const open = store.get(errorType);
-  console.log(open);
 
   return (
     <div>
@@ -140,7 +130,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                   </div>
                   <div className={classes.generalContainer}>
                     <Typography className={classes.confirmationText}>
-                      Is it installed? Please do so before continuing.
+                      Is it installed? Please enable it before continuing.
                     </Typography>
                   </div>
                 </div>

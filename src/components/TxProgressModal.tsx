@@ -18,17 +18,12 @@ import Success from "../assets/success.svg";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(20,20,20)",
+    background: "rgb(37,37,37)",
     borderRadius: "40px",
-    // border: "1px solid #3596DD",
-    // boxShadow:
-    //     "#FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
-    maxWidth: 350,
-    minWidth: 350,
-    // margin: "0px auto " + theme.spacing(1) + "px",
+    width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
-      maxWidth: "80%",
+      width: "80%",
     },
     position: "absolute",
     left: "50%",
@@ -37,11 +32,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   successContainer: {
     paddingTop: theme.spacing(1),
-    // display: "flex",
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
-    // opacity: 0.6,
     transition: "all 0.2s ease-in-out",
     "& img": {
       height: 75,
@@ -52,6 +45,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   successText: {
     color: "#fff",
     fontSize: 18,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 16,
+    },
   },
   walletText: {
     color: "#fff",
@@ -60,6 +56,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 16,
+    },
   },
   generalContainer: {
     paddingTop: theme.spacing(4),
@@ -70,10 +69,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     // color: theme.palette.info.contrastText,
     color: "#fff",
     fontSize: 16,
-  },
-  confirmationCount: {
-    color: "#fff",
-    fontSize: 16,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 14,
+    },
   },
   dismissContainer: {
     paddingTop: theme.spacing(2),
@@ -207,7 +205,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
                       confirmationNumber={confirmation}
                       confirmationTotal={total}
                     />
-                    <Typography className={classes.confirmationCount}>
+                    <Typography className={classes.confirmationText}>
                       {confirmation} of {total}
                     </Typography>
                   </div>

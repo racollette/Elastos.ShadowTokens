@@ -4,44 +4,44 @@ import { withStyles } from "@material-ui/styles";
 import theme from "../theme/theme";
 
 const styles = () => ({
-    link: {
-        fontSize: 16,
-        textDecoration: "none",
-        cursor: "pointer",
+  link: {
+    fontSize: 16,
+    textDecoration: "none",
+    cursor: "pointer",
+  },
+  lunarLink: {
+    color: theme.palette.primary.main,
+    "&:hover": {
+      color: "#8DFEFF",
     },
-    lunarLink: {
-        color: theme.palette.primary.main,
-        "&:hover": {
-            color: "#8DFEFF",
-        },
+  },
+  solarLink: {
+    color: "#bd660f",
+    "&:hover": {
+      color: "#ff0",
     },
-    solarLink: {
-        color: "#bd660f",
-        "&:hover": {
-            color: "#ff0",
-        },
-    },
+  },
 });
 
 interface Props {
-    className?: string;
-    classes: { [key in string]: string };
-    url: any;
+  className?: string;
+  classes: { [key in string]: string };
+  url: any;
 }
 
-const ActionLink: React.FC<Props> = function(props) {
-    const { children, classes, url } = props;
+const ActionLink: React.FC<Props> = function (props) {
+  const { children, classes, url } = props;
 
-    // let color = classes.lunarLink;
-    // if (direction === 1) {
-    //     color = classes.solarLink;
-    // }
-
-    return (
-        <a className={classNames(classes.link)} target="_blank" rel="noopener noreferrer" href={url}>
-            {children}
-        </a>
-    );
+  return (
+    <a
+      className={classNames(classes.link)}
+      target="_blank"
+      rel="noopener noreferrer"
+      href={url}
+    >
+      {children}
+    </a>
+  );
 };
 
 export default withStyles(styles)(ActionLink);

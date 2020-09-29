@@ -16,17 +16,12 @@ import Fade from "@material-ui/core/Fade";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(32,32,32)",
-
+    background: "rgb(37,37,37)",
     borderRadius: "40px",
-    // border: "1px solid #3596DD",
-    // boxShadow:
-    //   "#FFF 0 -5px 4px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0)",
-    maxWidth: 350,
-    // margin: "0px auto " + theme.spacing(1) + "px",
+    width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
-      maxWidth: "80%",
+      width: "80%",
     },
     position: "absolute",
     left: "50%",
@@ -72,12 +67,18 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 16,
+    },
   },
   assetText: {
     color: theme.palette.info.contrastText,
     fontSize: 18,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 16,
+    },
   },
   tokenMapContainer: {
     paddingTop: theme.spacing(3),
@@ -104,6 +105,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     color: theme.palette.info.contrastText,
     fontSize: 16,
     paddingTop: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 14,
+    },
   },
 });
 

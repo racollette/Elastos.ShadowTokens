@@ -3,8 +3,7 @@ import * as Sentry from "@sentry/react";
 import Web3 from "web3";
 // import Box from '3box'
 import Web3Modal from "web3modal";
-// import MEWconnect from "@myetherwallet/mewconnect-web-client";
-
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import ELA from "../assets/ela.png"
 import ETH from "../assets/eth.png";
 import TRX from "../assets/tron.png";
@@ -12,6 +11,7 @@ import USDT from "../assets/usdt.png";
 
 import MetaMask from "../assets/metamask-fox.svg";
 import Elaphant from "../assets/elaphant.png";
+import WalletConnect from "../assets/walletconnect.svg";
 
 import { getStore } from "../services/storeService";
 // import erc20ABI from "./erc20ABI.json";
@@ -46,6 +46,7 @@ export const BRIDGE_ICON_MAP: { [key in string]: string } = {
 export const WALLET_ICON_MAP: { [key in string]: string } = {
     MetaMask: MetaMask,
     Elaphant: Elaphant,
+    WalletConnect: WalletConnect,
 };
 
 export const NAME_MAP = {
@@ -143,6 +144,15 @@ export const getNetworkName = function(id: any, type: string) {
     }
 }
 
+export const walletConnectOptions = {
+    walletconnect: {
+        package: WalletConnectProvider, // required
+        options: {
+            infuraId: "27e484dcd9e3efcfd25a83a78777cdf1" // required
+        }
+    }
+}
+
 /**
  * Connecting to Local Web3 Wallet
  */
@@ -172,7 +182,9 @@ export const initLocalWeb3 = async function(type: any) {
                 return
             }
 
-            const providerOptions = {};
+            const providerOptions = {
+            };
+
             const web3Modal = new Web3Modal({
                 // network: selectedNetwork === "mainnet" ? "mainnet" : "private", // optional
                 cacheProvider: false, //optional
@@ -214,8 +226,40 @@ export const initLocalWeb3 = async function(type: any) {
             //     if (!currentProvider) return;
             //     accounts = await web3Provider.enable();
             //     network = selectedNetwork;
+        } else if (type === "WalletConnect") {
+            console.log('WalletConnect not yet supported')
+            const providerOptions = {
+                walletconnect: {
+                    package: WalletConnectProvider, // required
+                    options: {
+                        infuraId: "27e484dcd9e3efcfd25a83a78777cdf1" // required
+                    }
+                }
+            };
+            const web3Modal = new Web3Modal({
+                // network: selectedNetwork === "mainnet" ? "mainnet" : "private", // optional
+                cacheProvider: false, //optional
+                providerOptions,
+            });
+            const web3Provider = await web3Modal.connect();
+            web3 = new Web3(web3Provider);
+            setListener(web3)
+
+            if (typeof web3.currentProvider === "string") return;
+            if (!web3.currentProvider) return;
+            accounts = await web3.eth.getAccounts();
+            const netId = await web3.eth.net.getId();
+            // network = getNetworkName(netId, "id")
+            let networkId = await web3.eth.net.getNetworkType()
+            if (netId === 1 && networkId === "private") {
+                networkId = "elastos"
+                network = getNetworkName(networkId, "name")
+            } else {
+                network = getNetworkName(netId, "id")
+            }
         } else if (type === "Elaphant") {
             console.log('Elaphant wallet not yet supported')
+            return
         } else {
             console.error("Invalid wallet type.");
             store.set("spaceError", true);

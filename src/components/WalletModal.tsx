@@ -17,17 +17,12 @@ import theme from "../theme/theme";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(32,32,32)",
-
+    background: "rgb(37,37,37)",
     borderRadius: "40px",
-    // border: "1px solid #ff8000",
-    // boxShadow:
-    //   "#FFF 0 -2px 3px, #ff0 0 -1px 10px, #ff8000 0 -10px 20px, red 0 -9px 20px, 5px 5px 10px 5px rgba(0,0,0,0)",
     width: 500,
-    // margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "80%",
+    [theme.breakpoints.down("xs")]: {
+      width: "80%",
     },
     position: "absolute",
     left: "50%",
@@ -55,22 +50,21 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   metamask: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     "& div": {
       background: "rgb(255,255,255,0.1)",
       borderRadius: "10px",
       border: "1px solid transparent",
-      width: 110,
+      width: 120,
       height: 110,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       cursor: "pointer",
-      // opacity: 0.6,
+      opacity: 0.75,
       transition: "all 0.2s ease-in-out",
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
+      margin: theme.spacing(1),
       padding: theme.spacing(2),
       boxShadow:
         "0px 3px 3px -2px rgba(0,0,0,0.1),0px 3px 4px 0px rgba(0,0,0,0.07),0px 1px 8px 0px rgba(0,0,0,0.06)",
@@ -94,10 +88,10 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingTop: theme.spacing(1),
     color: "#fff",
     textTransform: "uppercase",
-    fontSize: 12.5,
+    fontSize: 11.5,
     fontWeight: "bold",
     [theme.breakpoints.down("sm")]: {
-      fontSize: 11,
+      fontSize: 10,
     },
   },
   selectedWallet: {
@@ -204,13 +198,6 @@ class WalletModal extends React.Component<any> {
                   Metamask
                 </Typography>
               </Grid>
-
-              {/* <div
-                        className={walletType === "mew-connect" ? "selected" : ""}
-                        onClick={() => store.set("selectedWalletType", "mew-connect")}
-                    >
-                        <img src={Mew} alt="Mew" />
-                    </div> */}
               <Grid
                 container
                 className={walletType === "Elaphant" ? "selected" : ""}
@@ -219,6 +206,19 @@ class WalletModal extends React.Component<any> {
                 <img src={WALLET_ICON_MAP["Elaphant"]} alt="Elaphant" />
                 <Typography className={classes.walletLabel}>
                   Elaphant
+                </Typography>
+              </Grid>
+              <Grid
+                container
+                className={walletType === "WalletConnect" ? "selected" : ""}
+                onClick={() => store.set("selectedWalletType", "WalletConnect")}
+              >
+                <img
+                  src={WALLET_ICON_MAP["WalletConnect"]}
+                  alt="WalletConnect"
+                />
+                <Typography className={classes.walletLabel}>
+                  WalletConnect
                 </Typography>
               </Grid>
             </Grid>
