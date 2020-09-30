@@ -52,7 +52,7 @@ const styles = () => ({
     paddingLeft: theme.spacing(2),
     marginBottom: theme.spacing(3),
     fontSize: 18,
-    color: "#fff",
+    color: theme.palette.info.contrastText,
     [theme.breakpoints.down("sm")]: {
       fontSize: 16,
     },

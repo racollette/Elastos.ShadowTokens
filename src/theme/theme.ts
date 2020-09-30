@@ -24,7 +24,7 @@ export default createMuiTheme({
         },
         secondary: {
             light: "#ff0",
-            main: "#bb387aff",
+            main: "#b04373ff",
             dark: "#404040",
             contrastText: "#fff",
         },
@@ -33,6 +33,12 @@ export default createMuiTheme({
             main: "#797986",
             dark: "#404040",
             contrastText: "rgba(255, 255, 255, 0.5)",
+        },
+        success: {
+            light: "#32ce7cff",
+            main: "#0aab6eff",
+            dark: "#404040",
+            contrastText: "#fff",
         },
         divider: "#606060",
     },

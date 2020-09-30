@@ -14,6 +14,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Success from "../assets/success.svg";
+import Sent from "../assets/sent.svg";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
@@ -85,6 +86,13 @@ const ExplorerButton = withStyles({
   root: {
     textTransform: "none",
     color: theme.palette.info.contrastText,
+  },
+})(Button);
+
+const SuccessButton = withStyles({
+  root: {
+    color: theme.palette.success.light,
+    borderColor: theme.palette.success.light,
   },
 })(Button);
 
@@ -161,9 +169,8 @@ const TxProgressModal: React.FC<Props> = function (props) {
                   justify="flex-end"
                   className={classes.dismissContainer}
                 >
-                  <Button
+                  <SuccessButton
                     variant={"outlined"}
-                    color="primary"
                     disableRipple
                     fullWidth
                     className={classNames(classes.actionButton)}
@@ -171,13 +178,14 @@ const TxProgressModal: React.FC<Props> = function (props) {
                       restoreInitialState();
                     }}
                   >
-                    Okay
-                  </Button>
+                    OKAY
+                  </SuccessButton>
                 </Grid>
               </div>
             ) : (
               <div className={classes.container}>
                 <div className={classes.successContainer}>
+                  <img src={Sent} alt="Sent" />
                   <Typography className={classes.successText}>
                     Transfer request sent
                   </Typography>
