@@ -22,7 +22,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   logo: {
-    height: 40,
+    height: 44,
     width: "auto",
     marginRight: theme.spacing(1),
   },

@@ -41,8 +41,11 @@ const styles = () => ({
     },
   },
   titleImage: {
-    width: "60%",
+    width: "65%",
     height: "auto",
+    [theme.breakpoints.down("xs")]: {
+      width: "75%",
+    },
   },
   gray: {
     color: theme.palette.info.contrastText,
