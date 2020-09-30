@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Menu from "@material-ui/core/Menu";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
-import ShadowtokensTitle from "../assets/logo_title5.svg";
+import ShadowtokensTitle from "../assets/logo_title11.svg";
 
 import {
   BRIDGE_SYMBOL_MAP,

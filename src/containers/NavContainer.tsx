@@ -6,7 +6,7 @@ import classNames from "classnames";
 import { restoreInitialState } from "../utils/txUtils";
 import { BRIDGE_NAME_MAP, BRIDGE_ICON_MAP } from "../utils/bridgeUtils";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
-import ShadowtokensLogo from "../assets/logo_title5.svg";
+import ShadowtokensLogo from "../assets/logo_title11.svg";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
