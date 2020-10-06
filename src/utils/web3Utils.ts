@@ -1,8 +1,14 @@
-export const ETH_GATEWAY_MAIN = "0x8029e261707d1cd3e27b621f65Bbd9ed4B103a17";
-export const ETH_GATEWAY_TEST = "0x8029e261707d1cd3e27b621f65Bbd9ed4B103a17";
 
-export const USDT_ADDRESS_MAIN = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 export const USDT_ADDRESS_TEST = "0x1a37dd375096820a5fde14342720102c07100f26";
+
+// Development contracts
+export const CONTRACT_MAP: { [key in string]: string } = {
+    ela: "0x5b0d153ed6404a02c885ebe864c21c22996e289d", // Ela testnet
+    eth: "0x5b0d153ED6404a02C885EBE864C21C22996e289D", // Kovan
+}
+
+
+
 
 
 

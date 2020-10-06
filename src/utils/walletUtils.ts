@@ -14,15 +14,15 @@ import Elaphant from "../assets/elaphant.png";
 import WalletConnect from "../assets/walletconnect.svg";
 
 import { getStore } from "../services/storeService";
+
+import { CONTRACT_MAP } from "./web3Utils";
+import { updateConfirmations } from "./transferUtils";
+import ETH_ELA_GATEWAY_ABI from "./ETH_ELA_GATEWAY_ABI.json";
 // import erc20ABI from "./erc20ABI.json";
-// import {
-//     USDT_ADDRESS_TEST,
-// } from "./web3Utils";
+
 
 // used for montoring balances
 let walletDataInterval: any = null;
-
-// export const ASSETS = ["BTC", "WBTC"];
 
 // Top level bridge selection options
 export const BRIDGE_SYMBOL_MAP: { [key in string]: string } = {
@@ -85,9 +85,11 @@ export const NETWORK_MAP: { [key in string]: string } = {
     wusdt: "Elastos",
 };
 
+// Development networks
 export const NETWORK_TYPE: { [key in string]: string } = {
     ela: "Elastos mainnet",
-    eth: "Ethereum mainnet",
+    // eth: "Ethereum mainnet",
+    eth: "Kovan testnet",
     usdt: "Ethereum mainnet",
     wela: "Ethereum mainnet",
     weth: "Elastos mainnet",
@@ -131,8 +133,10 @@ export const SUPPORTED_NETWORK_NAMES: { [key in string]: string } = {
     elastos: 'Elastos mainnet'
 }
 
+// Development rpc
 export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
-    ela: "https://mainrpc.elaeth.io",
+    ela: "https://mainrpc.elaeth.io", // "https://rpc.elaeth.io",
+
 }
 
 export const getNetworkName = function(id: any, type: string) {
@@ -206,6 +210,7 @@ export const initLocalWeb3 = async function(type: any) {
                 network = getNetworkName(networkId, "name")
             } else {
                 network = getNetworkName(netId, "id")
+                console.log(network)
             }
             // } else if (type === "mew-connect") {
             //     const chainId = selectedNetwork === "testnet" ? 42 : 1;
@@ -365,11 +370,11 @@ export const updateBalance = async function() {
     // const usdt = new web3.eth.Contract(erc20ABI, USDTAddress);
     // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
 
-    if (walletNetwork === "Ethereum mainnet") {
+    if (walletNetwork === "Ethereum mainnet" || walletNetwork === "Kovan testnet" || walletNetwork === "Rinkeby") {
         const ethBal = await web3.eth.getBalance(walletAddress);
         console.log('ETH BALANACE', ethBal)
         store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(4));
-    } else if (walletNetwork === "Elastos mainnet") {
+    } else if (walletNetwork === "Elastos mainnet" || walletNetwork === "Elastos testnet") {
         const elaBal = await web3.eth.getBalance(walletAddress);
         console.log('ELA BALANACE', elaBal)
         store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(4));
@@ -470,5 +475,96 @@ export const abbreviateAddress = function(walletAddress: string) {
         );
     }
 };
+
+////// Send tx
+
+//  getAccount: function (callback) {
+//     this.theWeb3.eth.getAccounts().then((accounts) => {
+//       this._theAccount = accounts[0];
+//       return callback(this._theAccount);
+//     });
+//   },
+
+//   getBalanceOfToken: function (callback) {
+//     this.getTokenContract()
+//       .methods.balanceOf(this._theAccount)
+//       .call()
+//       .then((balance) => {
+//         return callback(balance);
+//       });
+//   },
+
+//   getBalanceOfETH: function (callback) {
+//     this.theWeb3.eth.getBalance(this._theAccount).then((balance) => {
+//       console.log("ETH balance", balance);
+//       return callback(this.theWeb3.utils.fromWei(balance, "ether"));
+//     });
+//   },
+
+
+
+export const getInputContract = function(inputAsset: string) {
+    const store = getStore();
+    // const contractInput = store.get("_contractInput")
+    const web3 = store.get("localWeb3")
+
+    let contract = new web3.eth.Contract(ETH_ELA_GATEWAY_ABI, CONTRACT_MAP[inputAsset])
+    store.set("_contractInput", contract)
+
+    return contract
+};
+
+export const startTransfer = function(confirmTx: any) {
+    const contract = getInputContract(confirmTx.sourceAsset)
+    const store = getStore();
+    const web3 = store.get("localWeb3")
+    const web3Address = store.get("localWeb3Address")
+
+    console.log(confirmTx)
+
+    console.log(web3Address)
+    console.log(web3.utils.toWei(String(confirmTx.amount), "ether"))
+
+    web3.eth
+        .sendTransaction(
+            {
+                from: web3Address,
+                to: "0x61ffC37eFB973561d5fe91B11c14EbAd603F7d67", // CONTRACT_MAP[confirmTx.sourceAsset],
+                value: web3.utils.toWei(String(confirmTx.amount), "ether"),
+            },
+            (error: any, hash: any) => {
+                if (error) {
+                    if (error.code === 4001) {
+                        store.set("waitingApproval", false)
+                        store.set("txRejected", true)
+                    } else {
+                        store.set("waitingApproval", false)
+                        store.set("unknownError", true)
+                    }
+                    return console.error(error);
+                } else {
+                    // return callback(hash);
+                    store.set("sourceTxID", hash)
+                }
+            }
+        )
+        .on("transactionHash", (tx: any) => {
+            // console.log('done callback')
+            // }).on('receipt', receipt => {
+            // return doneCallback(receipt.transactionHash)
+            // return doneCallback(tx);
+            store.set("waitingApproval", false);
+            store.set("confirmationProgress", true);
+        })
+        .on('confirmation', function(confirmationNumber: number, receipt: any) {
+            updateConfirmations(confirmationNumber);
+        })
+    // .on('error', (error: any) => {
+    //     store.set("waitingApproval", false)
+    //     store.set("unknownError", true)
+    // })
+};
+
+
 
 export default {};
