@@ -515,7 +515,7 @@ export const getInputContract = function(inputAsset: string) {
 };
 
 export const startTransfer = function(confirmTx: any) {
-    const contract = getInputContract(confirmTx.sourceAsset)
+    // const contract = getInputContract(confirmTx.sourceAsset)
     const store = getStore();
     const web3 = store.get("localWeb3")
     const web3Address = store.get("localWeb3Address")

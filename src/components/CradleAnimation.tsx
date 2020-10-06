@@ -1,11 +1,11 @@
 import React from "react";
 import { Styles, withStyles } from "@material-ui/styles";
 import theme from "../theme/theme";
-import {
-    BRIDGE_SYMBOL_MAP,
-    BRIDGE_NAME_MAP,
-    BRIDGE_ICON_MAP,
-} from "../utils/bridgeUtils";
+// import {
+//     BRIDGE_SYMBOL_MAP,
+//     BRIDGE_NAME_MAP,
+//     BRIDGE_ICON_MAP,
+// } from "../utils/bridgeUtils";
 
 const styles: Styles<any, any> = () => ({
     cradleContainer: {
