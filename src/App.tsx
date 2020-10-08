@@ -99,6 +99,9 @@ const initialState = {
     txRejected: false,
     unknownError: false,
 
+    // warnings
+    walletConnectWarning: false,
+
     // awaiting user
     waitingApproval: false,
 

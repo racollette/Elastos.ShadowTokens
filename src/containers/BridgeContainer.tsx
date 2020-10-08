@@ -23,7 +23,7 @@ const styles = () => ({
         background: "rgb(32,32,32)",
         borderRadius: "40px",
         // boxShadow:
-        //   " #FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
+        //     " #FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
         maxWidth: 500,
         margin: "0px auto " + theme.spacing(1) + "px",
         padding: theme.spacing(2.5),
@@ -270,8 +270,7 @@ class BridgeContainer extends React.Component<Props> {
                         className={classes.subtitle}
                         variant="body1"
                     >
-                        Your assets, anywhere. Map your tokens to other blockchains by
-                        minting ShadowTokens.
+                        Bridge your coins and tokens to other blockchains. No custody. Fully decentralized and validated by oracles.
           </Typography>
                 </Grid>
                 <div className={classes.actionsContainer}>
