@@ -1,5 +1,6 @@
 import React from "react";
 import { Styles, withStyles } from "@material-ui/styles";
+import { TranslateSVG } from "../components/Translate";
 import theme from "../theme/theme";
 // import {
 //     BRIDGE_SYMBOL_MAP,
@@ -80,11 +81,9 @@ class CradleAnimation extends React.PureComponent<any> {
                         <path id="arc-right-up" fill="none" d="M 100 90 A 90 90 0 0 0 190 0" />
                     </svg>
 
-                    <text x="170" y="50" fill="#ffffff" className={classes.text}
-                        text-anchor="middle">
-                        {/* One token in, one token out. */}
-                        Conservation of assets
-  </text>
+                    <text x="170" y="50" fill="#ffffff" className={classes.text} textAnchor="middle">
+                        <TranslateSVG text="Home.Title" />
+                    </text>
                     <circle cx="20" cy="20" r="20" fill="url(#grad1)" filter="url(#f1)">
                         <animateMotion dur="1.5s" repeatCount="indefinite"
                             calcMode="linear"

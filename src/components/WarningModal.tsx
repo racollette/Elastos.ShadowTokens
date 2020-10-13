@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-
+import { Translate } from "./Translate";
 import Warning from "../assets/alert.svg";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
@@ -109,13 +109,13 @@ const WarningModal: React.FC<Props> = function(props) {
                                     <div className={classes.errorContainer}>
                                         <img src={Warning} alt="Warning" />
                                         <Typography className={classes.successText}>
-                                            Warning
+                                            <Translate text="Warning.Title"/>
                     </Typography>
                                     </div>
                                     <div className={classes.generalContainer}>
                                         <Typography className={classes.confirmationText}>
-                                            Please be advised that retrieving Ethereum-based assets from other blockchains requires a wallet capable of switching networks. Currently, this includes the MetaMask, etc etc wallets.
-                    </Typography>
+                                            <Translate text="Warning.Message"/>
+                                        </Typography>
                                     </div>
                                 </div>
                             )}
@@ -135,7 +135,8 @@ const WarningModal: React.FC<Props> = function(props) {
                                         store.set(warningType, false);
                                     }}
                                 >
-                                    Okay
+                                 <Translate text="Warning.Accept"/>
+
                 </Button>
                             </Grid>
                         </div>

@@ -8,9 +8,9 @@ import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-
 import Fail from "../assets/fail.svg";
 import Alert from "../assets/alert.svg";
+import { Translate } from "./Translate";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
     container: {
@@ -112,13 +112,12 @@ const ErrorModal: React.FC<Props> = function(props) {
                                     <div className={classes.errorContainer}>
                                         <img src={Fail} alt="Error" />
                                         <Typography className={classes.successText}>
-                                            Wrong Network
+                                            <Translate text="Error.WrongNetwork.Title"/>
                     </Typography>
                                     </div>
                                     <div className={classes.generalContainer}>
                                         <Typography className={classes.confirmationText}>
-                                            Please connect your wallet to the {targetNetwork} to
-                                            communicate with the bridge.
+                                             <Translate text="Error.WrongNetwork.Message1"/>&nbsp;{targetNetwork}&nbsp;<Translate text="Error.WrongNetwork.Message2"/>
                     </Typography>
                                     </div>
                                 </div>
@@ -129,13 +128,13 @@ const ErrorModal: React.FC<Props> = function(props) {
                                     <div className={classes.errorContainer}>
                                         <img src={Alert} alt="Alert" />
                                         <Typography className={classes.successText}>
-                                            No Wallet Found
+                                             <Translate text="Error.NoWeb3.Title"/>
                     </Typography>
                                     </div>
                                     <div className={classes.generalContainer}>
                                         <Typography className={classes.confirmationText}>
-                                            Is it installed? Please enable it before continuing.
-                    </Typography>
+                                        <Translate text="Error.NoWeb3.Message"/>
+                  </Typography>
                                     </div>
                                 </div>
                             )}
@@ -145,7 +144,7 @@ const ErrorModal: React.FC<Props> = function(props) {
                                     <div className={classNames(classes.errorContainer, classes.spacer)}>
                                         <img src={Alert} alt="Alert" />
                                         <Typography className={classes.successText}>
-                                            Transaction rejected
+                                        <Translate text="Error.TxRejected.Message"/>
                     </Typography>
                                     </div>
                                 </div>
@@ -156,7 +155,7 @@ const ErrorModal: React.FC<Props> = function(props) {
                                     <div className={classNames(classes.errorContainer, classes.spacer)}>
                                         <img src={Alert} alt="Alert" />
                                         <Typography className={classes.successText}>
-                                            An unknown error occurred
+                                        <Translate text="Error.Unknown.Message"/>
                     </Typography>
                                     </div>
                                 </div>
@@ -177,7 +176,7 @@ const ErrorModal: React.FC<Props> = function(props) {
                                         store.set(errorType, false);
                                     }}
                                 >
-                                    Okay
+                                    <Translate text="Error.Accept"/>
                 </Button>
                             </Grid>
                         </div>

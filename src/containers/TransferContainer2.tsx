@@ -16,7 +16,7 @@ import {
   // abbreviateAddress,
   // updateBalance,
 } from "../utils/walletUtils";
-
+import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -28,6 +28,7 @@ import ErrorModal from "../components/ErrorModal";
 import AddressValidator from "wallet-address-validator";
 import Numeral from "numeral";
 import theme from "../theme/theme";
+import { Translate } from "../components/Translate";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
@@ -278,7 +279,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     fontSize: 11.5,
   },
 });
-//
+
 class TransferContainer2 extends React.Component<any> {
   burnInputRef = React.createRef();
   constructor(props: any) {
@@ -532,6 +533,17 @@ class TransferContainer2 extends React.Component<any> {
     }
     const wrongNetwork = store.get("wrongNetwork");
 
+    // Workaround to translation issue in input placeholder field
+    const locale = i18n.language;
+    const placeholder =
+      locale === "en"
+        ? `Enter ${NETWORK_MAP[destAsset]} Address`
+        : `输入 ${NETWORK_MAP[destAsset]} 地址`;
+    const inputError =
+      locale === "en"
+        ? `Please enter a valid ${NETWORK_MAP[destAsset]} address`
+        : `请输入一个有效的 ${NETWORK_MAP[destAsset]} 地址`;
+
     // const allowance = store.get("convert.adapterWbtcAllowance");
     // const convertAddressValid = store.get("convert.destinationValid");
     // const hasAllowance = Number(amount) <= Number(allowance);
@@ -567,7 +579,7 @@ class TransferContainer2 extends React.Component<any> {
               }}
             />
             <Typography variant="overline" className={classes.navTitle}>
-              Build Transaction
+              <Translate text="Transfer.Header" />
             </Typography>
           </div>
           {
@@ -637,7 +649,8 @@ class TransferContainer2 extends React.Component<any> {
                     >
                       <Grid container justify="center">
                         <Typography className={classes.sourceLabel}>
-                          From {NETWORK_MAP[selectedAsset]}
+                          <Translate text="Transfer.From" />
+                          &nbsp;{NETWORK_MAP[selectedAsset]}
                         </Typography>
                       </Grid>
                       <Grid container justify="center">
@@ -650,7 +663,8 @@ class TransferContainer2 extends React.Component<any> {
                       </Grid>
                       <Grid container justify="center">
                         <Typography className={classes.destLabel}>
-                          To {NETWORK_MAP[destAsset]}
+                          <Translate text="Transfer.To" />
+                          &nbsp;{NETWORK_MAP[destAsset]}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -665,7 +679,7 @@ class TransferContainer2 extends React.Component<any> {
                     >
                       <Hidden xsDown>
                         <Grid item className={classes.grayText} sm={4}>
-                          {assetConvertType}
+                          <Translate text={`Transfer.${assetConvertType}`} />
                         </Grid>
                       </Hidden>
 
@@ -691,10 +705,9 @@ class TransferContainer2 extends React.Component<any> {
                       </Grid>
                     </Grid>
                   </React.Fragment>
-                  /// End ETH to ELA
                 )}
                 {selectedDirection === 1 && (
-                  /// ELA to ETH
+                  // / ELA to ETH
                   <React.Fragment>
                     <Grid
                       container
@@ -744,7 +757,8 @@ class TransferContainer2 extends React.Component<any> {
                     >
                       <Grid container justify="center">
                         <Typography className={classes.sourceLabel}>
-                          From {NETWORK_MAP[selectedAsset]}
+                          <Translate text="Transfer.From" />
+                          &nbsp;{NETWORK_MAP[selectedAsset]}
                         </Typography>
                       </Grid>
                       <Grid container justify="center">
@@ -757,7 +771,8 @@ class TransferContainer2 extends React.Component<any> {
                       </Grid>
                       <Grid container justify="center">
                         <Typography className={classes.destLabel}>
-                          To {NETWORK_MAP[destAsset]}
+                          <Translate text="Transfer.To" />
+                          &nbsp;{NETWORK_MAP[destAsset]}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -772,7 +787,7 @@ class TransferContainer2 extends React.Component<any> {
                     >
                       <Hidden xsDown>
                         <Grid item className={classes.grayText} sm={4}>
-                          {assetConvertType}
+                          <Translate text={`Transfer.${assetConvertType}`} />
                         </Grid>
                       </Hidden>
 
@@ -798,27 +813,22 @@ class TransferContainer2 extends React.Component<any> {
                       </Grid>
                     </Grid>
                   </React.Fragment>
-                  /// End ELA to ETH
                 )}
                 {/* Destination Address input */}
                 <Grid>
                   <div className={classes.addressInput}>
                     <TextField
                       color={selectedDirection ? "secondary" : "primary"}
-                      label="Destination Address"
+                      label={<Translate text="Transfer.Destination" />}
                       placeholder={
                         localWeb3Address && localWeb3Address.length > 0
                           ? localWeb3Address
-                          : `Enter ${NETWORK_MAP[destAsset]} Address`
+                          : placeholder
                       }
                       size="medium"
                       fullWidth={true}
                       error={showDestinationError}
-                      helperText={
-                        showDestinationError
-                          ? `Please enter a valid ${NETWORK_MAP[destAsset]} address`
-                          : ""
-                      }
+                      helperText={showDestinationError ? inputError : ""}
                       InputProps={{ disableUnderline: true }}
                       InputLabelProps={{
                         shrink: true,
@@ -868,7 +878,7 @@ class TransferContainer2 extends React.Component<any> {
                           store.set("showWalletModal", true);
                         }}
                       >
-                        Connect Wallet
+                        <Translate text="Transfer.Connect" />
                       </Button>
                     ) : (
                       <div>
@@ -882,7 +892,7 @@ class TransferContainer2 extends React.Component<any> {
                           className={classNames(classes.actionButton)}
                           onClick={this.isSelectedNetwork.bind(this)}
                         >
-                          Next
+                          <Translate text="Transfer.Next" />
                         </Button>
                         {wrongNetwork && (
                           <div>

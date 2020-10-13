@@ -12,6 +12,7 @@ import DarkTooltip from "../components/DarkTooltip";
 import WaitingModal from "../components/WaitingModal";
 import TxProgressModal from "../components/TxProgressModal";
 import ErrorModal from "../components/ErrorModal";
+import { Translate } from "../components/Translate";
 import theme from "../theme/theme";
 import {
     abbreviateAddress,
@@ -341,7 +342,7 @@ class ConfirmContainer extends React.Component<any> {
                             }}
                         />
                         <Typography variant="overline" className={classes.navTitle}>
-                            Confirmation
+                        <Translate text="Confirm.Header"/>
             </Typography>
 
                         <Typography variant="body1" className={classes.titleAmount}>
@@ -354,7 +355,7 @@ class ConfirmContainer extends React.Component<any> {
                         </Typography>
 
                         <Typography variant="body1">
-                            from {sourceNetwork} Network
+                            <Translate text="Confirm.From"/>&nbsp;{sourceNetwork}&nbsp;<Translate text="Confirm.Network"/>
             </Typography>
                     </div>
                     <div className={classes.actionsContainer}>
@@ -368,16 +369,18 @@ class ConfirmContainer extends React.Component<any> {
                                     >
                                         <Grid container className={classes.option}>
                                             <Grid item xs={6} className={classes.fade}>
-                                                Destination
+                                               <Translate text="Confirm.Destination"/>
+
                       </Grid>
                                             <Grid item xs={6}>
-                                                {destNetwork} Network
+                                                {destNetwork}&nbsp;<Translate text="Confirm.Network"/>
                       </Grid>
                                         </Grid>
 
                                         <Grid container className={classes.option}>
                                             <Grid item xs={6} className={classes.fade}>
-                                                Destination Asset
+                                                <Translate text="Confirm.Asset"/>
+
                       </Grid>
                                             <Grid item xs={6}>
                                                 <img alt={destAsset} src={MINI_ICON_MAP[destAsset]} />
@@ -387,7 +390,8 @@ class ConfirmContainer extends React.Component<any> {
 
                                         <Grid container className={classes.option}>
                                             <Grid item xs={6} className={classes.fade}>
-                                                Target Address
+                                                <Translate text="Confirm.Target"/>
+                                                
                       </Grid>
                                             <Grid item xs={6}>
                                                 <DarkTooltip
@@ -405,7 +409,8 @@ class ConfirmContainer extends React.Component<any> {
 
                                         <Grid container className={classes.option}>
                                             <Grid item xs={6} className={classes.fade}>
-                                                Service Fee
+                                                <Translate text="Confirm.Fee"/>
+                                                
                       </Grid>
                                             <Grid item xs={6} className={classes.amountCell}>
                                                 <img
@@ -420,7 +425,8 @@ class ConfirmContainer extends React.Component<any> {
                                         <div className={classes.totalContainer}>
                                             <Grid container className={classNames(classes.option)}>
                                                 <Grid item xs={6} className={classes.fade}>
-                                                    You will receive
+                                                    <Translate text="Confirm.Receive"/>
+
                         </Grid>
                                                 <Grid item xs={6} className={classes.amountCell}>
                                                     <img alt={destAsset} src={MINI_ICON_MAP[destAsset]} />
@@ -458,7 +464,7 @@ class ConfirmContainer extends React.Component<any> {
                                             // }, 5000);
                                         }}
                                     >
-                                        Start Transfer
+                                        <Translate text="Confirm.Start"/>
                   </Button>
                                     {waitingApproval && (
                                         <WaitingModal

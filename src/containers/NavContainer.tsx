@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
 import theme from "../theme/theme";
@@ -10,6 +10,8 @@ import ShadowtokensLogo from "../assets/logo_title11.svg";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import LanguageSelect from "../components/LanguageSelect";
+import { Translate } from "../components/Translate";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
     navContainer: {
@@ -216,7 +218,7 @@ class NavContainer extends React.Component<any> {
                                             </div>
                                         ) : (
                                                 <span className={classes.navButtonText}>
-                                                    Connect Wallet
+                                                    <Translate text="Nav.Connect"/>
                         {/* <span className={classes.hideMobile}></span> */}
                                                 </span>
                                             )}
@@ -256,11 +258,17 @@ class NavContainer extends React.Component<any> {
                                             </Grid>
                                         ) : (
                                                 <span className={classes.navButtonText}>
-                                                    Choose Bridge
+                                                <Translate text="Nav.Bridge"/>
+
                         {/* <span className={classes.hideMobile}></span> */}
                                                 </span>
                                             )}
                                     </BridgeButton>
+					 				<LanguageSelect
+                                        store={store}
+						                isVisible={true}
+						                position={{ right: 0 }}
+					                />
                                 </Grid>
                             </Grid>
                         </Grid>

@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Menu from "@material-ui/core/Menu";
 import CradleAnimation from "../components/CradleAnimation";
+import { Translate } from "../components/Translate";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 // import ShadowtokensTitle from "../assets/logo_title11.svg";
 
@@ -58,7 +59,7 @@ const styles = () => ({
         fontSize: 15,
         color: theme.palette.primary.contrastText,
         [theme.breakpoints.down("sm")]: {
-            fontSize: 13,
+            fontSize: 14,
         },
         align: "center !important",
     },
@@ -179,7 +180,9 @@ interface Props extends Balances {
     active?: string;
     pair?: string;
     disabled?: boolean;
+    // t: WithTranslation;
 }
+
 
 class BridgeContainer extends React.Component<Props> {
     bridgeEl: React.RefObject<any>;
@@ -189,6 +192,7 @@ class BridgeContainer extends React.Component<Props> {
         bridgeOpen: false,
         pairsOpen: false,
     };
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -270,8 +274,8 @@ class BridgeContainer extends React.Component<Props> {
                         className={classes.subtitle}
                         variant="body1"
                     >
-                        Bridge your coins and tokens to other blockchains. No custody. Fully decentralized and validated by oracles.
-          </Typography>
+                        <Translate text="Home.Intro"/>
+                    </Typography>
                 </Grid>
                 <div className={classes.actionsContainer}>
                     <Grid>
@@ -281,8 +285,8 @@ class BridgeContainer extends React.Component<Props> {
                                     <Grid container justify="center">
                                         {/* Bridge Chain */}
                                         <Typography className={classes.bridgeSelectionLabel}>
-                                            Supported Bridges
-                    </Typography>
+                                            <Translate text="Home.Bridges"/>
+                                        </Typography>
                                         <Button
                                             fullWidth
                                             className={(classes.button, classes.bridgeSelectionBox)}
@@ -361,7 +365,7 @@ class BridgeContainer extends React.Component<Props> {
                                     <Grid container justify="center">
                                         {/* Pair Chain */}
                                         <Typography className={classes.bridgeSelectionLabel}>
-                                            Pair Networks
+                                            <Translate text="Home.Pairs"/>
                     </Typography>
                                         <Button
                                             fullWidth
@@ -453,7 +457,7 @@ class BridgeContainer extends React.Component<Props> {
                                                 );
                                             }}
                                         >
-                                            Next
+                                            <Translate text="Home.Next"/>
                     </Button>
                                     </Grid>
                                 </Grid>
@@ -466,4 +470,7 @@ class BridgeContainer extends React.Component<Props> {
     }
 }
 
-export default withStyles(styles)(withStore(BridgeContainer));
+
+export default withStore(withStyles(styles)(BridgeContainer));
+
+

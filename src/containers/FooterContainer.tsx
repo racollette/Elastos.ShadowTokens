@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Github from "../assets/github.svg";
 import Telegram from "../assets/telegram.svg";
 import Twitter from "../assets/twitter.svg";
+import { Translate } from "../components/Translate";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   footerContainer: {
@@ -46,28 +47,30 @@ class FooterContainer extends React.Component<any> {
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-                Home
+                <Translate text="Footer.Home"/>
+      
               </a>{" "}
               <a
                 rel="noreferrer noopener"
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-                About
+              <Translate text="Footer.About"/>
+
               </a>{" "}
               <a
                 rel="noreferrer noopener"
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-                FAQs
+              <Translate text="Footer.FAQs"/>
               </a>{" "}
               <a
                 rel="noreferrer noopener"
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-                Docs
+               <Translate text="Footer.Docs"/>
               </a>{" "}
             </Typography>
             <Typography className={classes.footerLinks} variant="caption">

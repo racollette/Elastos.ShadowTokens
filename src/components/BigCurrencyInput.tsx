@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Hidden from "@material-ui/core/Hidden";
 import theme from "../theme/theme";
+import { Translate } from "./Translate";
 
 const styles: Styles<any, any> = () => ({
   container: {
@@ -139,7 +140,8 @@ class BigCurrencyInput extends React.PureComponent<any> {
                     store.set("convert.amount", balance);
                   }}
                 >
-                  Max <Hidden xsDown>{balance || "0.00"}</Hidden>
+                  <Translate text="Transfer.Max" />
+                  &nbsp;<Hidden xsDown>{balance || "0.00"}</Hidden>
                 </Button>
               </Grid>
               {/* <Grid

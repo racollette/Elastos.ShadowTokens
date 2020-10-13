@@ -3,7 +3,6 @@ import { createStore, withStore } from "@spyna/react-store";
 import queryString from "query-string";
 import { ThemeProvider, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
-
 import BridgeContainer from "./containers/BridgeContainer";
 import NavContainer from "./containers/NavContainer";
 import FooterContainer from "./containers/FooterContainer";
@@ -83,6 +82,7 @@ const initialState = {
     selectedAsset: "eth",
 
     // modals
+    localesOpen: false,
     showWalletModal: false,
     showNetworkMenu: false,
     showDepositModal: false,
@@ -156,7 +156,6 @@ class AppWrapper extends React.Component<Props> {
     async componentDidMount() {
         const { store } = this.props;
         const params = queryString.parse(window.location.search);
-
         store.set("queryParams", params);
         // setNetwork("mainnet");
         // initLocalWeb3("injected");
@@ -254,7 +253,7 @@ class AppWrapper extends React.Component<Props> {
     }
 }
 
-const AppWrapperComponent = withStore(AppWrapper);
+const AppWrapperComponent = (withStore(AppWrapper));
 
 class App extends React.Component<Props> {
     render() {

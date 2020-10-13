@@ -1,0 +1,64 @@
+{
+  "Nav.Connect": "Connect Wallet",
+  "Nav.Bridge": "Choose Bridge",
+
+  "Home.Title": "Conservation of assets",
+  "Home.Intro": "Bridge your coins and tokens to other blockchains. No custody. Fully decentralized and validated by oracles.",
+  "Home.Bridges": "Supported Bridges",
+  "Home.Pairs": "Pair Networks",
+  "Home.Next": "Next",
+
+  "Wallet.Header": "Select a wallet provider",
+  "Wallet.Connect": "Connect to ",
+
+  "Transfer.Header": "Build transaction",
+  "Transfer.Destination": "Destination Address",
+  "Transfer.Connect": "Connect Wallet",
+  "Transfer.From": "From",
+  "Transfer.To": "To",
+  "Transfer.Mint": "Mint",
+  "Transfer.Release": "Release",
+  "Transfer.Next": "Next",
+  "Transfer.Max": "Max",
+
+  "Confirm.Header": "Confirmation",
+  "Confirm.From": "from",
+  "Confirm.Network": "Network",
+  "Confirm.Destination": "Destination",
+  "Confirm.Asset": "Destination Asset",
+  "Confirm.Target": "Target Address",
+  "Confirm.Fee": "Service Fee",
+  "Confirm.Receive": "You will receive",
+  "Confirm.Start": "Start Transfer",
+
+  "Error.WrongNetwork.Title": "Wrong Network",
+  "Error.WrongNetwork.Message1": "Please connect your wallet to the",
+  "Error.WrongNetwork.Message2": "to communicate with the bridge.",
+  "Error.NoWeb3.Title": "No Wallet Found",
+  "Error.NoWeb3.Message": "Is it installed? Please enable it before continuing.",
+  "Error.TxRejected.Message": "Transaction rejected",
+  "Error.Unknown.Message": "An unknown error occurred",
+  "Error.Accept": "Okay",
+
+  "Waiting.Confirm": "Confirm transation with",
+  "Waiting.User": "Waiting for user response...",
+
+  "Progress.Success": "Success",
+  "Progress.Received": "received on ",
+  "Progress.Chain": " blockchain",
+  "Progress.Explorer": "View in explorer",
+  "Progress.Sent": "Transfer request sent",
+  "Progress.Blocks": "Waiting for block confirmations...",
+  "Progress.Complete": "Transfer complete",
+  "Progress.Oracles": "Oracles validating transaction...",
+  "Progress.Accept": "OKAY",
+
+  "Warning.Title": "Warning",
+  "Warning.Message": "Please be advised that retrieving Ethereum-based assets from other blockchains requires a wallet capable of switching networks. Currently, this includes the MetaMask, etc etc wallets.",
+  "Warning.Accept": "Okay",
+
+  "Footer.Home": "Home",
+  "Footer.About": "About",
+  "Footer.FAQs": "FAQs",
+  "Footer.Docs": "Docs"
+}

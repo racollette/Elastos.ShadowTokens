@@ -11,7 +11,7 @@ import Fade from "@material-ui/core/Fade";
 import { WALLET_ICON_MAP } from "../utils/walletUtils";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { grey } from "@material-ui/core/colors";
-
+import { Translate } from "./Translate";
 import theme from "../theme/theme";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
@@ -151,7 +151,6 @@ class WalletModal extends React.Component<any> {
     const walletType = store.get("selectedWalletType");
     const showWalletModal = store.get("showWalletModal");
 
-    let text = "Connect to " + walletType;
     // if (requesting) {
     //   if (!box) {
     //     text = "Connecting to 3box";
@@ -177,7 +176,7 @@ class WalletModal extends React.Component<any> {
           <div className={classes.container}>
             <div className={classes.headerText}>
               <Typography variant="overline" className={classes.navTitle}>
-                Select a wallet provider
+                <Translate text="Wallet.Header"/>
               </Typography>
               <HighlightOffIcon
                 style={{ color: grey[500] }}
@@ -261,7 +260,7 @@ class WalletModal extends React.Component<any> {
                     />
                   </div>
                 )} */}
-                {text}
+                <Translate text="Wallet.Connect"/>&nbsp;{walletType}
               </Button>
               {/* </Grid> */}
 

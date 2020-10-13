@@ -1,14 +1,9 @@
 import React from "react";
 import theme from "../theme/theme";
 import { Styles, withStyles } from "@material-ui/styles";
-
-import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
-
-import { MINI_ICON_MAP } from "../utils/walletUtils";
 
 const styles: Styles<any, any> = () => ({
   amountField: {
@@ -84,12 +79,7 @@ class CurrencyInput extends React.Component<Props> {
 
   render() {
     const { classes, onAmountChange, bridgeDirection } = this.props;
-
     const { currency, open } = this.state;
-
-    const selected = currency;
-
-    // const bridgeDirection = "Receive";
 
     return (
       <TextField

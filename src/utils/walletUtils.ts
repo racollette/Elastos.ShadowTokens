@@ -18,7 +18,7 @@ import { getStore } from "../services/storeService";
 import { CONTRACT_MAP } from "./web3Utils";
 import { updateConfirmations } from "./transferUtils";
 import ETH_ELA_GATEWAY_ABI from "./ETH_ELA_GATEWAY_ABI.json";
-// import erc20ABI from "./erc20ABI.json";
+import erc20ABI from "./erc20ABI.json";
 
 
 // used for montoring balances
@@ -367,11 +367,10 @@ export const updateBalance = async function() {
     if (!web3 || !walletAddress) {
         return;
     }
-    // const usdt = new web3.eth.Contract(erc20ABI, USDTAddress);
-    // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
 
     if (walletNetwork === "Ethereum mainnet" || walletNetwork === "Kovan testnet" || walletNetwork === "Rinkeby") {
         const ethBal = await web3.eth.getBalance(walletAddress);
+        console.log(ethBal)
         console.log('ETH BALANACE', ethBal)
         store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(4));
     } else if (walletNetwork === "Elastos mainnet" || walletNetwork === "Elastos testnet") {
@@ -379,6 +378,18 @@ export const updateBalance = async function() {
         console.log('ELA BALANACE', elaBal)
         store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(4));
     }
+
+
+    // Mana test
+    // const usdt = new web3.eth.Contract(erc20ABI, "0x0f5d2fb29fb7d3cfee444a200298f468908cc942");
+    // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
+    // store.set("USDTBalance", Number(web3.utils.fromWei(usdtBal)).toFixed(4));
+
+    // Enigma test
+    const usdt = new web3.eth.Contract(erc20ABI, "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4");
+    // console.log(usdt)
+    const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
+    store.set("USDTBalance", Number(usdtBal / (Math.pow(10, 8))).toFixed(4));
 
     // store.set("USDTBalance", Number(parseInt(usdtBal.toString()) / 10 ** 8).toFixed(8));
     store.set("loadingBalances", false);

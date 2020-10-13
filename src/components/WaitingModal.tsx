@@ -12,6 +12,7 @@ import {
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import { Translate } from "./Translate";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
     container: {
@@ -181,7 +182,7 @@ const WaitingModal: React.FC<Props> = function(props) {
                             <div className={classes.walletIconContainer}>
                                 <img src={WALLET_ICON_MAP[wallet]} alt={wallet} />
                                 <Typography className={classes.walletText}>
-                                    Confirm transaction with {wallet}
+                                    <Translate text="Waiting.Confirm"/>&nbsp;{wallet}
                                 </Typography>
                             </div>
                             <div className={classes.tokenMapContainer}>
@@ -217,7 +218,7 @@ const WaitingModal: React.FC<Props> = function(props) {
                             <div className={classes.spinnerContainer}>
                                 <LinearProgress color="primary" />
                                 <Typography className={classes.waitingText}>
-                                    Waiting for user response...
+                                    <Translate text="Waiting.User"/>
                 </Typography>
                             </div>
                         </div>
