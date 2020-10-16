@@ -310,6 +310,7 @@ export const initLocalWeb3 = async function(type: any) {
 };
 
 export const updateMarketData = async function() {
+    console.log('updateMarketData')
     const store = getStore();
 
     try {
@@ -381,15 +382,15 @@ export const updateBalance = async function() {
 
 
     // Mana test
-    // const usdt = new web3.eth.Contract(erc20ABI, "0x0f5d2fb29fb7d3cfee444a200298f468908cc942");
-    // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
-    // store.set("USDTBalance", Number(web3.utils.fromWei(usdtBal)).toFixed(4));
+    const usdt = new web3.eth.Contract(erc20ABI, "0x0f5d2fb29fb7d3cfee444a200298f468908cc942");
+    const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
+    store.set("USDTBalance", Number(web3.utils.fromWei(usdtBal)).toFixed(4));
 
     // Enigma test
-    const usdt = new web3.eth.Contract(erc20ABI, "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4");
+    // const usdt = new web3.eth.Contract(erc20ABI, "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4");
     // console.log(usdt)
-    const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
-    store.set("USDTBalance", Number(usdtBal / (Math.pow(10, 8))).toFixed(4));
+    // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
+    // store.set("USDTBalance", Number(usdtBal / (Math.pow(10, 8))).toFixed(4));
 
     // store.set("USDTBalance", Number(parseInt(usdtBal.toString()) / 10 ** 8).toFixed(8));
     store.set("loadingBalances", false);

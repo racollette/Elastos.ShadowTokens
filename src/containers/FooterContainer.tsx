@@ -23,6 +23,13 @@ const styles: Styles<typeof theme, any> = (theme) => ({
         opacity: 0.75,
       },
     },
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      "& a": {
+        marginRight: theme.spacing(1),
+      },
+    },
   },
   footerLogo: {
     height: 12,
@@ -47,30 +54,28 @@ class FooterContainer extends React.Component<any> {
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-                <Translate text="Footer.Home"/>
-      
+                <Translate text="Footer.Home" />
               </a>{" "}
               <a
                 rel="noreferrer noopener"
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-              <Translate text="Footer.About"/>
-
+                <Translate text="Footer.About" />
               </a>{" "}
               <a
                 rel="noreferrer noopener"
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-              <Translate text="Footer.FAQs"/>
+                <Translate text="Footer.FAQs" />
               </a>{" "}
               <a
                 rel="noreferrer noopener"
                 target="_blank"
                 href={"https://elabank.net/"}
               >
-               <Translate text="Footer.Docs"/>
+                <Translate text="Footer.Docs" />
               </a>{" "}
             </Typography>
             <Typography className={classes.footerLinks} variant="caption">

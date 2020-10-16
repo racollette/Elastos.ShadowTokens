@@ -14,463 +14,459 @@ import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 // import ShadowtokensTitle from "../assets/logo_title11.svg";
 
 import {
-    BRIDGE_SYMBOL_MAP,
-    BRIDGE_NAME_MAP,
-    BRIDGE_ICON_MAP,
+  BRIDGE_SYMBOL_MAP,
+  BRIDGE_NAME_MAP,
+  BRIDGE_ICON_MAP,
 } from "../utils/bridgeUtils";
 
 const styles = () => ({
-    container: {
-        background: "rgb(32,32,32)",
-        borderRadius: "40px",
-        // boxShadow:
-        //     " #FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
-        maxWidth: 500,
-        margin: "0px auto " + theme.spacing(1) + "px",
-        padding: theme.spacing(2.5),
-        [theme.breakpoints.down("sm")]: {
-            maxWidth: "100%",
-        },
+  container: {
+    background: "rgb(32,32,32)",
+    borderRadius: "40px",
+    // boxShadow:
+    //     " #FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
+    maxWidth: 500,
+    margin: "0px auto " + theme.spacing(1) + "px",
+    padding: theme.spacing(2.5),
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
     },
-    title: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(2),
-        fontSize: 34,
-        fontWeight: 700,
-        color: "#fff",
-        [theme.breakpoints.down("sm")]: {
-            fontSize: 24,
-        },
+  },
+  title: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    fontSize: 34,
+    fontWeight: 700,
+    color: "#fff",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 24,
     },
-    titleImage: {
-        width: "65%",
-        height: "auto",
-        [theme.breakpoints.down("xs")]: {
-            width: "75%",
-        },
+  },
+  titleImage: {
+    width: "65%",
+    height: "auto",
+    [theme.breakpoints.down("xs")]: {
+      width: "75%",
     },
-    gray: {
-        color: theme.palette.info.contrastText,
+  },
+  gray: {
+    color: theme.palette.info.contrastText,
+  },
+  subtitle: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginBottom: theme.spacing(3),
+    fontSize: 15,
+    color: theme.palette.primary.contrastText,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 13,
     },
-    subtitle: {
-        paddingRight: theme.spacing(2),
-        paddingLeft: theme.spacing(2),
-        marginBottom: theme.spacing(3),
-        fontSize: 15,
-        color: theme.palette.primary.contrastText,
-        [theme.breakpoints.down("sm")]: {
-            fontSize: 14,
-        },
-        align: "center !important",
-    },
-    actionButtonContainer: {
-        // paddingTop: theme.spacing(2),
-        marginTop: theme.spacing(3),
+    align: "center !important",
+  },
+  actionButtonContainer: {
+    // paddingTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
 
-        "& button": {
-            "&.Mui-disabled": {},
-            margin: "0px auto",
-            fontSize: 12,
-            minWidth: 175,
-            padding: theme.spacing(1),
-        },
+    "& button": {
+      "&.Mui-disabled": {},
+      margin: "0px auto",
+      fontSize: 12,
+      minWidth: 175,
+      padding: theme.spacing(1),
     },
-    actionButton: {
-        borderRadius: "16px",
+  },
+  actionButton: {
+    borderRadius: "16px",
+  },
+  bridgeSelectionBox: {
+    border: "0.5px solid " + theme.palette.divider,
+    borderRadius: "10px",
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  bridgeSelectionLabel: {
+    color: theme.palette.info.contrastText,
+    fontSize: 15,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 12,
     },
-    bridgeSelectionBox: {
-        border: "0.5px solid " + theme.palette.divider,
-        borderRadius: "10px",
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
+  },
+  amountField: {
+    width: "100%",
+  },
+  endAdornment: {
+    "& p": {},
+  },
+  item: {
+    display: "flex",
+    fontSize: 14,
+    alignItems: "center",
+    minWidth: 55,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    "& div": {
+      display: "flex",
     },
-    bridgeSelectionLabel: {
-        color: theme.palette.info.contrastText,
-        fontSize: 15,
-        [theme.breakpoints.down("sm")]: {
-            fontSize: 12,
-        },
+    justifyContent: "flex-start",
+  },
+  select: {
+    display: "flex",
+    "& div": {
+      display: "flex",
     },
-    amountField: {
-        width: "100%",
+    "& MuiInput-underline:before": {
+      display: "none",
     },
-    endAdornment: {
-        "& p": {},
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginRight: 10,
+  },
+  button: {
+    fontSize: 24,
+    color: "#fff",
+    display: "flex",
+    justifyContent: "flex-start",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 16,
     },
-    item: {
-        display: "flex",
-        fontSize: 14,
-        alignItems: "center",
-        minWidth: 55,
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        "& div": {
-            display: "flex",
-        },
-        justifyContent: "flex-start",
+  },
+  arrow: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    "& svg": {
+      width: 22,
+      height: "auto",
+      marginLeft: theme.spacing(0.75),
     },
-    select: {
-        display: "flex",
-        "& div": {
-            display: "flex",
-        },
-        "& MuiInput-underline:before": {
-            display: "none",
-        },
+  },
+  balance: {
+    fontSize: 12,
+    marginTop: -2,
+    color: theme.palette.info.main,
+  },
+  standaloneOption: {
+    border: "1px solid #DBE0E8",
+    borderRadius: 4,
+    boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
+  },
+  option: {
+    minHeight: 60,
+    fontSize: 14,
+    "& img": {
+      height: "auto",
+      width: 24,
+      marginRight: theme.spacing(1),
     },
-    icon: {
-        width: 32,
-        height: 32,
-        marginRight: 10,
+    "& .MuiGrid-root": {
+      display: "flex",
+      alignItems: "center",
     },
-    button: {
-        fontSize: 24,
-        color: "#fff",
-        display: "flex",
-        justifyContent: "flex-start",
-        [theme.breakpoints.down("sm")]: {
-            fontSize: 16,
-        },
-    },
-    arrow: {
-        flex: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        "& svg": {
-            width: 22,
-            height: "auto",
-            marginLeft: theme.spacing(0.75),
-        },
-    },
-    balance: {
-        fontSize: 12,
-        marginTop: -2,
-        color: theme.palette.info.main,
-    },
-    standaloneOption: {
-        border: "1px solid #DBE0E8",
-        borderRadius: 4,
-        boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
-    },
-    option: {
-        minHeight: 60,
-        fontSize: 14,
-        "& img": {
-            height: "auto",
-            width: 24,
-            marginRight: theme.spacing(1),
-        },
-        "& .MuiGrid-root": {
-            display: "flex",
-            alignItems: "center",
-        },
-    },
+  },
 });
 
 type Balances = {
-    [key in string]: string | any;
+  [key in string]: string | any;
 };
 
 interface Props extends Balances {
-    items: Array<keyof typeof BRIDGE_SYMBOL_MAP>;
-    classes: { [key in string]: string };
-    active?: string;
-    pair?: string;
-    disabled?: boolean;
-    // t: WithTranslation;
+  items: Array<keyof typeof BRIDGE_SYMBOL_MAP>;
+  classes: { [key in string]: string };
+  active?: string;
+  pair?: string;
+  disabled?: boolean;
+  // t: WithTranslation;
 }
 
-
 class BridgeContainer extends React.Component<Props> {
-    bridgeEl: React.RefObject<any>;
-    pairsEl: React.RefObject<any>;
-    state = {
-        currency: "",
-        bridgeOpen: false,
-        pairsOpen: false,
+  bridgeEl: React.RefObject<any>;
+  pairsEl: React.RefObject<any>;
+  state = {
+    currency: "",
+    bridgeOpen: false,
+    pairsOpen: false,
+  };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      currency: "",
+      bridgeOpen: false,
+      pairsOpen: false,
     };
+    this.bridgeEl = React.createRef();
+    this.pairsEl = React.createRef();
+  }
 
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            currency: "",
-            bridgeOpen: false,
-            pairsOpen: false,
-        };
-        this.bridgeEl = React.createRef();
-        this.pairsEl = React.createRef();
+  setBridge(selectedBridge: string, selectedPair: string) {
+    const { store } = this.props;
+    store.set("confirmBridge", true);
+    store.set("selectedBridge", selectedBridge);
+    store.set("selectedPair", selectedPair);
+  }
+
+  handleBridgeOpen() {
+    this.setState({
+      bridgeOpen: true,
+    });
+  }
+
+  handleBridgeClose(event: any) {
+    const { store } = this.props;
+    const selectedBridge = store.get("selectedBridge");
+
+    const value = event.target.value;
+    console.log("HANDLE BRIDGE CLOSE", value);
+    console.log(selectedBridge);
+    if (value) {
+      this.props.onBridgeChange(value);
+      this.setState({ currency: value });
+      //   this.props.onPairChange(value);
     }
+    this.setState({ bridgeOpen: false });
+  }
 
-    setBridge(selectedBridge: string, selectedPair: string) {
-        const { store } = this.props;
-        store.set("confirmBridge", true);
-        store.set("selectedBridge", selectedBridge);
-        store.set("selectedPair", selectedPair);
+  handlePairsOpen() {
+    this.setState({
+      pairsOpen: true,
+    });
+  }
+
+  handlePairsClose(event: any) {
+    // console.log(event, event.target, event.target.value)
+    const value = event.target.value;
+    if (value) {
+      this.props.onPairChange(value);
+      this.setState({ currency: value });
     }
+    this.setState({ pairsOpen: false });
+  }
 
-    handleBridgeOpen() {
-        this.setState({
-            bridgeOpen: true,
-        });
-    }
+  render() {
+    const { classes, items, active, pair } = this.props;
 
-    handleBridgeClose(event: any) {
-        const { store } = this.props;
-        const selectedBridge = store.get("selectedBridge");
+    const { bridgeOpen, pairsOpen } = this.state;
+    const selected = active || items[0];
+    const chainPair = pair || items[0];
 
-        const value = event.target.value;
-        console.log("HANDLE BRIDGE CLOSE", value);
-        console.log(selectedBridge);
-        if (value) {
-            this.props.onBridgeChange(value);
-            this.setState({ currency: value });
-            //   this.props.onPairChange(value);
-        }
-        this.setState({ bridgeOpen: false });
-    }
+    let pairOptions = [...items].filter((item) => item !== selected);
+    // console.log("PAIR OPTIONS", pairOptions);
 
-    handlePairsOpen() {
-        this.setState({
-            pairsOpen: true,
-        });
-    }
-
-    handlePairsClose(event: any) {
-        // console.log(event, event.target, event.target.value)
-        const value = event.target.value;
-        if (value) {
-            this.props.onPairChange(value);
-            this.setState({ currency: value });
-        }
-        this.setState({ pairsOpen: false });
-    }
-
-    render() {
-        const { classes, items, active, pair } = this.props;
-
-        const { bridgeOpen, pairsOpen } = this.state;
-        const selected = active || items[0];
-        const chainPair = pair || items[0];
-
-        let pairOptions = [...items].filter((item) => item !== selected);
-        // console.log("PAIR OPTIONS", pairOptions);
-
-        return (
-            <div className={classes.container}>
-                <Grid container justify="center">
-                    <CradleAnimation />
-                    {/* <Grid container justify="center" className={classes.title}>
+    return (
+      <div className={classes.container}>
+        <Grid container justify="center">
+          <CradleAnimation />
+          {/* <Grid container justify="center" className={classes.title}>
                         <img
                             src={ShadowtokensTitle}
                             alt="ShadowTokens"
                             className={classes.titleImage}
                         />
                     </Grid> */}
-                    <Typography
-                        align="center"
-                        className={classes.subtitle}
-                        variant="body1"
+          <Typography
+            align="center"
+            className={classes.subtitle}
+            variant="body1"
+          >
+            <Translate text="Home.Intro" />
+          </Typography>
+        </Grid>
+        <div className={classes.actionsContainer}>
+          <Grid>
+            <React.Fragment>
+              <Grid container className={classNames(classes.option)}>
+                <Grid item xs={6}>
+                  <Grid container justify="center">
+                    {/* Bridge Chain */}
+                    <Typography className={classes.bridgeSelectionLabel}>
+                      <Translate text="Home.Bridges" />
+                    </Typography>
+                    <Button
+                      fullWidth
+                      className={(classes.button, classes.bridgeSelectionBox)}
+                      // size="large"
+                      ref={this.bridgeEl}
+                      aria-controls="bridgeMenu"
+                      aria-haspopup="true"
+                      onClick={this.handleBridgeOpen.bind(this)}
                     >
-                        <Translate text="Home.Intro"/>
-                    </Typography>
-                </Grid>
-                <div className={classes.actionsContainer}>
-                    <Grid>
-                        <React.Fragment>
-                            <Grid container className={classNames(classes.option)}>
-                                <Grid item xs={6}>
-                                    <Grid container justify="center">
-                                        {/* Bridge Chain */}
-                                        <Typography className={classes.bridgeSelectionLabel}>
-                                            <Translate text="Home.Bridges"/>
-                                        </Typography>
-                                        <Button
-                                            fullWidth
-                                            className={(classes.button, classes.bridgeSelectionBox)}
-                                            // size="large"
-                                            ref={this.bridgeEl}
-                                            aria-controls="bridgeMenu"
-                                            aria-haspopup="true"
-                                            onClick={this.handleBridgeOpen.bind(this)}
-                                        >
-                                            <img
-                                                src={
-                                                    BRIDGE_ICON_MAP[selected.toLowerCase()] ||
-                                                    BRIDGE_ICON_MAP["eth"]
-                                                }
-                                                alt={selected}
-                                                className={classes.icon}
-                                            />
-                                            <span className={classes.assetSymbol}>
-                                                {BRIDGE_NAME_MAP[selected.toLowerCase()] ||
-                                                    BRIDGE_NAME_MAP["eth"]}
-                                            </span>
-                                            <div className={classes.arrow}>
-                                                <ArrowDropDown />
-                                            </div>
-                                        </Button>
-                                        <Menu
-                                            id="bridgeMenu"
-                                            anchorEl={this.bridgeEl.current}
-                                            keepMounted
-                                            open={bridgeOpen}
-                                            onClose={this.handleBridgeClose.bind(this)}
-                                        >
-                                            {items.map((i, index) => {
-                                                return (
-                                                    <MenuItem
-                                                        className={classes.item}
-                                                        onClick={() => {
-                                                            this.handleBridgeClose.bind(this)({
-                                                                target: {
-                                                                    value: i,
-                                                                },
-                                                            });
-                                                        }}
-                                                        key={index}
-                                                        value={i}
-                                                    >
-                                                        <div>
-                                                            <img
-                                                                src={BRIDGE_ICON_MAP[i.toLowerCase()]}
-                                                                alt={i}
-                                                                className={classes.icon}
-                                                            />
-                                                        </div>
-                                                        <Grid
-                                                            container
-                                                            direction="column"
-                                                            alignItems="flex-start"
-                                                        >
-                                                            <span>{i}</span>
-                                                            <span className={classes.balance}>
-                                                                {
-                                                                    BRIDGE_NAME_MAP[
-                                                                    i.toLowerCase() as keyof typeof BRIDGE_NAME_MAP
-                                                                    ]
-                                                                }
-                                                            </span>
-                                                        </Grid>
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Menu>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Grid container justify="center">
-                                        {/* Pair Chain */}
-                                        <Typography className={classes.bridgeSelectionLabel}>
-                                            <Translate text="Home.Pairs"/>
-                    </Typography>
-                                        <Button
-                                            fullWidth
-                                            className={(classes.button, classes.bridgeSelectionBox)}
-                                            // size="large"
-                                            ref={this.pairsEl}
-                                            aria-controls="pairsMenu"
-                                            aria-haspopup="true"
-                                            onClick={this.handlePairsOpen.bind(this)}
-                                        >
-                                            <img
-                                                src={BRIDGE_ICON_MAP[chainPair.toLowerCase()]}
-                                                alt={selected}
-                                                className={classes.icon}
-                                            />
-                                            <span className={classes.assetSymbol}>
-                                                {BRIDGE_NAME_MAP[chainPair.toLowerCase()]}
-                                            </span>
-                                            <div className={classes.arrow}>
-                                                <ArrowDropDown />
-                                            </div>
-                                        </Button>
-                                        <Menu
-                                            id="pairsMenu"
-                                            anchorEl={this.pairsEl.current}
-                                            keepMounted
-                                            open={pairsOpen}
-                                            onClose={this.handlePairsClose.bind(this)}
-                                        >
-                                            {pairOptions.map((i, index) => {
-                                                return (
-                                                    <MenuItem
-                                                        className={classes.item}
-                                                        onClick={() => {
-                                                            this.handlePairsClose.bind(this)({
-                                                                target: {
-                                                                    value: i,
-                                                                },
-                                                            });
-                                                        }}
-                                                        key={index}
-                                                        value={i}
-                                                    >
-                                                        <div>
-                                                            <img
-                                                                src={BRIDGE_ICON_MAP[i.toLowerCase()]}
-                                                                alt={i}
-                                                                className={classes.icon}
-                                                            />
-                                                        </div>
-                                                        <Grid
-                                                            container
-                                                            direction="column"
-                                                            alignItems="flex-start"
-                                                        >
-                                                            <span>{i}</span>
-                                                            <span className={classes.balance}>
-                                                                {
-                                                                    BRIDGE_NAME_MAP[
-                                                                    i.toLowerCase() as keyof typeof BRIDGE_NAME_MAP
-                                                                    ]
-                                                                }
-                                                            </span>
-                                                        </Grid>
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Menu>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid
-                                    container
-                                    justify="center"
-                                    className={classes.actionButtonContainer}
-                                >
-                                    <Grid item xs={12}>
-                                        <Button
-                                            variant={"contained"}
-                                            disableRipple
-                                            color="primary"
-                                            size="large"
-                                            fullWidth
-                                            className={classNames(classes.actionButton)}
-                                            onClick={() => {
-                                                this.setBridge.bind(this)(
-                                                    selected.toLowerCase(),
-                                                    chainPair.toLowerCase()
-                                                );
-                                            }}
-                                        >
-                                            <Translate text="Home.Next"/>
+                      <img
+                        src={
+                          BRIDGE_ICON_MAP[selected.toLowerCase()] ||
+                          BRIDGE_ICON_MAP["eth"]
+                        }
+                        alt={selected}
+                        className={classes.icon}
+                      />
+                      <span className={classes.assetSymbol}>
+                        {BRIDGE_NAME_MAP[selected.toLowerCase()] ||
+                          BRIDGE_NAME_MAP["eth"]}
+                      </span>
+                      <div className={classes.arrow}>
+                        <ArrowDropDown />
+                      </div>
                     </Button>
-                                    </Grid>
-                                </Grid>
+                    <Menu
+                      id="bridgeMenu"
+                      anchorEl={this.bridgeEl.current}
+                      keepMounted
+                      open={bridgeOpen}
+                      onClose={this.handleBridgeClose.bind(this)}
+                    >
+                      {items.map((i, index) => {
+                        return (
+                          <MenuItem
+                            className={classes.item}
+                            onClick={() => {
+                              this.handleBridgeClose.bind(this)({
+                                target: {
+                                  value: i,
+                                },
+                              });
+                            }}
+                            key={index}
+                            value={i}
+                          >
+                            <div>
+                              <img
+                                src={BRIDGE_ICON_MAP[i.toLowerCase()]}
+                                alt={i}
+                                className={classes.icon}
+                              />
+                            </div>
+                            <Grid
+                              container
+                              direction="column"
+                              alignItems="flex-start"
+                            >
+                              <span>{i}</span>
+                              <span className={classes.balance}>
+                                {
+                                  BRIDGE_NAME_MAP[
+                                    i.toLowerCase() as keyof typeof BRIDGE_NAME_MAP
+                                  ]
+                                }
+                              </span>
                             </Grid>
-                        </React.Fragment>
-                    </Grid>
-                </div>
-            </div>
-        );
-    }
+                          </MenuItem>
+                        );
+                      })}
+                    </Menu>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Grid container justify="center">
+                    {/* Pair Chain */}
+                    <Typography className={classes.bridgeSelectionLabel}>
+                      <Translate text="Home.Pairs" />
+                    </Typography>
+                    <Button
+                      fullWidth
+                      className={(classes.button, classes.bridgeSelectionBox)}
+                      // size="large"
+                      ref={this.pairsEl}
+                      aria-controls="pairsMenu"
+                      aria-haspopup="true"
+                      onClick={this.handlePairsOpen.bind(this)}
+                    >
+                      <img
+                        src={BRIDGE_ICON_MAP[chainPair.toLowerCase()]}
+                        alt={selected}
+                        className={classes.icon}
+                      />
+                      <span className={classes.assetSymbol}>
+                        {BRIDGE_NAME_MAP[chainPair.toLowerCase()]}
+                      </span>
+                      <div className={classes.arrow}>
+                        <ArrowDropDown />
+                      </div>
+                    </Button>
+                    <Menu
+                      id="pairsMenu"
+                      anchorEl={this.pairsEl.current}
+                      keepMounted
+                      open={pairsOpen}
+                      onClose={this.handlePairsClose.bind(this)}
+                    >
+                      {pairOptions.map((i, index) => {
+                        return (
+                          <MenuItem
+                            className={classes.item}
+                            onClick={() => {
+                              this.handlePairsClose.bind(this)({
+                                target: {
+                                  value: i,
+                                },
+                              });
+                            }}
+                            key={index}
+                            value={i}
+                          >
+                            <div>
+                              <img
+                                src={BRIDGE_ICON_MAP[i.toLowerCase()]}
+                                alt={i}
+                                className={classes.icon}
+                              />
+                            </div>
+                            <Grid
+                              container
+                              direction="column"
+                              alignItems="flex-start"
+                            >
+                              <span>{i}</span>
+                              <span className={classes.balance}>
+                                {
+                                  BRIDGE_NAME_MAP[
+                                    i.toLowerCase() as keyof typeof BRIDGE_NAME_MAP
+                                  ]
+                                }
+                              </span>
+                            </Grid>
+                          </MenuItem>
+                        );
+                      })}
+                    </Menu>
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  justify="center"
+                  className={classes.actionButtonContainer}
+                >
+                  <Grid item xs={12}>
+                    <Button
+                      variant={"contained"}
+                      disableRipple
+                      color="primary"
+                      size="large"
+                      fullWidth
+                      className={classNames(classes.actionButton)}
+                      onClick={() => {
+                        this.setBridge.bind(this)(
+                          selected.toLowerCase(),
+                          chainPair.toLowerCase()
+                        );
+                      }}
+                    >
+                      <Translate text="Home.Next" />
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </React.Fragment>
+          </Grid>
+        </div>
+      </div>
+    );
+  }
 }
 
-
 export default withStore(withStyles(styles)(BridgeContainer));
-
-

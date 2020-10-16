@@ -68,8 +68,8 @@ export default createMuiTheme({
                     },
                 },
                 "&.MuiButton-sizeLarge": {
-                    minHeight: 54,
-                    fontSize: 18,
+                    minHeight: 50,
+                    fontSize: 17,
                 },
                 "&.MuiButton-contained": {
                     boxShadow: "none",

@@ -280,7 +280,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
 });
 
-class TransferContainer2 extends React.Component<any> {
+class TransferContainer extends React.Component<any> {
   burnInputRef = React.createRef();
   constructor(props: any) {
     super(props);
@@ -917,4 +917,4 @@ class TransferContainer2 extends React.Component<any> {
   }
 }
 
-export default withStyles(styles)(withStore(TransferContainer2));
+export default withStyles(styles)(withStore(TransferContainer));
