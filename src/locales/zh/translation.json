@@ -1,16 +1,13 @@
 {
   "Nav.Connect": "连接钱包",
   "Nav.Bridge": "选择跨链桥",
-
   "Home.Title": "资产保全",
   "Home.Intro": "将您在一条链上的加密资产映射到另一条链，完全去中心的验证人保护您的财产安全。",
   "Home.Bridges": "起源链",
   "Home.Pairs": "目标链",
   "Home.Next": "下一步",
-
   "Wallet.Header": "选择钱包",
   "Wallet.Connect": "连接",
-
   "Transfer.Header": "创建交易",
   "Transfer.Destination": "目的地址",
   "Transfer.Connect": "连接钱包",
@@ -20,7 +17,6 @@
   "Transfer.Release": "释放",
   "Transfer.Next": "下一步",
   "Transfer.Max": "最大",
-
   "Confirm.Header": "确认",
   "Confirm.From": "从",
   "Confirm.Network": "网络",
@@ -30,7 +26,6 @@
   "Confirm.Fee": "服务费",
   "Confirm.Receive": "你将收到",
   "Confirm.Start": "开始传送",
-
   "Error.WrongNetwork.Title": "错误的网络",
   "Error.WrongNetwork.Message1": "请连接你的钱包到",
   "Error.WrongNetwork.Message2": "与跨链桥通信",
@@ -39,10 +34,8 @@
   "Error.TxRejected.Message": "交易被拒绝",
   "Error.Unknown.Message": "未知错误",
   "Error.Accept": "好的",
-
   "Waiting.Confirm": "确认交易",
   "Waiting.User": "正在等待用户回应...",
-
   "Progress.Success": "成功",
   "Progress.Received": "接收",
   "Progress.Chain": "区块链",
@@ -52,11 +45,9 @@
   "Progress.Complete": "传送完成",
   "Progress.Oracles": "见证人正在验证交易...",
   "Progress.Accept": "好的",
-
   "Warning.Title": "警告",
   "Warning.Message": "请注意，从其他区块链中检索基于Ethereum的资产需要一个能够切换网络的钱包。目前，这包括MetaMask等钱包。",
-  "Warning.Accept": "好的"",
-
+  "Warning.Accept": "好的",
   "Footer.Home": "首页",
   "Footer.About": "关于",
   "Footer.FAQs": "FAQs",
