@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 
-import { MINI_ICON_MAP, NAME_MAP } from "../utils/walletUtils";
+import { MINI_ICON_MAP, NAME_MAP } from "../bridges/ETH_ELA/utils/walletUtils";
 
 const NoCapsButton = withStyles({
   root: {

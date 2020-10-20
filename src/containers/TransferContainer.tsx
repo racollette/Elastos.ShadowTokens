@@ -5,7 +5,10 @@ import { SwapCalls } from "@material-ui/icons";
 // import SwitchLogo from "../assets/logo2.svg";
 import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
-import { gatherFeeData, MIN_TX_AMOUNTS } from "../utils/txUtils";
+import {
+  gatherFeeData,
+  MIN_TX_AMOUNTS,
+} from "../bridges/ETH_ELA/utils/txUtils";
 import {
   MINI_ICON_MAP,
   SYMBOL_MAP,
@@ -15,7 +18,7 @@ import {
   ASSET_CONVERSION_TYPES,
   // abbreviateAddress,
   // updateBalance,
-} from "../utils/walletUtils";
+} from "../bridges/ETH_ELA/utils/walletUtils";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -308,7 +311,9 @@ class TransferContainer extends React.Component<any> {
       "selectedAsset"
     );
     const localWeb3Network = store.get("localWeb3Network");
+    console.log(localWeb3Network);
     const targetWeb3Network = NETWORK_TYPE[selectedAsset];
+    console.log(targetWeb3Network);
     const correctNetwork = localWeb3Network === targetWeb3Network;
 
     if (!correctNetwork) {
@@ -387,7 +392,7 @@ class TransferContainer extends React.Component<any> {
 
     const tx = {
       id: "tx-" + Math.floor(Math.random() * 10 ** 16),
-      type: "convert",
+      type: ASSET_CONVERSION_TYPES[asset],
       instant: false,
       // awaiting: `${asset}-init`,
       sourceAsset: asset,
@@ -408,7 +413,7 @@ class TransferContainer extends React.Component<any> {
     }
 
     store.set("confirmTx", tx);
-    store.set("confirmAction", "release");
+    store.set("confirmAction", ASSET_CONVERSION_TYPES[format]);
   }
 
   async newWithdraw() {
@@ -422,9 +427,12 @@ class TransferContainer extends React.Component<any> {
     );
     const asset: keyof typeof NETWORK_MAP = store.get("selectedAsset");
 
+    console.log(format);
+    console.log("MINT or RELEASE?: ", ASSET_CONVERSION_TYPES[asset]);
+
     const tx = {
       id: "tx-" + Math.floor(Math.random() * 10 ** 16),
-      type: "convert",
+      type: ASSET_CONVERSION_TYPES[asset],
       instant: false,
       sourceAsset: format,
       sourceNetwork: NETWORK_MAP[format],
@@ -506,7 +514,7 @@ class TransferContainer extends React.Component<any> {
     // Replace 'w' to retrieve price of native asset, assuming they are equivalent
     // Careful if asset ticket contains a w
     const usdValue = Number(
-      store.get(`${selectedAsset.replace("w", "")}usd`) * amount
+      store.get(`${selectedAsset.replace("e", "")}usd`) * amount
     ).toFixed(2);
     const chars = total ? String(total) : "";
 
@@ -599,17 +607,17 @@ class TransferContainer extends React.Component<any> {
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
-                          items={["ETH", "wELA", "USDT"]}
+                          items={["ETH", "eELA", "USDT", "MAIN"]}
                           onCurrencyChange={(v: string) => {
                             const asset = v.toLowerCase();
-                            if (asset === "wela") {
+                            if (asset === "eela") {
                               store.set(
                                 "convert.selectedFormat",
-                                `${asset.replace("w", "")}`
+                                `${asset.replace("e", "")}`
                               );
                               store.set("selectedAsset", asset);
                             } else {
-                              store.set("convert.selectedFormat", `w${asset}`);
+                              store.set("convert.selectedFormat", `e${asset}`);
                               store.set("selectedAsset", asset);
                             }
                             gatherFeeData();
@@ -720,7 +728,7 @@ class TransferContainer extends React.Component<any> {
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
-                          items={["wETH", "ELA", "wUSDT"]}
+                          items={["eETH", "ELA", "eUSDT", "eMAIN"]}
                           // ETHBalance={store.get("ethbal")}
                           onCurrencyChange={(v: string) => {
                             const asset = v.toLowerCase();

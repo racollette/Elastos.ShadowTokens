@@ -14,8 +14,8 @@ import ErrorModal from "./components/ErrorModal";
 import { storeListener } from "./services/storeService";
 import theme from "./theme/theme";
 // import { setNetwork } from "./utils/walletUtils";
-import { BRIDGE_SYMBOL_MAP } from "./utils/bridgeUtils";
-import { USDT_ADDRESS_TEST } from "./utils/web3Utils";
+import { BRIDGE_SYMBOL_MAP } from "./bridges/bridges";
+// import { USDT_ADDRESS_TEST } from "./bridges/ETH_ELA/utils/web3Utils";
 
 require("dotenv").config();
 
@@ -39,7 +39,7 @@ const styles = () => ({
 
 const initialState = {
   // networking
-  USDTAddress: USDT_ADDRESS_TEST,
+  // USDTAddress: USDT_ADDRESS_TEST,
   selectedNetwork: "",
   queryParams: {},
 
@@ -94,11 +94,12 @@ const initialState = {
   confirmTx: null,
   confirmAction: "",
   confirmationNumber: 0,
-  confirmationTotal: 6,
+  confirmationTotal: null,
   confirmationError: null as string | null,
   confirmationProgress: false,
   validatorStep: false,
   validatorProgress: 0,
+  transactionType: "",
   transferSuccess: false,
 
   // contracts
@@ -114,7 +115,7 @@ const initialState = {
   "convert.adapterWbtcAllowanceRequesting": "",
   "convert.transactions": [],
   "convert.pendingConvertToEthereum": [],
-  "convert.selectedFormat": "weth",
+  "convert.selectedFormat": "eeth",
   "convert.selectedDirection": 0,
   "convert.amount": "",
   "convert.destination": "",

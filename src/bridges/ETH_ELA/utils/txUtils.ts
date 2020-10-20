@@ -1,22 +1,26 @@
-import { getStore } from "../services/storeService";
+import { getStore } from "../../../services/storeService";
 
 export const MIN_TX_AMOUNTS = {
     ela: 0.0035036,
     eth: 0.0035036,
     usdt: 0.0035036,
-    wela: 0.0035036,
-    weth: 0.0035036,
-    wusdt: 0.0035036,
+    main: 0.0035036,
+    eela: 0.0035036,
+    eeth: 0.0035036,
+    eusdt: 0.0035036,
+    emain: 0.0035036,
 };
 
 // Percentage fees
 export const FEE_STRUCTURE: { [key in string]: number } = {
-    ela: 0.3,
-    eth: 0.3,
-    usdt: 0.3,
-    wela: 0.3,
-    weth: 0.3,
-    wusdt: 0.3,
+    ela: 0.1,
+    eth: 0.1,
+    usdt: 0.1,
+    main: 0.1,
+    eela: 0.1,
+    eeth: 0.1,
+    eusdt: 0.1,
+    emain: 0.1,
 }
 
 // Development, switch to mainnet in prod
@@ -24,9 +28,11 @@ export const EXPLORER_URLS: { [key in string]: string } = {
     ela: "https://explorer.elaeth.io/", // https://explorer.elaeth.io/,
     eth: "https://kovan.etherscan.io", // https://etherscan.io",
     usdt: "https://kovan.etherscan.io",
-    wela: "https://kovan.etherscan.io",
-    weth: "https://testnet.elaeth.io/",
-    wusdt: "https://testnet.elaeth.io/",
+    main: "https://kovan.etherscan.io",
+    eela: "https://kovan.etherscan.io",
+    eeth: "https://testnet.elaeth.io/",
+    eusdt: "https://testnet.elaeth.io/",
+    emain: "https://testnet.elaeth.io/",
 }
 
 export const issueTx = function() {

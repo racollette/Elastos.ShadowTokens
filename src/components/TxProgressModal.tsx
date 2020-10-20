@@ -8,8 +8,11 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import Button from "@material-ui/core/Button";
 import LinearDeterminate from "./LinearDeterminate";
 import ActionLink from "../components/ActionLink";
-import { SYMBOL_MAP } from "../utils/walletUtils";
-import { getExplorerLink, restoreInitialState } from "../utils/txUtils";
+import { SYMBOL_MAP } from "../bridges/ETH_ELA/utils/walletUtils";
+import {
+  getExplorerLink,
+  restoreInitialState,
+} from "../bridges/ETH_ELA/utils/txUtils";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -153,15 +156,14 @@ const TxProgressModal: React.FC<Props> = function (props) {
                 <div className={classes.successContainer}>
                   <img src={Success} alt="Transfer Complete" />
                   <Typography className={classes.successText}>
-                    <Translate text="Progress.Successs" />
+                    <Translate text="Progress.Success" />
                   </Typography>
                 </div>
                 <div className={classes.generalContainer}>
                   <Typography className={classes.confirmationText}>
                     {SYMBOL_MAP[txInput.destAsset]}&nbsp;
                     <Translate text="Progress.Received" />
-                    &nbsp;
-                    {txInput.destNetwork}&nbsp;
+                    &nbsp;{txInput.destNetwork}&nbsp;
                     <Translate text="Progress.Chain" />
                   </Typography>
                   <ActionLink

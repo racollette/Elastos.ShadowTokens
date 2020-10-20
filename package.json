@@ -4,9 +4,12 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
+    "@burner-wallet/core": "^1.1.9",
+    "@burner-wallet/exchange": "^1.1.4",
     "@material-ui/core": "^4.3.2",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.25",
+    "@poanet/tokenbridge-bw-exchange": "^1.1.0",
     "@sentry/react": "^5.21.1",
     "@spyna/react-store": "^1.4.0",
     "@types/classnames": "^2.2.10",
@@ -35,6 +38,7 @@
     "typescript": "^3.9.7",
     "wallet-address-validator": "^0.2.4",
     "web3": "^1.3.0",
+    "web3-eth-contract": "1.2.7",
     "web3modal": "^1.3.0"
   },
   "scripts": {

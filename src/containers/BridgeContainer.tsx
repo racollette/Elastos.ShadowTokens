@@ -17,7 +17,7 @@ import {
   BRIDGE_SYMBOL_MAP,
   BRIDGE_NAME_MAP,
   BRIDGE_ICON_MAP,
-} from "../utils/bridgeUtils";
+} from "../bridges/bridges";
 
 const styles = () => ({
   container: {
