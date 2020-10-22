@@ -37,6 +37,7 @@
   "Error.NoWeb3.Title": "没有发现钱包",
   "Error.NoWeb3.Message": "安装了么？请先确认。",
   "Error.TxRejected.Message": "交易被拒绝",
+  "Error.InsufficientBalance.Message": "Insufficient balance",
   "Error.Unknown.Message": "未知错误",
   "Error.Accept": "好的",
 

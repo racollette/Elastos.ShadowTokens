@@ -36,6 +36,7 @@
   "Error.WrongNetwork.Message2": "to communicate with the bridge.",
   "Error.NoWeb3.Title": "No Wallet Found",
   "Error.NoWeb3.Message": "Is it installed? Please enable it before continuing.",
+  "Error.InsufficientBalance.Message": "Insufficient balance",
   "Error.TxRejected.Message": "Transaction rejected",
   "Error.Unknown.Message": "An unknown error occurred",
   "Error.Accept": "Okay",

@@ -1,0 +1,25 @@
+import ERC20_ABI from "../abis/ERC20_ABI.json";
+
+export const DAI = {
+    id: 'DAI',
+    name: 'DAI',
+    network: '42',
+    address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+    bridgeMode: 'erc_erc_amb',
+    abi: ERC20_ABI,
+    priceTicker: 'dai',
+    priceFeed: 'https://api.coincap.io/v2/assets/multi-collateral-dai',
+    confirmations: 8,
+}
+
+export const eDAI = {
+    id: 'eDAI',
+    name: 'eDAI',
+    network: '21',
+    address: '0x6b175474e89094c44da98b954eedeac495271d0f', // generate on elastos
+    bridgeMode: 'erc_erc_amb',
+    abi: ERC20_ABI,
+    priceTicker: 'dai',
+    priceFeed: 'https://api.coincap.io/v2/assets/multi-collateral-dai',
+    confirmations: 1,
+}

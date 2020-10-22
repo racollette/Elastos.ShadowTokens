@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/react";
+import { getStore } from "../../../services/storeService";
 
 import Web3 from "web3";
 import Web3Modal from "web3modal";
@@ -8,12 +9,15 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import ELA from "../../../assets/ela.png"
 import ETH from "../../../assets/eth.png";
 import USDT from "../../../assets/usdt.png";
+import DAI from "../../../assets/dai.png";
+import USDC from "../../../assets/usdc.png";
+import MAIN from "../../../assets/main.png";
 
 import MetaMask from "../../../assets/metamask-fox.svg";
 import Elaphant from "../../../assets/elaphant.png";
 import WalletConnect from "../../../assets/walletconnect.svg";
 
-import { getStore } from "../../../services/storeService";
+import { TOKENS } from '../tokens'
 
 // used for montoring balances
 let walletDataInterval: any = null;
@@ -29,10 +33,14 @@ export const NAME_MAP = {
     ela: "Elastos",
     eth: "Ethereum",
     usdt: "Tether",
+    dai: "Dai",
+    usdc: "USD Coin",
     main: "Main",
     eela: "Wrapped Elastos",
     eeth: "Wrapped Ethereum",
     eusdt: "Wrapped Tether",
+    edai: "Wrapped Dai",
+    eusdc: "Wrapped USD Coin",
     emain: "Wrapped Main",
 };
 
@@ -40,10 +48,14 @@ export const SYMBOL_MAP: { [key in string]: string } = {
     ela: "ELA",
     eth: "ETH",
     usdt: "USDT",
+    dai: "DAI",
+    usdc: "USDC",
     main: "MAIN",
     eela: "eELA",
     eeth: "eETH",
     eusdt: "eUSDT",
+    edai: "eDAI",
+    eusdc: "eUSDC",
     emain: "eMAIN",
 };
 
@@ -51,10 +63,14 @@ export const CONVERT_MAP: { [key in string]: string } = {
     ela: "eela",
     eth: "eeth",
     usdt: "eusdt",
+    dai: "edai",
+    usdc: "eusdc",
     main: "emain",
     eela: "ela",
     eeth: "eth",
     eusdt: "usdt",
+    edai: "dai",
+    eusdc: "usdc",
     emain: "main",
 };
 
@@ -62,10 +78,14 @@ export const NETWORK_MAP: { [key in string]: string } = {
     ela: "Elastos",
     eth: "Ethereum",
     usdt: "Ethereum",
+    dai: "Ethereum",
+    usdc: "Ethereum",
     main: "Ethereum",
     eela: "Ethereum",
     eeth: "Elastos",
     eusdt: "Elastos",
+    edai: "Elastos",
+    eusdc: "Elastos",
     emain: "Elastos",
 };
 
@@ -75,10 +95,14 @@ export const NETWORK_TYPE: { [key in string]: string } = {
     // eth: "Ethereum mainnet",
     eth: "Kovan testnet",
     usdt: "Ethereum mainnet",
+    dai: "Ethereum mainnet",
+    usdc: "Ethereum mainnet",
     main: "Kovan testnet",
-    eela: "Ethereum mainnet",
+    eela: "Kovan testnet",
     eeth: "Elastos mainnet",
     eusdt: "Elastos mainnet",
+    edai: "Elastos mainnet",
+    eusdc: "Elastos mainnet",
     emain: "Elastos mainnet"
 };
 
@@ -86,10 +110,14 @@ export const ASSET_CONVERSION_TYPES: { [key in string]: string } = {
     ela: "mint",
     eth: "mint",
     usdt: "mint",
+    dai: "mint",
+    usdc: "mint",
     main: "mint",
     eela: "release",
     eeth: "release",
     eusdt: "release",
+    edai: "release",
+    eusdc: "release",
     emain: "release",
 };
 
@@ -97,11 +125,15 @@ export const MINI_ICON_MAP: { [key in string]: string } = {
     ela: ELA,
     eth: ETH,
     usdt: USDT,
-    main: USDT,
+    dai: DAI,
+    usdc: USDC,
+    main: MAIN,
     eela: ELA,
     eeth: ETH,
     eusdt: USDT,
-    emain: USDT,
+    edai: DAI,
+    eusdc: USDC,
+    emain: MAIN,
 };
 
 export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
@@ -301,6 +333,13 @@ export const initLocalWeb3 = async function(type: any) {
     store.set("selectedWallet", true);
     store.set("convert.destinationValid", true);
 
+    // Set default transfer direction
+    if (network !== 'Kovan testnet') {
+        store.set("convert.selectedDirection", Number(1));
+        store.set("selectedAsset", 'ela');
+        store.set("convert.selectedFormat", 'eela');
+    }
+
     updateBalance();
     return;
 };
@@ -337,20 +376,57 @@ export const updateMarketData = async function() {
         });
     }
 
+    // try {
+    //     const usdt = await fetch(`https://api.coincap.io/v2/assets/tether`, {
+    //         method: "GET",
+    //     });
+
+    //     store.set("usdtusd", (await usdt.json()).data.priceUsd);
+    // } catch (e) {
+    //     console.error(e);
+    //     Sentry.withScope(function(scope) {
+    //         scope.setTag("error-hint", "updating market data");
+    //         Sentry.captureException(e);
+    //     });
+    // }
+};
+
+export const fetchTokenPrice = async function(token: any) {
+    console.log('updateMarketData')
+    const store = getStore();
+
+    if (token.priceFeed.length === 0) return
     try {
-        const usdt = await fetch(`https://api.coincap.io/v2/assets/tether`, {
+        const price = await fetch(token.priceFeed, {
             method: "GET",
         });
-
-        store.set("usdtusd", (await usdt.json()).data.priceUsd);
+        store.set(`${token.priceTicker}usd`, (await price.json()).data.priceUsd);
+        console.log('price object', price)
     } catch (e) {
         console.error(e);
-        Sentry.withScope(function(scope) {
-            scope.setTag("error-hint", "updating market data");
-            Sentry.captureException(e);
-        });
     }
-};
+}
+
+export const fetchTokenBalance = async function(asset: any) {
+    const store = getStore();
+
+    const web3 = store.get("localWeb3");
+    const walletAddress = store.get("localWeb3Address");
+    const walletNetwork = store.get("localWeb3Network");
+    if (!web3 || !walletAddress) {
+        return;
+    }
+    // Enable in prod
+    // if (NETWORK_TYPE[asset] !== walletNetwork) return
+
+    const token = TOKENS[asset]
+    if (!token) return
+
+    fetchTokenPrice(token)
+    const tokenContract = new web3.eth.Contract(token.abi, token.address);
+    const tokenBal = await tokenContract.methods.balanceOf(walletAddress).call();
+    store.set(`${token.id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(4));
+}
 
 export const updateBalance = async function() {
     console.log('Update Balances')
@@ -435,16 +511,12 @@ export const setListener = async function(web3: any) {
         listeningProvider.on("accountsChanged", async () => {
             window.location.reload();
         });
-
-        listeningProvider.on("chainChanged", async () => {
-            window.location.reload();
-        });
-
-        listeningProvider.on("networkChanged", async () => {
-            window.location.reload();
-            // initLocalWeb3(store.get("selectedWalletType"))
-        });
-
+        // listeningProvider.on("chainChanged", async () => {
+        //     window.location.reload();
+        // });
+        // listeningProvider.on("networkChanged", async () => {
+        //     window.location.reload();
+        // });
         listeningProvider.on("disconnected", async () => {
             window.location.reload();
         });

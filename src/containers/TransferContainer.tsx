@@ -17,7 +17,7 @@ import {
   NETWORK_TYPE,
   ASSET_CONVERSION_TYPES,
   // abbreviateAddress,
-  // updateBalance,
+  fetchTokenBalance,
 } from "../bridges/ETH_ELA/utils/walletUtils";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
@@ -181,7 +181,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& img": {
       height: "auto",
       width: 24,
-      marginRight: 6,
+      marginRight: theme.spacing(1.5),
     },
     "& .MuiGrid-root": {
       display: "flex",
@@ -305,21 +305,37 @@ class TransferContainer extends React.Component<any> {
     return store.get(`${asset}Balance`);
   }
 
-  async isSelectedNetwork() {
+  isSelectedNetwork() {
     const { store } = this.props;
     const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
       "selectedAsset"
     );
     const localWeb3Network = store.get("localWeb3Network");
-    console.log(localWeb3Network);
+    // console.log(localWeb3Network);
     const targetWeb3Network = NETWORK_TYPE[selectedAsset];
-    console.log(targetWeb3Network);
+    // console.log(targetWeb3Network);
     const correctNetwork = localWeb3Network === targetWeb3Network;
 
     if (!correctNetwork) {
       store.set("wrongNetwork", true);
     } else {
-      this.newDeposit();
+      return true;
+    }
+  }
+
+  isBalanceEnough() {
+    const { store } = this.props;
+    const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
+      "selectedAsset"
+    );
+    let balance = Number(store.get(SYMBOL_MAP[selectedAsset] + "Balance"));
+    if (isNaN(balance)) balance = 0;
+    const inputAmount = Number(store.get("convert.amount"));
+
+    if (inputAmount > balance) {
+      store.set("insufficientBalance", true);
+    } else {
+      this.newTransfer();
     }
   }
 
@@ -374,7 +390,7 @@ class TransferContainer extends React.Component<any> {
     }
   }
 
-  async newDeposit() {
+  async newTransfer() {
     const { store } = this.props;
 
     const amount = store.get("convert.amount");
@@ -416,47 +432,8 @@ class TransferContainer extends React.Component<any> {
     store.set("confirmAction", ASSET_CONVERSION_TYPES[format]);
   }
 
-  async newWithdraw() {
-    const { store } = this.props;
-
-    const amount = store.get("convert.amount");
-    const destination = store.get("convert.destination");
-    const network = store.get("selectedNetwork");
-    const format: keyof typeof NETWORK_MAP = store.get(
-      "convert.selectedFormat"
-    );
-    const asset: keyof typeof NETWORK_MAP = store.get("selectedAsset");
-
-    console.log(format);
-    console.log("MINT or RELEASE?: ", ASSET_CONVERSION_TYPES[asset]);
-
-    const tx = {
-      id: "tx-" + Math.floor(Math.random() * 10 ** 16),
-      type: ASSET_CONVERSION_TYPES[asset],
-      instant: false,
-      sourceAsset: format,
-      sourceNetwork: NETWORK_MAP[format],
-      sourceNetworkVersion: network,
-      destAddress: destination,
-      destNetwork: NETWORK_MAP[asset],
-      destNetworkVersion: network,
-      destAsset: asset,
-      amount: Number(amount),
-      error: false,
-      txHash: "",
-    };
-
-    if (!this.validateWithdraw()) {
-      return;
-    }
-
-    store.set("confirmTx", tx);
-    store.set("confirmAction", "mint");
-  }
-
   async switchOriginChain() {
     const { store } = this.props;
-    // console.log("Swapping direction");
     const selectedDirection = store.get("convert.selectedDirection");
     if (selectedDirection === 0) {
       store.set("convert.selectedDirection", Number(1));
@@ -471,13 +448,6 @@ class TransferContainer extends React.Component<any> {
 
     store.set("convert.selectedFormat", selectedAsset);
     store.set("selectedAsset", destAsset);
-
-    // store.set("convert.amount", "");
-    // store.set("convert.networkFee", "");
-    // store.set("convert.conversionTotal", "");
-    // store.set("convert.destination", "");
-    // store.set("convert.showAmountError", false);
-    // store.set("convert.showDestinationError", false);
   }
 
   render() {
@@ -485,7 +455,6 @@ class TransferContainer extends React.Component<any> {
 
     // Transaction parameters
     const selectedWallet = store.get("selectedWallet");
-    // console.log('selected Wallet?', selectedWallet)
     const selectedDirection = store.get("convert.selectedDirection");
     const selectedFormat: keyof typeof SYMBOL_MAP = store.get(
       "convert.selectedFormat"
@@ -500,7 +469,7 @@ class TransferContainer extends React.Component<any> {
     }
     const balance = store.get(SYMBOL_MAP[selectedAsset] + "Balance");
     const amount = store.get("convert.amount");
-    let total = Number(store.get("convert.conversionTotal")).toFixed(2);
+    let total = Number(store.get("convert.conversionTotal")).toFixed(4);
 
     // Account parameters
     const localWeb3Address = store.get("localWeb3Address");
@@ -511,17 +480,18 @@ class TransferContainer extends React.Component<any> {
       total = "0.00";
     }
 
-    // Replace 'w' to retrieve price of native asset, assuming they are equivalent
-    // Careful if asset ticket contains a w
-    const usdValue = Number(
-      store.get(`${selectedAsset.replace("e", "")}usd`) * amount
-    ).toFixed(2);
-    const chars = total ? String(total) : "";
+    let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
+    if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
+      usdValue = Number(
+        store.get(`${selectedAsset.substring(1)}usd`) * amount
+      ).toFixed(2);
+    }
 
     let output = `${total} ${SYMBOL_MAP[destAsset]}  (${Numeral(
       usdValue
     ).format("$0,0.00")})`;
 
+    const chars = total ? String(total) : "";
     let size = "large";
     if (chars.length > 8 && chars.length <= 10) {
       size = "medium";
@@ -607,7 +577,7 @@ class TransferContainer extends React.Component<any> {
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
-                          items={["ETH", "eELA", "USDT", "MAIN"]}
+                          items={["ETH", "eELA", "USDT", "DAI", "USDC", "MAIN"]}
                           onCurrencyChange={(v: string) => {
                             const asset = v.toLowerCase();
                             if (asset === "eela") {
@@ -621,6 +591,7 @@ class TransferContainer extends React.Component<any> {
                               store.set("selectedAsset", asset);
                             }
                             gatherFeeData();
+                            fetchTokenBalance(asset);
                           }}
                         />
                       </Grid>
@@ -634,7 +605,7 @@ class TransferContainer extends React.Component<any> {
                           direction={selectedDirection}
                           placeholder={"0.00"}
                           onChange={(event: any) => {
-                            const value = event.value || "";
+                            let value = event.value || "";
                             console.log("Send amount input", value);
                             store.set("convert.amount", String(value));
                             gatherFeeData();
@@ -728,13 +699,21 @@ class TransferContainer extends React.Component<any> {
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
-                          items={["eETH", "ELA", "eUSDT", "eMAIN"]}
+                          items={[
+                            "ELA",
+                            "eETH",
+                            "eUSDT",
+                            "eDAI",
+                            "eUSDC",
+                            "eMAIN",
+                          ]}
                           // ETHBalance={store.get("ethbal")}
                           onCurrencyChange={(v: string) => {
                             const asset = v.toLowerCase();
                             const destAsset = CONVERT_MAP[asset];
                             store.set("selectedAsset", asset);
                             store.set("convert.selectedFormat", destAsset);
+                            fetchTokenBalance(asset);
                             gatherFeeData();
                           }}
                         />
@@ -898,7 +877,11 @@ class TransferContainer extends React.Component<any> {
                           size="large"
                           fullWidth
                           className={classNames(classes.actionButton)}
-                          onClick={this.isSelectedNetwork.bind(this)}
+                          onClick={() => {
+                            if (this.isSelectedNetwork()) {
+                              this.isBalanceEnough();
+                            }
+                          }}
                         >
                           <Translate text="Transfer.Next" />
                         </Button>

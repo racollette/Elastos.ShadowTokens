@@ -80,6 +80,7 @@ const initialState = {
 
   // errors
   noWeb3: false,
+  insufficientBalance: false,
   wrongNetwork: false,
   txRejected: false,
   unknownError: false,
@@ -165,6 +166,7 @@ class AppWrapper extends React.Component<Props> {
     const confirmTx = store.get("confirmTx");
 
     const noWeb3 = store.get("noWeb3");
+    const insufficientBalance = store.get("insufficientBalance");
 
     return (
       <ThemeProvider theme={theme}>
@@ -223,6 +225,12 @@ class AppWrapper extends React.Component<Props> {
               {noWeb3 && (
                 <div>
                   <ErrorModal store={store} errorType={"noWeb3"} />
+                </div>
+              )}
+
+              {insufficientBalance && (
+                <div>
+                  <ErrorModal store={store} errorType={"insufficientBalance"} />
                 </div>
               )}
             </Grid>

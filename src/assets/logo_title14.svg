@@ -217,7 +217,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -273,7 +273,10 @@
        height="681.13806"
        x="-79.322624"
        y="248.27835"
-       ry="3.0960613e-11" />
+       ry="3.0960613e-11"
+       inkscape:export-filename="/home/ryan/Desktop/shadowtokens.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g979"
        transform="matrix(4.2464261,0,0,4.2464261,-244.78717,-1234.1089)">
