@@ -412,7 +412,7 @@ export const fetchTokenBalance = async function(asset: any) {
 
     const web3 = store.get("localWeb3");
     const walletAddress = store.get("localWeb3Address");
-    const walletNetwork = store.get("localWeb3Network");
+    // const walletNetwork = store.get("localWeb3Network");
     if (!web3 || !walletAddress) {
         return;
     }
