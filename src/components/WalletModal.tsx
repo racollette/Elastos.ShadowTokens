@@ -1,7 +1,7 @@
 import React from "react";
 import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
-import { initLocalWeb3 } from "../bridges/ETH_ELA/utils/walletUtils";
+import { initLocalWeb3, clearWeb3 } from "../bridges/ETH_ELA/utils/walletUtils";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -22,7 +22,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     width: 500,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
-      width: "80%",
+      width: "75%",
     },
     position: "absolute",
     left: "50%",
@@ -144,20 +144,9 @@ class WalletModal extends React.Component<any> {
     const { classes, store } = this.props;
 
     // const walletConnecting = store.get("walletConnecting");
-    // const requesting = store.get("spaceRequesting");
-
-    // const error = store.get("spaceError");
-    // const box = store.get("box");
     const walletType = store.get("selectedWalletType");
+    const walletConnected = String(store.get("localWeb3Address")).length > 0;
     const showWalletModal = store.get("showWalletModal");
-
-    // if (requesting) {
-    //   if (!box) {
-    //     text = "Connecting to 3box";
-    //   } else {
-    //     text = "Loading data";
-    //   }
-    // }
 
     return (
       <Modal
@@ -197,7 +186,7 @@ class WalletModal extends React.Component<any> {
                   Metamask
                 </Typography>
               </Grid>
-              <Grid
+              {/* <Grid
                 container
                 className={walletType === "Elaphant" ? "selected" : ""}
                 onClick={() => store.set("selectedWalletType", "Elaphant")}
@@ -206,7 +195,7 @@ class WalletModal extends React.Component<any> {
                 <Typography className={classes.walletLabel}>
                   Elaphant
                 </Typography>
-              </Grid>
+              </Grid> */}
               <Grid
                 container
                 className={walletType === "WalletConnect" ? "selected" : ""}
@@ -231,8 +220,12 @@ class WalletModal extends React.Component<any> {
               {/* <Grid item xs={12}> */}
               <Button
                 onClick={() => {
-                  initLocalWeb3(walletType);
-                  store.set("showWalletModal", false);
+                  if (!walletConnected) {
+                    initLocalWeb3(walletType);
+                    store.set("showWalletModal", false);
+                  } else {
+                    clearWeb3();
+                  }
                 }}
                 // disabled={walletConnecting || requesting}
                 className={classes.actionButton}
@@ -260,8 +253,17 @@ class WalletModal extends React.Component<any> {
                     />
                   </div>
                 )} */}
-                <Translate text="Wallet.Connect" />
-                &nbsp;{walletType}
+                {!walletConnected ? (
+                  <div>
+                    <Translate text="Wallet.Connect" />
+                    &nbsp;{walletType}
+                  </div>
+                ) : (
+                  <div>
+                    <Translate text="Wallet.Disconnect" />
+                    &nbsp;{walletType}
+                  </div>
+                )}
               </Button>
               {/* </Grid> */}
 

@@ -25,7 +25,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
     background: "rgb(32,32,32)",
-
     borderRadius: "40px",
     // border: "1px solid #ff8000",
     // boxShadow:
@@ -59,13 +58,15 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   actionButtonContainer: {
     marginTop: theme.spacing(3),
-
     "& button": {
       "&.Mui-disabled": {},
       margin: "0px auto",
       fontSize: 12,
       minWidth: 175,
       padding: theme.spacing(1),
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginTop: theme.spacing(2),
     },
   },
   actionButton: {
@@ -139,6 +140,10 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& :last-child": {
       borderBottom: "1px solid transparent",
     },
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
   },
   option: {
     borderBottom: "1px solid " + theme.palette.divider,
@@ -152,6 +157,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& div": {
       display: "flex",
       alignItems: "center",
+    },
+    [theme.breakpoints.down("xs")]: {
+      minHeight: 36,
     },
   },
   fade: {
@@ -177,12 +185,18 @@ const styles: Styles<typeof theme, any> = (theme) => ({
 
   titleAmount: {
     marginTop: theme.spacing(3),
+    [theme.breakpoints.down("xs")]: {
+      marginTop: theme.spacing(1),
+    },
   },
   headerText: {
     color: "#fff",
     textAlign: "center",
     position: "relative",
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: 0,
+    },
   },
   navTitle: {
     color: "#fff",

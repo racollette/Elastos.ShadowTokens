@@ -137,7 +137,11 @@ class BigCurrencyInput extends React.PureComponent<any> {
                   color={direction ? "secondary" : "primary"}
                   className={(classes.small, classes.balanceButton)}
                   onClick={() => {
-                    store.set("convert.amount", balance);
+                    if (balance) {
+                      store.set("convert.amount", balance);
+                    } else {
+                      store.set("convert.amount", 0);
+                    }
                   }}
                 >
                   <Translate text="Transfer.Max" />

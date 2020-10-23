@@ -68,7 +68,7 @@ export default createMuiTheme({
                     },
                 },
                 "&.MuiButton-sizeLarge": {
-                    minHeight: 50,
+                    minHeight: 45,
                     fontSize: 17,
                 },
                 "&.MuiButton-contained": {
@@ -112,7 +112,7 @@ export default createMuiTheme({
                     fontSize: 14,
                 },
                 "& button": {
-                    minHeight: 54,
+                    minHeight: 52,
                 },
                 borderRadius: 0,
                 borderTopLeftRadius: 4,

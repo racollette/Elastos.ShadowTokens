@@ -2,7 +2,8 @@ import React from "react";
 import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
 import { SwapCalls } from "@material-ui/icons";
-// import SwitchLogo from "../assets/logo2.svg";
+// import InfoLogo1 from "../assets/infoLogo1.svg";
+// import InfoLogo2 from "../assets/infoLogo2.svg";
 import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
 import {
@@ -49,6 +50,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     textAlign: "center",
     position: "relative",
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: theme.spacing(1),
+    },
   },
   navTitle: {
     color: "#fff",
@@ -181,7 +185,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& img": {
       height: "auto",
       width: 24,
-      marginRight: theme.spacing(1.5),
+      marginRight: theme.spacing(1),
     },
     "& .MuiGrid-root": {
       display: "flex",
@@ -229,6 +233,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1),
   },
+  // infoLogo: {
+  //   height: 48,
+  //   marginLeft: theme.spacing(1),
+  //   marginRight: theme.spacing(1),
+  // },
   sourceLabel: {
     fontSize: 14,
     color: theme.palette.primary.contrastText,
@@ -623,29 +632,54 @@ class TransferContainer extends React.Component<any> {
 
                     {/* Network direction indicator */}
                     <Grid
+                      container
                       className={classes.switchDirection}
-                      onClick={this.switchOriginChain.bind(this)}
+                      alignItems="center"
                     >
-                      <Grid container justify="center">
-                        <Typography className={classes.sourceLabel}>
-                          <Translate text="Transfer.From" />
-                          &nbsp;{NETWORK_MAP[selectedAsset]}
-                        </Typography>
-                      </Grid>
-                      <Grid container justify="center">
-                        <SwapCalls color="primary" fontSize="large" />
-                        {/* <img
+                      {/* <Grid item xs={4}>
+                        <Grid container justify="flex-end">
+                          <img
+                            className={classes.infoLogo}
+                            alt="Show More"
+                            src={InfoLogo1}
+                          />
+                        </Grid>
+                      </Grid> */}
+                      <Grid item xs={12}>
+                        <Grid container justify="center">
+                          <Typography className={classes.sourceLabel}>
+                            <Translate text="Transfer.From" />
+                            &nbsp;{NETWORK_MAP[selectedAsset]}
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          container
+                          justify="center"
+                          onClick={this.switchOriginChain.bind(this)}
+                        >
+                          <SwapCalls color="primary" fontSize="large" />
+                          {/* <img
                           src={SwitchLogo}
                           className={classes.switchLogo}
                           alt="Switch Direction"
                         /> */}
+                        </Grid>
+                        <Grid container justify="center">
+                          <Typography className={classes.destLabel}>
+                            <Translate text="Transfer.To" />
+                            &nbsp;{NETWORK_MAP[destAsset]}
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid container justify="center">
-                        <Typography className={classes.destLabel}>
-                          <Translate text="Transfer.To" />
-                          &nbsp;{NETWORK_MAP[destAsset]}
-                        </Typography>
-                      </Grid>
+                      {/* <Grid item xs={4}>
+                        <Grid container justify="flex-start">
+                          <img
+                            className={classes.infoLogo}
+                            alt="Show More"
+                            src={InfoLogo2}
+                          />
+                        </Grid>
+                      </Grid> */}
                     </Grid>
 
                     <Grid

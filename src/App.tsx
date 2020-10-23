@@ -15,7 +15,7 @@ import { storeListener } from "./services/storeService";
 import theme from "./theme/theme";
 // import { setNetwork } from "./utils/walletUtils";
 import { BRIDGE_SYMBOL_MAP } from "./bridges/bridges";
-import { initLocalWeb3 } from "./bridges/ETH_ELA/utils/walletUtils";
+// import { initLocalWeb3 } from "./bridges/ETH_ELA/utils/walletUtils";
 require("dotenv").config();
 
 console.log(process.env.REACT_APP_INFURA_KEY);
@@ -49,10 +49,6 @@ const initialState = {
   localWeb3: null,
   localWeb3Address: "",
   localWeb3Network: "",
-  box: null,
-  space: null,
-  spaceError: false,
-  spaceRequesting: false,
   walletConnecting: false,
   loadingBalances: true,
   ethBalance: 0,
@@ -145,7 +141,7 @@ class AppWrapper extends React.Component<Props> {
     const params = queryString.parse(window.location.search);
     store.set("queryParams", params);
     // setNetwork("mainnet");
-    initLocalWeb3();
+    // initLocalWeb3();
   }
 
   render() {

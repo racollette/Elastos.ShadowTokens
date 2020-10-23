@@ -5,9 +5,13 @@ import theme from "../theme/theme";
 
 const styles: Styles<any, any> = () => ({
   cradleContainer: {
-    height: 130,
     paddingBottom: theme.spacing(4),
+    margin: "auto",
+    transform: "scale(1.0)",
+    WebkitTransform: "scale(1.0)",
     [theme.breakpoints.down("xs")]: {
+      transform: "scale(0.85)",
+      WebkitTransform: "scale(0.85)",
       paddingBottom: theme.spacing(2),
     },
     // "& circle": { stroke: "#606060", strokeWidth: "4" },
@@ -20,15 +24,7 @@ const styles: Styles<any, any> = () => ({
     fontSize: 18,
     fontWeight: 500,
   },
-  scale: {
-    margin: "auto",
-    transform: "scale(1.0)",
-    WebkitTransform: "scale(1.0)",
-    [theme.breakpoints.down("xs")]: {
-      transform: "scale(0.8)",
-      WebkitTransform: "scale(0.8)",
-    },
-  },
+  scale: {},
   orangeStart: {
     stopColor: "#d56066ff",
     stopOpacity: 1,

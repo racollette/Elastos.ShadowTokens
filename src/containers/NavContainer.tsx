@@ -222,47 +222,50 @@ class NavContainer extends React.Component<any> {
                       </span>
                     )}
                   </WalletButton>
-                  <BridgeButton
-                    disableRipple
-                    onClick={() => {
-                      restoreInitialState();
-                    }}
-                    variant="outlined"
-                    size="small"
-                    className={classNames(
-                      classes.accountButton,
-                      selectedBridge && classes.bridgeActive
-                    )}
-                  >
-                    {selectedBridge ? (
-                      <Grid
-                        container
-                        alignItems="center"
-                        justify="center"
-                        className={classes.navButtonText}
-                      >
-                        <img
-                          src={BRIDGE_ICON_MAP[selectedBridge]}
-                          alt={BRIDGE_NAME_MAP[selectedBridge]}
-                          className={classes.icon}
-                        />
-                        {BRIDGE_NAME_MAP[selectedBridge]}
-                        <SwapHorizIcon />
-                        <img
-                          src={BRIDGE_ICON_MAP[selectedPair]}
-                          alt={BRIDGE_NAME_MAP[selectedPair]}
-                          className={classes.icon}
-                        />
-                        {BRIDGE_NAME_MAP[selectedPair]}
-                      </Grid>
-                    ) : (
-                      <span className={classes.navButtonText}>
-                        <Translate text="Nav.Bridge" />
 
-                        {/* <span className={classes.hideMobile}></span> */}
-                      </span>
-                    )}
-                  </BridgeButton>
+                  <Hidden xsDown>
+                    <BridgeButton
+                      disableRipple
+                      onClick={() => {
+                        restoreInitialState();
+                      }}
+                      variant="outlined"
+                      size="small"
+                      className={classNames(
+                        classes.accountButton,
+                        selectedBridge && classes.bridgeActive
+                      )}
+                    >
+                      {selectedBridge ? (
+                        <Grid
+                          container
+                          alignItems="center"
+                          justify="center"
+                          className={classes.navButtonText}
+                        >
+                          <img
+                            src={BRIDGE_ICON_MAP[selectedBridge]}
+                            alt={BRIDGE_NAME_MAP[selectedBridge]}
+                            className={classes.icon}
+                          />
+                          {BRIDGE_NAME_MAP[selectedBridge]}
+                          <SwapHorizIcon />
+                          <img
+                            src={BRIDGE_ICON_MAP[selectedPair]}
+                            alt={BRIDGE_NAME_MAP[selectedPair]}
+                            className={classes.icon}
+                          />
+                          {BRIDGE_NAME_MAP[selectedPair]}
+                        </Grid>
+                      ) : (
+                        <span className={classes.navButtonText}>
+                          <Translate text="Nav.Bridge" />
+
+                          {/* <span className={classes.hideMobile}></span> */}
+                        </span>
+                      )}
+                    </BridgeButton>
+                  </Hidden>
                   <Hidden smDown>
                     <LanguageSelect
                       className={classes.hideMobile}

@@ -10,6 +10,7 @@
 
   "Wallet.Header": "选择钱包",
   "Wallet.Connect": "连接",
+  "Wallet.Disconnect": "Disconnect",
 
   "Transfer.Header": "创建交易",
   "Transfer.Destination": "目的地址",
@@ -25,7 +26,7 @@
   "Confirm.From": "从",
   "Confirm.Network": "网络",
   "Confirm.Destination": "目的",
-  "Confirm.Asset": "目的资产",
+  "Confirm.Asset": "资产",
   "Confirm.Target": "目的地址",
   "Confirm.Fee": "服务费",
   "Confirm.Receive": "你将收到",

@@ -10,6 +10,16 @@ export const MEDIATOR_CONTRACTS: any = {
                 release: '', // Foreign,  Kovan source
                 mint: '', // Home, testnet source
             }
+        },
+        native_erc_amb: {
+            Ethereum: {
+                release: '', // Home, Elastos testnet source
+                mint: '', // Foreign, Kovan source
+            },
+            Elastos: {
+                release: '', // Foreign,  Kovan source
+                mint: '', // Home, testnet source
+            }
         }
     }
 

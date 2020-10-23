@@ -259,7 +259,7 @@ export const initLocalWeb3 = async function(type?: any) {
                 walletconnect: {
                     package: WalletConnectProvider, // required
                     options: {
-                        infuraId: "27e484dcd9e3efcfd25a83a78777cdf1" // required
+                        infuraId: process.env.REACT_APP_INFURA_KEY // "27e484dcd9e3efcfd25a83a78777cdf1" // required
                     }
                 }
             };
@@ -278,11 +278,15 @@ export const initLocalWeb3 = async function(type?: any) {
             const netId = await web3.eth.net.getId();
             // network = getNetworkName(netId, "id")
             let networkId = await web3.eth.net.getNetworkType()
-            if (netId === 1 && networkId === "private") {
-                networkId = "elastos"
+            if (netId === 20 && networkId === "private") {
+                networkId = "elastosMainnet"
+                network = getNetworkName(networkId, "name")
+            } else if (netId === 21 && networkId === "private") {
+                networkId = "elastosTestnet"
                 network = getNetworkName(networkId, "name")
             } else {
                 network = getNetworkName(netId, "id")
+                console.log(network)
             }
         } else if (type === "Elaphant") {
             console.log('Elaphant wallet not yet supported')
@@ -306,19 +310,6 @@ export const initLocalWeb3 = async function(type?: any) {
         return;
     }
 
-    // const address = accounts[0];
-    // const addressLowerCase = address.toLowerCase();
-    // const db = store.get("db");
-    // const fns = store.get("fns");
-
-    // if (selectedNetwork !== network) {
-    //     store.set("showNetworkModal", true);
-    //     store.set("spaceError", true);
-    //     store.set("spaceRequesting", false);
-    //     store.set("walletConnecting", false);
-    //     return;
-    // }
-
     store.set("localWeb3", web3);
     store.set("localWeb3Address", accounts[0]);
     store.set("localWeb3Network", network);
@@ -337,6 +328,15 @@ export const initLocalWeb3 = async function(type?: any) {
     updateBalance();
     return;
 };
+
+export const clearWeb3 = async function() {
+    const store = getStore();
+    store.set("localWeb3", null);
+    store.set("localWeb3Address", "");
+    store.set("localWeb3Network", null);
+    store.set("walletConnecting", false);
+    store.set("selectedWallet", false);
+}
 
 export const updateMarketData = async function() {
     console.log('updateMarketData')

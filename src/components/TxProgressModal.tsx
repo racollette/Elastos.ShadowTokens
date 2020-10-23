@@ -29,7 +29,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
-      width: "80%",
+      width: "75%",
     },
     position: "absolute",
     left: "50%",
@@ -134,12 +134,6 @@ const TxProgressModal: React.FC<Props> = function (props) {
     sourceTxID,
     destTxID,
   } = props;
-
-  // Dummy tx id, instead return from wallet provider
-  // let txId1 =
-  //     "0xf6c69955e79c17962aeffde498688bd749511ff4591fc78319fd6c5e235fddea";
-  // let txId2 =
-  //     "0x8f17ac71a470ab41f945c488a1636ee9af96c7949e5efd9814f72e60ccb0a831";
 
   return (
     <div>

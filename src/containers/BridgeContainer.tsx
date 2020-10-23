@@ -30,6 +30,7 @@ const styles = () => ({
     padding: theme.spacing(2.5),
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100%",
+      padding: theme.spacing(2),
     },
   },
   title: {

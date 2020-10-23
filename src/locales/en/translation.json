@@ -9,7 +9,8 @@
   "Home.Next": "Next",
 
   "Wallet.Header": "Select a wallet provider",
-  "Wallet.Connect": "Connect to ",
+  "Wallet.Connect": "Connect to",
+  "Wallet.Disconnect": "Disconnect",
 
   "Transfer.Header": "Build transaction",
   "Transfer.Destination": "Destination Address",
@@ -25,7 +26,7 @@
   "Confirm.From": "from",
   "Confirm.Network": "Network",
   "Confirm.Destination": "Destination",
-  "Confirm.Asset": "Destination Asset",
+  "Confirm.Asset": "Asset",
   "Confirm.Target": "Target Address",
   "Confirm.Fee": "Service Fee",
   "Confirm.Receive": "You will receive",

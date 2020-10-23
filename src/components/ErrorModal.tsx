@@ -20,7 +20,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
-      width: "80%",
+      width: "75%",
     },
     position: "absolute",
     left: "50%",
