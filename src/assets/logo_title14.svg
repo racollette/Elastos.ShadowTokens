@@ -8,9 +8,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="561.51129mm"
-   height="83.896706mm"
-   viewBox="0 0 561.51129 83.896703"
+   width="512.37531mm"
+   height="79.844887mm"
+   viewBox="0 0 512.3753 79.844884"
    version="1.1"
    id="svg6819"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
@@ -162,7 +162,7 @@
        x2="44.914368"
        y2="-158.65083"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.5978612,2.3838047e-8,-2.3838047e-8,1.5978612,-303.70296,-118.64602)" />
+       gradientTransform="matrix(1.5978612,2.3838046e-8,-2.3838046e-8,1.5978612,-303.70296,-118.64602)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient886"
@@ -193,9 +193,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.175"
-     inkscape:cx="1149.8594"
-     inkscape:cy="2161.9074"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="848.43126"
+     inkscape:cy="400.68454"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -217,7 +217,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -225,10 +225,21 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-94.814354,-24.726074)">
+     transform="translate(-98.898636,-26.751963)">
+    <rect
+       style="fill:#000000;stroke-width:2.86625;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       id="rect973"
+       width="863.52472"
+       height="681.13806"
+       x="-72.677727"
+       y="202.7924"
+       ry="3.0960613e-11"
+       inkscape:export-filename="/home/ryan/Desktop/shadowtokens.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g891"
-       transform="matrix(1.052439,0,0,1.052439,2.8285005,-3.4974803)">
+       transform="matrix(1.0016111,0,0,1.0016111,11.838224,-0.10852473)">
       <path
          d="m 177.25951,66.935842 a 40.177654,40.177654 0 0 0 -80.355221,-5.6e-5 20.088841,20.088841 0 0 0 40.177681,0 20.088834,20.088834 0 0 1 40.17754,5.6e-5"
          fill="#ffffff"
@@ -257,26 +268,15 @@
     <text
        xml:space="preserve"
        id="text8592"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:51.8586px;line-height:1.25;font-family:'Courier New';-inkscape-font-specification:'Courier New';white-space:pre;shape-inside:url(#rect8594);fill:#ffffff;"
-       transform="matrix(1.1428506,0,0,1.1428506,15.382008,-20.52514)"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.3023px;line-height:1.25;font-family:'Courier New';-inkscape-font-specification:'Courier New';white-space:pre;shape-inside:url(#rect8594);fill:#ffffff;"
+       transform="matrix(1.1428506,0,0,1.1428506,15.382008,-16.769531)"><tspan
          x="184.15625"
-         y="91.771526"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:51.8586px;font-family:'Courier New';-inkscape-font-specification:'Courier New';fill:#ffffff">Shadowtokens</tspan></tspan></text>
+         y="86.827654"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.3023px;font-family:'Courier New';-inkscape-font-specification:'Courier New';fill:#ffffff">Shadowtokens</tspan></tspan></text>
     <text
        xml:space="preserve"
        id="text8606"
        style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;white-space:pre;shape-inside:url(#rect8608);" />
-    <rect
-       style="fill:#000000;stroke-width:2.86625;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
-       id="rect973"
-       width="863.52472"
-       height="681.13806"
-       x="-79.322624"
-       y="248.27835"
-       ry="3.0960613e-11"
-       inkscape:export-filename="/home/ryan/Desktop/shadowtokens.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
     <g
        id="g979"
        transform="matrix(4.2464261,0,0,4.2464261,-244.78717,-1234.1089)">

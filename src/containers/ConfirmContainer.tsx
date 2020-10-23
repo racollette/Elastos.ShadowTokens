@@ -499,7 +499,6 @@ class ConfirmContainer extends React.Component<any> {
                       confirmation={confirmationNumber}
                       total={confirmationTotal}
                       validatorStep={validatorStep}
-                      validatorProgress={validatorProgress}
                       transferSuccess={transferSuccess}
                       sourceTxID={sourceTxID}
                     />

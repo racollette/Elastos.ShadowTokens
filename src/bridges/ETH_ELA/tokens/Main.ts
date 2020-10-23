@@ -11,6 +11,8 @@ export const MAIN = {
     bridgeMode: 'erc_erc_amb',
     abi: ERC20_ABI,
     confirmations: 8,
+    priceTicker: 'main',
+    priceFeed: '',
 }
 
 export const eMAIN = {
@@ -21,6 +23,8 @@ export const eMAIN = {
     bridgeMode: 'erc_erc_amb',
     abi: ERC20_ABI,
     confirmations: 1,
+    priceTicker: 'main',
+    priceFeed: '',
 }
 
 // Contract Config

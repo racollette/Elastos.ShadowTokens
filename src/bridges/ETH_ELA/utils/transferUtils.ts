@@ -1,13 +1,22 @@
 import { getStore } from "../../../services/storeService";
-import { EventData, Contract } from 'web3-eth-contract'
+import Web3 from "web3";
+import { EventData } from 'web3-eth-contract'
 // import { toWei } from 'web3-utils'
 import ERC20_ABI from "../abis/ERC20_ABI.json";
+import MEDIATOR_ABI from "../abis/MEDIATOR_ABI.json";
 import { TOKENS } from '../tokens'
-import { MEDIATOR_ABI } from "../abis/Mediator";
 import { MEDIATOR_CONTRACTS } from "./contracts";
+
+// Development rpc
+export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
+    Elastos: "https://rpc.elaeth.io", // "https://mainrpc.elaeth.io",
+    Ethereum: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
+}
 
 export const handleBridgeMode = function(confirmTx: any) {
     startTokenTransfer(confirmTx)
+    // testTokenEvents(confirmTx)
+    // testing()
 }
 
 export const startTokenTransfer = async function(confirmTx: any) {
@@ -16,30 +25,31 @@ export const startTokenTransfer = async function(confirmTx: any) {
     const store = getStore();
     const web3 = store.get("localWeb3")
     const from = store.get("localWeb3Address")
+    const recipient = confirmTx.destAddress
     const Contract = web3.eth.Contract;
 
     const asset = TOKENS[confirmTx.sourceAsset]
     const token = new Contract(ERC20_ABI, asset.address);
     let to = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.sourceNetwork][confirmTx.type]
+    let destContract = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.sourceNetwork].release
     if (confirmTx.type === "release") {
         to = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.destNetwork][confirmTx.type]
+        destContract = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.destNetwork].mint
     }
     const mediatorConfs = TOKENS[confirmTx.sourceAsset].confirmations
     store.set("confirmationTotal", mediatorConfs)
-    const bridge = new Contract(MEDIATOR_ABI, to);
-    // console.log('bridge contract', bridge)
+    const sourceBridge = new Contract(MEDIATOR_ABI, to);
 
-    if (bridge) {
+    if (sourceBridge) {
         const value = web3.utils.toWei(String(confirmTx.amount), "ether")
         // const excessValue = web3.utils.toWei(String(Number(confirmTx.amount)* 1000000)), "ether")
-
         // const allowance = await token.methods.allowance(from, to).call()
         // console.log('allowance', allowance)
         // if (toBN(allowance).lt(toBN(value))) {
 
         // ApproveSpend
         store.set("transactionType", "approve")
-        // const approve
+        // const approve = 
         await token.methods.approve(to, value).send({ from }, (error: any, hash: any) => {
             if (error) {
                 if (error.code === 4001) {
@@ -62,20 +72,13 @@ export const startTokenTransfer = async function(confirmTx: any) {
             .on('receipt', function(receipt: any) {
                 store.set("waitingApproval", false);
             })
-        // .on('confirmation', function(confirmationNumber: number, receipt: any) {
-        //     console.log(confirmationNumber)
-        //     if (confirmationNumber === 1) {
-        //         store.set("waitingApproval", false);
-        //     }
-        // })
-
 
         // RelayTokens
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)
 
-        // const receipt
-        await bridge.methods.relayTokens(from, value).send({
+        // const receipt =
+        await sourceBridge.methods.relayTokens(recipient, value).send({
             from
         }, (error: any, hash: any) => {
             if (error) {
@@ -98,9 +101,8 @@ export const startTokenTransfer = async function(confirmTx: any) {
             })
             .on('confirmation', function(confirmationNumber: number, receipt: any) {
                 updateRelayConfirmations(confirmationNumber, mediatorConfs);
+                detectExchangeFinished(recipient, value, destContract, confirmTx.destNetwork)
             })
-
-        detectExchangeFinished(from, value, bridge)
     }
 };
 
@@ -117,9 +119,6 @@ export const updateRelayConfirmations = function(confirmationNumber: number, con
         store.set("validatorStep", true);
         setTimeout(() => {
             store.set("validatorProgress", 1);
-            setTimeout(() => {
-                store.set("transferSuccess", true);
-            }, 2000);
         }, 5000);
     } else {
         confirmationNumber++;
@@ -128,53 +127,55 @@ export const updateRelayConfirmations = function(confirmationNumber: number, con
 }
 
 const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time))
-const TIMEOUT = 9180000
+const TIMEOUT = 180000
 
-export const detectExchangeFinished = async function(account: any, value: any, contract: Contract) {
+export const detectExchangeFinished = async function(recipient: any, value: any, destContract: string, destNetwork: string) {
     const store = getStore();
-    const web3 = store.get("localWeb3")
-    // const contract = new web3.eth.Contract(MEDIATOR_ABI, this.assetABridge)
-    // waitForEvent(web3, contract, 'TokensBridged', processMediatorEvents(account))
-    let fromBlock = await web3.eth.getBlockNumber()
+    const web3 = new Web3(new Web3.providers.HttpProvider(SUPPORTED_RPC_URLS[destNetwork]))
+    const contract = new web3.eth.Contract([{
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "recipient",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "name": "messageId",
+                "type": "bytes32"
+            }
+        ],
+        "name": "TokensBridged",
+        "type": "event"
+    }], destContract)
 
+    let fromBlock = await web3.eth.getBlockNumber()
     const stopTime = Date.now() + TIMEOUT
     while (Date.now() <= stopTime) {
         const currentBlock = await web3.eth.getBlockNumber()
 
-        console.log(contract)
         const events: EventData[] = await contract.getPastEvents('TokensBridged', {
             fromBlock,
             toBlock: currentBlock
-        }, function(error: any, event: any) { console.log(event); })
+        }, function(error: any, event: any) {
+            // Error handling
+        })
 
-        console.log(events)
-        // const confirmationEvent = events.filter(event => event.returnValues.transactionHash === sendResult.txHash)
-        const confirmationEvent = events
+        const confirmationEvent = events.filter(event => event.returnValues.recipient === recipient)
 
         if (confirmationEvent.length > 0) {
+            const txID = confirmationEvent[0].transactionHash
+            store.set("destTxID", txID);
+            store.set("transferSuccess", true);
             return;
         }
         fromBlock = currentBlock
-        await wait(5000);
+        await wait(4000);
     }
 }
-
-// export const processMediatorEvents: Function = function(account: any) {
-//     // return events => {
-//     //     const confirmationEvent = events.filter(
-//     //         event => event.returnValues.recipient.toLowerCase() === account.toLowerCase()
-//     //     )
-//     //     return confirmationEvent.length > 0
-//     // }
-//     return null
-// }
-
-
-// export const isBridgeContract = async (contract: Contract): Promise<boolean> => {
-//   try {
-//     await contract.methods.deployedAtBlock().call()
-//     return true
-//   } catch (e) {
-//     return false
-//   }
-// }

@@ -41,12 +41,12 @@
   "Error.Unknown.Message": "未知错误",
   "Error.Accept": "好的",
 
-  "Waiting.ApproveSpend": "Authorize withdrawal of",
-  "Waiting.Confirm": "Authorize contract interaction with",
+  "Waiting.ApproveSpend": "Step 1 - Authorize withdrawal of",
+  "Waiting.Confirm": "Step 2 - Authorize contract interaction",
   "Waiting.User": "正在等待用户回应...",
   "Waiting.SpendApproved1": "Spend of",
   "Waiting.SpendApproved2": "approved.",
-  "Waiting.Confirmations": "Waiting for confirmation...",
+  "Waiting.Confirmations": "Waiting for block confirmation...",
 
   "Progress.Success": "成功",
   "Progress.Received": "接收",
@@ -54,7 +54,6 @@
   "Progress.Explorer": "在浏览器查看",
   "Progress.Sent": "传送请求已发送",
   "Progress.Blocks": "等待区块链确认...",
-  "Progress.Complete": "传送完成",
   "Progress.Oracles": "见证人正在验证交易...",
   "Progress.Accept": "好的",
 

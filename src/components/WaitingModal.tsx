@@ -111,7 +111,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   spacer: {
-    marginTop: theme.spacing(1.5),
+    marginTop: theme.spacing(1),
   },
 });
 
@@ -188,7 +188,7 @@ const WaitingModal: React.FC<Props> = function (props) {
                   </div>
                   <div className={classes.spacer} />
                   <div className={classes.spinnerContainer}>
-                    <LinearProgress color="primary" />
+                    <LinearProgress color="secondary" />
                     <Typography className={classes.waitingText}>
                       <Translate text="Waiting.User" />
                     </Typography>
@@ -221,7 +221,7 @@ const WaitingModal: React.FC<Props> = function (props) {
                     <img src={WALLET_ICON_MAP[wallet]} alt={wallet} />
                     <Typography className={classes.walletText}>
                       <Translate text="Waiting.Confirm" />
-                      &nbsp;{wallet}
+                      {/* &nbsp;{wallet} */}
                     </Typography>
                   </div>
                   <div className={classes.tokenMapContainer}>
@@ -255,7 +255,7 @@ const WaitingModal: React.FC<Props> = function (props) {
                   </div>
 
                   <div className={classes.spinnerContainer}>
-                    <LinearProgress color="primary" />
+                    <LinearProgress color="secondary" />
                     <Typography className={classes.waitingText}>
                       <Translate text="Waiting.User" />
                     </Typography>

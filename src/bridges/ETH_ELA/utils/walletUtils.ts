@@ -156,12 +156,6 @@ export const SUPPORTED_NETWORK_NAMES: { [key in string]: string } = {
     elastosTestnet: 'Elastos mainnet',
 }
 
-// Development rpc
-export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
-    ela: "https://rpc.elaeth.io", // "https://mainrpc.elaeth.io",
-
-}
-
 export const getNetworkName = function(id: any, type: string) {
     switch (type) {
         case "id":
@@ -183,7 +177,7 @@ export const walletConnectOptions = {
 /**
  * Connecting to Local Web3 Wallet
  */
-export const initLocalWeb3 = async function(type: any) {
+export const initLocalWeb3 = async function(type?: any) {
     const store = getStore();
     store.set("walletConnecting", true);
     store.set("spaceError", false);

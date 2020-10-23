@@ -41,12 +41,12 @@
   "Error.Unknown.Message": "An unknown error occurred",
   "Error.Accept": "Okay",
 
-  "Waiting.ApproveSpend": "Authorize withdrawal of",
-  "Waiting.Confirm": "Authorize contract interaction with",
+  "Waiting.ApproveSpend": "Step 1 - Authorize withdrawal of",
+  "Waiting.Confirm": "Step 2 - Authorize contract interaction",
   "Waiting.User": "Waiting for user response...",
   "Waiting.SpendApproved1": "Spend of",
-  "Waiting.SpendApproved2": "approved.",
-  "Waiting.Confirmations": "Waiting for confirmation...",
+  "Waiting.SpendApproved2": "approved",
+  "Waiting.Confirmations": "Waiting for block confirmation...",
 
   "Progress.Success": "Success",
   "Progress.Received": "received on",
@@ -54,7 +54,6 @@
   "Progress.Explorer": "View in explorer",
   "Progress.Sent": "Transfer request sent",
   "Progress.Blocks": "Waiting for block confirmations...",
-  "Progress.Complete": "Transfer complete",
   "Progress.Oracles": "Oracles validating transaction...",
   "Progress.Accept": "OKAY",
 

@@ -7,9 +7,9 @@ export const USDC = {
     address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     bridgeMode: 'erc_erc_amb',
     abi: ERC20_ABI,
+    confirmations: 8,
     priceTicker: 'usdc',
     priceFeed: 'https://api.coincap.io/v2/assets/usd-coin',
-    confirmations: 8,
 }
 
 export const eUSDC = {
@@ -19,7 +19,7 @@ export const eUSDC = {
     address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // generate on elastos
     bridgeMode: 'erc_erc_amb',
     abi: ERC20_ABI,
+    confirmations: 1,
     priceTicker: 'usdc',
     priceFeed: 'https://api.coincap.io/v2/assets/usd-coin',
-    confirmations: 1,
 }

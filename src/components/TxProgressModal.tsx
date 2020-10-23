@@ -6,6 +6,7 @@ import classNames from "classnames";
 import theme from "../theme/theme";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import Button from "@material-ui/core/Button";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import LinearDeterminate from "./LinearDeterminate";
 import ActionLink from "../components/ActionLink";
 import { SYMBOL_MAP } from "../bridges/ETH_ELA/utils/walletUtils";
@@ -71,9 +72,16 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     justifyContent: "center",
   },
   confirmationText: {
-    // color: theme.palette.info.contrastText,
     color: "#fff",
     fontSize: 16,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 14,
+    },
+  },
+  waitingText: {
+    color: theme.palette.info.contrastText,
+    fontSize: 16,
+    paddingTop: theme.spacing(1),
     [theme.breakpoints.down("sm")]: {
       fontSize: 14,
     },
@@ -109,7 +117,6 @@ interface Props {
   total: any;
   txInput: any;
   validatorStep: boolean;
-  validatorProgress: number;
   transferSuccess: boolean;
   sourceTxID?: any;
   destTxID?: any;
@@ -123,7 +130,6 @@ const TxProgressModal: React.FC<Props> = function (props) {
     total,
     txInput,
     validatorStep,
-    validatorProgress,
     transferSuccess,
     sourceTxID,
     destTxID,
@@ -234,20 +240,10 @@ const TxProgressModal: React.FC<Props> = function (props) {
                   </div>
                 ) : (
                   <div className={classes.generalContainer}>
-                    {transferSuccess ? (
-                      <Typography className={classes.confirmationText}>
-                        <Translate text="Progress.Complete" />
-                      </Typography>
-                    ) : (
-                      <Typography className={classes.confirmationText}>
-                        <Translate text="Progress.Oracles" />
-                      </Typography>
-                    )}
-
-                    <LinearDeterminate
-                      confirmationNumber={validatorProgress}
-                      confirmationTotal={1}
-                    />
+                    <LinearProgress color="primary" />
+                    <Typography className={classes.waitingText}>
+                      <Translate text="Progress.Oracles" />
+                    </Typography>
                   </div>
                 )}
               </div>

@@ -7,9 +7,9 @@ export const USDT = {
     address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     bridgeMode: 'erc_erc_amb',
     abi: ERC20_ABI,
+    confirmations: 8,
     priceTicker: 'usdt',
     priceFeed: 'https://api.coincap.io/v2/assets/tether',
-    confirmations: 8,
 }
 
 export const eUSDT = {
@@ -19,7 +19,7 @@ export const eUSDT = {
     address: '0xdac17f958d2ee523a2206206994597c13d831ec7', // generate on elastos
     bridgeMode: 'erc_erc_amb',
     abi: ERC20_ABI,
+    confirmations: 1,
     priceTicker: 'usdt',
     priceFeed: 'https://api.coincap.io/v2/assets/tether',
-    confirmations: 1,
 }

@@ -1,7 +1,4 @@
 
-export const USDT_ADDRESS_TEST = "0x1a37dd375096820a5fde14342720102c07100f26";
-
-
 export const MEDIATOR_CONTRACTS: any = {
     bridgeMode: {
         erc_erc_amb: {

@@ -1,4 +1,4 @@
-export const MEDIATOR_ABI = [
+export default [
   {
     anonymous: false,
     inputs: [
@@ -35,37 +35,4 @@ export const MEDIATOR_ABI = [
     stateMutability: "view",
     type: "function",
   },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: "",
-        type: "address",
-      },
-      {
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "relayTokens",
-    outputs: [],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: "getBridgeMode",
-    outputs: [
-      {
-        name: "",
-        type: "bytes4",
-      },
-    ],
-    payable: false,
-    stateMutability: "pure",
-    type: "function",
-  },
 ];
-//# sourceMappingURL=Mediator.js.map
