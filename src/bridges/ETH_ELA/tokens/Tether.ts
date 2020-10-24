@@ -12,9 +12,9 @@ export const USDT = {
     priceFeed: 'https://api.coincap.io/v2/assets/tether',
 }
 
-export const eUSDT = {
-    id: 'eUSDT',
-    name: 'eUSDT',
+export const elaUSDT = {
+    id: 'elaUSDT',
+    name: 'elaUSDT',
     network: '21',
     address: '0xdac17f958d2ee523a2206206994597c13d831ec7', // generate on elastos
     bridgeMode: 'erc_erc_amb',

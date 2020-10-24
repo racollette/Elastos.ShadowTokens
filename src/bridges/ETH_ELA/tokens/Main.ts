@@ -15,9 +15,9 @@ export const MAIN = {
     priceFeed: '',
 }
 
-export const eMAIN = {
-    id: 'eMAIN',
-    name: 'eMAIN',
+export const elaMAIN = {
+    id: 'elaMAIN',
+    name: 'elaMAIN',
     network: '21',
     address: '0xE3eB44F609Af7dEa9CAA1dF28BbA9032f603aC55',
     bridgeMode: 'erc_erc_amb',

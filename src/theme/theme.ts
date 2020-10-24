@@ -18,13 +18,13 @@ export default createMuiTheme({
         type: "dark",
         primary: {
             light: "#8DFEFF",
-            main: "#0d81cfff", // "#4e92ffff",
+            main: "rgb(13, 129, 207, 1)",
             dark: "#404040",
             contrastText: "#fff",
         },
         secondary: {
             light: "#ff0",
-            main: "#c85367ff",
+            main: "rgb(200, 83, 103, 1)",
             dark: "#404040",
             contrastText: "#fff",
         },
@@ -68,7 +68,7 @@ export default createMuiTheme({
                     },
                 },
                 "&.MuiButton-sizeLarge": {
-                    minHeight: 45,
+                    minHeight: 48,
                     fontSize: 17,
                 },
                 "&.MuiButton-contained": {

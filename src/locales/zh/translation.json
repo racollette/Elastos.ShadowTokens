@@ -1,6 +1,6 @@
 {
-  "Nav.Connect": "连接钱包",
-  "Nav.Bridge": "选择跨链桥",
+  "Nav.Connect": "Connect to a wallet",
+  "Nav.Bridge": "Select a bridge",
 
   "Home.Title": "资产保全",
   "Home.Intro": "将您在一条链上的加密资产映射到另一条链，完全去中心的验证人保护您的财产安全。",
@@ -39,6 +39,8 @@
   "Error.NoWeb3.Message": "安装了么？请先确认。",
   "Error.TxRejected.Message": "交易被拒绝",
   "Error.InsufficientBalance.Message": "Insufficient balance",
+  "Error.BelowMinTxLimit.Message": "Below minimum transfer amount",
+  "Error.ExceedsMaxTxLimit.Message": "Exceeds maximum transfer limit",
   "Error.Unknown.Message": "未知错误",
   "Error.Accept": "好的",
 

@@ -17,7 +17,8 @@ import MetaMask from "../../../assets/metamask-fox.svg";
 import Elaphant from "../../../assets/elaphant.png";
 import WalletConnect from "../../../assets/walletconnect.svg";
 
-import { TOKENS } from '../tokens'
+import { TOKENS } from '../tokens';
+import { switchOriginChain } from "./txUtils";
 
 // used for montoring balances
 let walletDataInterval: any = null;
@@ -36,12 +37,12 @@ export const NAME_MAP = {
     dai: "Dai",
     usdc: "USD Coin",
     main: "Main",
-    eela: "Wrapped Elastos",
-    eeth: "Wrapped Ethereum",
-    eusdt: "Wrapped Tether",
-    edai: "Wrapped Dai",
-    eusdc: "Wrapped USD Coin",
-    emain: "Wrapped Main",
+    ethela: "Shadow Elastos",
+    elaeth: "Shadow Ethereum",
+    elausdt: "Shadow Tether",
+    eladai: "Shadow Dai",
+    elausdc: "Shadow USD Coin",
+    elamain: "Shadow Main",
 };
 
 export const SYMBOL_MAP: { [key in string]: string } = {
@@ -51,27 +52,27 @@ export const SYMBOL_MAP: { [key in string]: string } = {
     dai: "DAI",
     usdc: "USDC",
     main: "MAIN",
-    eela: "eELA",
-    eeth: "eETH",
-    eusdt: "eUSDT",
-    edai: "eDAI",
-    eusdc: "eUSDC",
-    emain: "eMAIN",
+    ethela: "ethELA",
+    elaeth: "elaETH",
+    elausdt: "elaUSDT",
+    eladai: "elaDAI",
+    elausdc: "elaUSDC",
+    elamain: "elaMAIN",
 };
 
 export const CONVERT_MAP: { [key in string]: string } = {
-    ela: "eela",
-    eth: "eeth",
-    usdt: "eusdt",
-    dai: "edai",
-    usdc: "eusdc",
-    main: "emain",
-    eela: "ela",
-    eeth: "eth",
-    eusdt: "usdt",
-    edai: "dai",
-    eusdc: "usdc",
-    emain: "main",
+    ela: "ethela",
+    eth: "elaeth",
+    usdt: "elausdt",
+    dai: "eladai",
+    usdc: "elausdc",
+    main: "elamain",
+    ethela: "ela",
+    elaeth: "eth",
+    elausdt: "usdt",
+    eladai: "dai",
+    elausdc: "usdc",
+    elamain: "main",
 };
 
 export const NETWORK_MAP: { [key in string]: string } = {
@@ -81,12 +82,12 @@ export const NETWORK_MAP: { [key in string]: string } = {
     dai: "Ethereum",
     usdc: "Ethereum",
     main: "Ethereum",
-    eela: "Ethereum",
-    eeth: "Elastos",
-    eusdt: "Elastos",
-    edai: "Elastos",
-    eusdc: "Elastos",
-    emain: "Elastos",
+    ethela: "Ethereum",
+    elaeth: "Elastos",
+    elausdt: "Elastos",
+    eladai: "Elastos",
+    elausdc: "Elastos",
+    elamain: "Elastos",
 };
 
 // Development networks
@@ -98,12 +99,12 @@ export const NETWORK_TYPE: { [key in string]: string } = {
     dai: "Ethereum mainnet",
     usdc: "Ethereum mainnet",
     main: "Kovan testnet",
-    eela: "Kovan testnet",
-    eeth: "Elastos mainnet",
-    eusdt: "Elastos mainnet",
-    edai: "Elastos mainnet",
-    eusdc: "Elastos mainnet",
-    emain: "Elastos mainnet"
+    ethela: "Kovan testnet",
+    elaeth: "Elastos mainnet",
+    elausdt: "Elastos mainnet",
+    eladai: "Elastos mainnet",
+    elausdc: "Elastos mainnet",
+    elamain: "Elastos mainnet"
 };
 
 export const ASSET_CONVERSION_TYPES: { [key in string]: string } = {
@@ -113,12 +114,12 @@ export const ASSET_CONVERSION_TYPES: { [key in string]: string } = {
     dai: "mint",
     usdc: "mint",
     main: "mint",
-    eela: "release",
-    eeth: "release",
-    eusdt: "release",
-    edai: "release",
-    eusdc: "release",
-    emain: "release",
+    ethela: "release",
+    elaeth: "release",
+    elausdt: "release",
+    eladai: "release",
+    elausdc: "release",
+    elamain: "release",
 };
 
 export const MINI_ICON_MAP: { [key in string]: string } = {
@@ -128,12 +129,12 @@ export const MINI_ICON_MAP: { [key in string]: string } = {
     dai: DAI,
     usdc: USDC,
     main: MAIN,
-    eela: ELA,
-    eeth: ETH,
-    eusdt: USDT,
-    edai: DAI,
-    eusdc: USDC,
-    emain: MAIN,
+    ethela: ELA,
+    elaeth: ETH,
+    elausdt: USDT,
+    eladai: DAI,
+    elausdc: USDC,
+    elamain: MAIN,
 };
 
 export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
@@ -190,6 +191,7 @@ export const initLocalWeb3 = async function(type?: any) {
     let web3;
     let accounts: string[] = [];
     let network: any = "";
+    let netId: number;
 
     try {
         // if (type === "injected" || !type) {
@@ -219,7 +221,7 @@ export const initLocalWeb3 = async function(type?: any) {
             if (typeof web3.currentProvider === "string") return;
             if (!web3.currentProvider) return;
             accounts = await web3.eth.getAccounts();
-            const netId = await web3.eth.net.getId();
+            netId = await web3.eth.net.getId();
             // network = getNetworkName(netId, "id")
             let networkId = await web3.eth.net.getNetworkType()
             // console.log('netId', netId)
@@ -275,7 +277,7 @@ export const initLocalWeb3 = async function(type?: any) {
             if (typeof web3.currentProvider === "string") return;
             if (!web3.currentProvider) return;
             accounts = await web3.eth.getAccounts();
-            const netId = await web3.eth.net.getId();
+            netId = await web3.eth.net.getId();
             // network = getNetworkName(netId, "id")
             let networkId = await web3.eth.net.getNetworkType()
             if (netId === 20 && networkId === "private") {
@@ -310,6 +312,7 @@ export const initLocalWeb3 = async function(type?: any) {
         return;
     }
 
+    setBridgeDirection(netId)
     store.set("localWeb3", web3);
     store.set("localWeb3Address", accounts[0]);
     store.set("localWeb3Network", network);
@@ -317,17 +320,29 @@ export const initLocalWeb3 = async function(type?: any) {
     store.set("walletConnecting", false);
     store.set("selectedWallet", true);
     store.set("convert.destinationValid", true);
-
-    // Set default transfer direction
-    if (network !== 'Kovan testnet') {
-        store.set("convert.selectedDirection", Number(1));
-        store.set("selectedAsset", 'ela');
-        store.set("convert.selectedFormat", 'eela');
-    }
-
     updateBalance();
     return;
 };
+
+export const setBridgeDirection = async function(netId: number) {
+    const store = getStore();
+    const selectedDirection = store.get("convert.selectedDirection")
+    // Set default transfer direction
+    switch (netId) {
+        case 42:
+            if (selectedDirection === 0) return
+            switchOriginChain(selectedDirection)
+            break
+        case 21:
+            if (selectedDirection === 1) return
+            switchOriginChain(selectedDirection)
+            break
+    }
+
+    // const selectedAsset = store.get("selectedAsset")
+    // store.set("selectedAsset", CONVERT_MAP[selectedAsset]);
+    // store.set("convert.selectedFormat", CONVERT_MAP[CONVERT_MAP[selectedAsset]]);
+}
 
 export const clearWeb3 = async function() {
     const store = getStore();
@@ -503,17 +518,16 @@ export const setListener = async function(web3: any) {
     if (listeningProvider.on) {
         // listen for changes
         listeningProvider.on("accountsChanged", async () => {
-            window.location.reload();
+            initLocalWeb3()
         });
-        // listeningProvider.on("chainChanged", async () => {
+        listeningProvider.on("chainChanged", async () => {
+            // window.location.reload();
+            const netId = await web3.eth.net.getId();
+            setBridgeDirection(netId)
+        });
+        // listeningProvider.on("disconnected", async () => {
         //     window.location.reload();
         // });
-        // listeningProvider.on("networkChanged", async () => {
-        //     window.location.reload();
-        // });
-        listeningProvider.on("disconnected", async () => {
-            window.location.reload();
-        });
     }
 }
 

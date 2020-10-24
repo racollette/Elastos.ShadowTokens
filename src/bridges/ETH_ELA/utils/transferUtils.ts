@@ -30,24 +30,39 @@ export const startTokenTransfer = async function(confirmTx: any) {
 
     const asset = TOKENS[confirmTx.sourceAsset]
     const token = new Contract(ERC20_ABI, asset.address);
+
     let to = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.sourceNetwork][confirmTx.type]
     let destContract = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.sourceNetwork].release
     if (confirmTx.type === "release") {
         to = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.destNetwork][confirmTx.type]
         destContract = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.destNetwork].mint
     }
+    const minTx = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.sourceNetwork].minTx
+    const maxTx = MEDIATOR_CONTRACTS.bridgeMode[asset.bridgeMode][confirmTx.sourceNetwork].maxTx
     const mediatorConfs = TOKENS[confirmTx.sourceAsset].confirmations
     store.set("confirmationTotal", mediatorConfs)
     const sourceBridge = new Contract(MEDIATOR_ABI, to);
 
     if (sourceBridge) {
         const value = web3.utils.toWei(String(confirmTx.amount), "ether")
+
+        if (value < minTx) {
+            store.set("minTx", (minTx / 1000000000000000000).toFixed(2))
+            store.set("belowMinTxLimit", true)
+            return
+        } else if (value > maxTx) {
+            store.set("maxTx", (maxTx / 1000000000000000000).toFixed(2))
+            store.set("exceedsMaxTxLimit", true)
+            return
+        }
+
         // const excessValue = web3.utils.toWei(String(Number(confirmTx.amount)* 1000000)), "ether")
         // const allowance = await token.methods.allowance(from, to).call()
         // console.log('allowance', allowance)
         // if (toBN(allowance).lt(toBN(value))) {
 
         // ApproveSpend
+        store.set("waitingApproval", true);
         store.set("transactionType", "approve")
         // const approve = 
         await token.methods.approve(to, value).send({ from }, (error: any, hash: any) => {
@@ -66,9 +81,6 @@ export const startTokenTransfer = async function(confirmTx: any) {
                 store.set("transactionType", "approveConfs")
             }
         })
-            .on("transactionHash", (tx: any) => {
-                console.log('transactionhash')
-            })
             .on('receipt', function(receipt: any) {
                 store.set("waitingApproval", false);
             })
@@ -103,6 +115,11 @@ export const startTokenTransfer = async function(confirmTx: any) {
                 updateRelayConfirmations(confirmationNumber, mediatorConfs);
                 detectExchangeFinished(recipient, value, destContract, confirmTx.destNetwork)
             })
+            .on('error', function(error: any) {
+                store.set("confirmationProgress", false)
+                store.set("unknownError", true)
+            })
+
     }
 };
 

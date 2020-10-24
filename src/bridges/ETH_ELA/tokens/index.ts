@@ -1,15 +1,15 @@
-import { DAI, eDAI } from './Dai'
-import { MAIN, eMAIN } from './Main'
-import { USDT, eUSDT } from './Tether'
-import { USDC, eUSDC } from './USD Coin'
+import { DAI, elaDAI } from './Dai'
+import { MAIN, elaMAIN } from './Main'
+import { USDT, elaUSDT } from './Tether'
+import { USDC, elaUSDC } from './USD Coin'
 
 export const TOKENS: any = {
     dai: DAI,
-    edai: eDAI,
+    eladai: elaDAI,
     main: MAIN,
-    emain: eMAIN,
+    elamain: elaMAIN,
     usdt: USDT,
-    eusdt: eUSDT,
+    elausdt: elaUSDT,
     usdc: USDC,
-    eusdc: eUSDC
+    elausdc: elaUSDC
 }

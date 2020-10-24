@@ -8,6 +8,7 @@ import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
 import {
   gatherFeeData,
+  switchOriginChain,
   MIN_TX_AMOUNTS,
 } from "../bridges/ETH_ELA/utils/txUtils";
 import {
@@ -17,7 +18,6 @@ import {
   NETWORK_MAP,
   NETWORK_TYPE,
   ASSET_CONVERSION_TYPES,
-  // abbreviateAddress,
   fetchTokenBalance,
 } from "../bridges/ETH_ELA/utils/walletUtils";
 import i18n from "i18next";
@@ -441,24 +441,6 @@ class TransferContainer extends React.Component<any> {
     store.set("confirmAction", ASSET_CONVERSION_TYPES[format]);
   }
 
-  async switchOriginChain() {
-    const { store } = this.props;
-    const selectedDirection = store.get("convert.selectedDirection");
-    if (selectedDirection === 0) {
-      store.set("convert.selectedDirection", Number(1));
-    } else {
-      store.set("convert.selectedDirection", Number(0));
-    }
-
-    const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
-      "selectedAsset"
-    );
-    const destAsset = CONVERT_MAP[selectedAsset];
-
-    store.set("convert.selectedFormat", selectedAsset);
-    store.set("selectedAsset", destAsset);
-  }
-
   render() {
     const { classes, store } = this.props;
 
@@ -492,7 +474,7 @@ class TransferContainer extends React.Component<any> {
     let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
     if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
       usdValue = Number(
-        store.get(`${selectedAsset.substring(1)}usd`) * amount
+        store.get(`${selectedAsset.substring(3)}usd`) * amount
       ).toFixed(2);
     }
 
@@ -586,17 +568,27 @@ class TransferContainer extends React.Component<any> {
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
-                          items={["ETH", "eELA", "USDT", "DAI", "USDC", "MAIN"]}
+                          items={[
+                            "ETH",
+                            "ethELA",
+                            "USDT",
+                            "DAI",
+                            "USDC",
+                            "MAIN",
+                          ]}
                           onCurrencyChange={(v: string) => {
                             const asset = v.toLowerCase();
-                            if (asset === "eela") {
+                            if (asset === "ethela") {
                               store.set(
                                 "convert.selectedFormat",
-                                `${asset.replace("e", "")}`
+                                `${asset.replace("eth", "")}`
                               );
                               store.set("selectedAsset", asset);
                             } else {
-                              store.set("convert.selectedFormat", `e${asset}`);
+                              store.set(
+                                "convert.selectedFormat",
+                                `ela${asset}`
+                              );
                               store.set("selectedAsset", asset);
                             }
                             gatherFeeData();
@@ -615,7 +607,6 @@ class TransferContainer extends React.Component<any> {
                           placeholder={"0.00"}
                           onChange={(event: any) => {
                             let value = event.value || "";
-                            console.log("Send amount input", value);
                             store.set("convert.amount", String(value));
                             gatherFeeData();
                           }}
@@ -655,7 +646,9 @@ class TransferContainer extends React.Component<any> {
                         <Grid
                           container
                           justify="center"
-                          onClick={this.switchOriginChain.bind(this)}
+                          onClick={() => {
+                            switchOriginChain(selectedDirection);
+                          }}
                         >
                           <SwapCalls color="primary" fontSize="large" />
                           {/* <img
@@ -735,11 +728,11 @@ class TransferContainer extends React.Component<any> {
                           className={classes.currencySelect}
                           items={[
                             "ELA",
-                            "eETH",
-                            "eUSDT",
-                            "eDAI",
-                            "eUSDC",
-                            "eMAIN",
+                            "elaETH",
+                            "elaUSDT",
+                            "elaDAI",
+                            "elaUSDC",
+                            "elaMAIN",
                           ]}
                           // ETHBalance={store.get("ethbal")}
                           onCurrencyChange={(v: string) => {
@@ -763,7 +756,6 @@ class TransferContainer extends React.Component<any> {
                           placeholder={"0.00"}
                           onChange={(event: any) => {
                             const value = event.value || "";
-                            console.log("Send amount input", value);
                             store.set("convert.amount", String(value));
                             gatherFeeData();
                           }}
@@ -774,7 +766,9 @@ class TransferContainer extends React.Component<any> {
                     {/* Network direction indicator */}
                     <Grid
                       className={classes.switchDirection}
-                      onClick={this.switchOriginChain.bind(this)}
+                      onClick={() => {
+                        switchOriginChain(selectedDirection);
+                      }}
                     >
                       <Grid container justify="center">
                         <Typography className={classes.sourceLabel}>

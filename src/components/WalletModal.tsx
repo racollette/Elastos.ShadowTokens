@@ -38,15 +38,15 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     color: "#fff",
     fontSize: "12",
   },
-  back: {
+  close: {
     position: "absolute",
-    top: 4,
+    top: 3,
     right: 6,
     height: "auto",
     width: 24,
     cursor: "pointer",
     "&:hover": {
-      opacity: 0.75,
+      opacity: 0.5,
     },
   },
   metamask: {
@@ -83,6 +83,24 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       height: 60,
       width: "auto",
     },
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      "& div": {
+        width: "90%",
+        height: 50,
+        marginTop: 0,
+        marginBottom: theme.spacing(1),
+        marginLeft: 0,
+        marginRight: 0,
+        padding: 0,
+        borderRadius: 14,
+      },
+      "& img": {
+        height: 30,
+        width: "auto",
+      },
+    },
   },
   walletLabel: {
     paddingTop: theme.spacing(1),
@@ -90,8 +108,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     textTransform: "uppercase",
     fontSize: 11.5,
     fontWeight: "bold",
-    [theme.breakpoints.down("sm")]: {
-      fontSize: 10,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 16,
+      paddingTop: 0,
+      textTransform: "none",
+      marginLeft: theme.spacing(3),
     },
   },
   selectedWallet: {
@@ -117,6 +138,10 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   actionButton: {
     width: "100%",
     borderRadius: "16px",
+    [theme.breakpoints.down("xs")]: {
+      width: "90%",
+      borderRadius: "14px",
+    },
   },
   error: {
     marginTop: theme.spacing(2),
@@ -150,9 +175,6 @@ class WalletModal extends React.Component<any> {
 
     return (
       <Modal
-        // aria-labelledby="transition-modal-title"
-        // aria-describedby="transition-modal-description"
-        //   className={classes.modal}
         open={showWalletModal}
         onClose={this.onClose.bind(this)}
         closeAfterTransition
@@ -168,8 +190,8 @@ class WalletModal extends React.Component<any> {
                 <Translate text="Wallet.Header" />
               </Typography>
               <HighlightOffIcon
-                style={{ color: grey[500] }}
-                className={classes.back}
+                style={{ color: grey[300] }}
+                className={classes.close}
                 onClick={() => {
                   store.set("showWalletModal", false);
                 }}
@@ -180,6 +202,8 @@ class WalletModal extends React.Component<any> {
                 container
                 className={walletType === "MetaMask" ? "selected" : ""}
                 onClick={() => store.set("selectedWalletType", "MetaMask")}
+                justify="center"
+                alignItems="center"
               >
                 <img src={WALLET_ICON_MAP["MetaMask"]} alt="MetaMask" />
                 <Typography className={classes.walletLabel}>
@@ -261,27 +285,9 @@ class WalletModal extends React.Component<any> {
                 ) : (
                   <div>
                     <Translate text="Wallet.Disconnect" />
-                    &nbsp;{walletType}
                   </div>
                 )}
               </Button>
-              {/* </Grid> */}
-
-              {/* {!requesting && error && (
-                <Typography variant="caption" className={classes.error}>
-                  Connection failed.
-                </Typography>
-              )} */}
-              {/* {requesting && (
-                <React.Fragment>
-                  <Typography variant="caption" className={classes.info}>
-                    Connecting to decentralized storage, this may take a minute.
-                  </Typography>
-                  <Typography variant="caption" className={classes.info2}>
-                    Please approve any 3box messages that appear in your wallet.
-                  </Typography>
-                </React.Fragment>
-              )} */}
             </Grid>
           </div>
         </Fade>

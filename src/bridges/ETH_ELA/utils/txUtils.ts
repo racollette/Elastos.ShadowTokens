@@ -1,4 +1,5 @@
 import { getStore } from "../../../services/storeService";
+import { CONVERT_MAP, NETWORK_TYPE, fetchTokenBalance } from "./walletUtils";
 
 export const MIN_TX_AMOUNTS = {
     ela: 0.0035036,
@@ -7,13 +8,12 @@ export const MIN_TX_AMOUNTS = {
     dai: 0.0035036,
     usdc: 0.0035036,
     main: 0.0035036,
-
-    eela: 0.0035036,
-    eeth: 0.0035036,
-    eusdt: 0.0035036,
-    edai: 0.0035036,
-    eusdc: 0.0035036,
-    emain: 0.0035036,
+    ethela: 0.0035036,
+    elaeth: 0.0035036,
+    elausdt: 0.0035036,
+    eladai: 0.0035036,
+    elausdc: 0.0035036,
+    elamain: 0.0035036,
 };
 
 // Percentage fees
@@ -24,12 +24,12 @@ export const FEE_STRUCTURE: { [key in string]: number } = {
     dai: 0.1,
     usdc: 0.1,
     main: 0.1,
-    eela: 0.1,
-    eeth: 0.1,
-    eusdt: 0.1,
-    edai: 0.1,
-    eusdc: 0.1,
-    emain: 0.1,
+    ethela: 0.1,
+    elaeth: 0.1,
+    elausdt: 0.1,
+    eladai: 0.1,
+    elausdc: 0.1,
+    elamain: 0.1,
 }
 
 // Development, switch to mainnet in prod
@@ -40,12 +40,12 @@ export const EXPLORER_URLS: { [key in string]: string } = {
     dai: "https://etherscan.io",
     usdc: "https://etherscan.io",
     main: "https://kovan.etherscan.io",
-    eela: "https://kovan.etherscan.io",
-    eeth: "https://testnet.elaeth.io/",
-    eusdt: "https://explorer.elaeth.io/",
-    edai: "https://explorer.elaeth.io/",
-    eusdc: "https://explorer.elaeth.io/",
-    emain: "https://testnet.elaeth.io/",
+    ethela: "https://kovan.etherscan.io",
+    elaeth: "https://testnet.elaeth.io/",
+    elausdt: "https://explorer.elaeth.io/",
+    eladai: "https://explorer.elaeth.io/",
+    elausdc: "https://explorer.elaeth.io/",
+    elamain: "https://testnet.elaeth.io/",
 }
 
 export const issueTx = function() {
@@ -122,14 +122,30 @@ export function getExplorerLink(network: 'source' | 'dest', type: 'transaction' 
 
 export function restoreInitialState() {
     const store = getStore();
-    store.set("confirmBridge", false)
+    const selectedAsset = store.get("selectedAsset")
+    fetchTokenBalance(selectedAsset)
     store.set("confirmTx", false)
     store.set("confirmAction", "")
+    store.set("convert.amount", "")
     store.set("waitingApproval", false)
     store.set("confirmationProgress", false)
     store.set("confirmationNumber", 0)
     store.set("validatorStep", false)
     store.set("validatorProgress", 0)
     store.set("transferSuccess", false)
+}
 
+export function switchOriginChain(selectedDirection: number) {
+    const store = getStore();
+    if (selectedDirection === 0) {
+        store.set("convert.selectedDirection", Number(1));
+    } else {
+        store.set("convert.selectedDirection", Number(0));
+    }
+
+    const selectedAsset = store.get("selectedAsset")
+    store.set("selectedAsset", CONVERT_MAP[selectedAsset]);
+    store.set("convert.selectedFormat", CONVERT_MAP[CONVERT_MAP[selectedAsset]]);
+    store.set("localWeb3Network", NETWORK_TYPE[CONVERT_MAP[selectedAsset]])
+    fetchTokenBalance(CONVERT_MAP[selectedAsset])
 }

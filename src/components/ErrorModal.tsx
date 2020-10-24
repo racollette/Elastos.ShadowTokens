@@ -89,6 +89,8 @@ interface Props {
 const ErrorModal: React.FC<Props> = function (props) {
   const { classes, targetNetwork, errorType, store } = props;
   const open = store.get(errorType);
+  const minTx = store.get("minTx");
+  const maxTx = store.get("maxTx");
 
   return (
     <div>
@@ -152,6 +154,40 @@ const ErrorModal: React.FC<Props> = function (props) {
                     <img src={Alert} alt="Alert" />
                     <Typography className={classes.successText}>
                       <Translate text="Error.InsufficientBalance.Message" />
+                    </Typography>
+                  </div>
+                </div>
+              )}
+
+              {errorType === "belowMinTxLimit" && (
+                <div>
+                  <div
+                    className={classNames(
+                      classes.errorContainer,
+                      classes.spacer
+                    )}
+                  >
+                    <img src={Alert} alt="Alert" />
+                    <Typography className={classes.successText}>
+                      <Translate text="Error.BelowMinTxLimit.Message" />
+                      &nbsp;({minTx})
+                    </Typography>
+                  </div>
+                </div>
+              )}
+
+              {errorType === "exceedsMaxTxLimit" && (
+                <div>
+                  <div
+                    className={classNames(
+                      classes.errorContainer,
+                      classes.spacer
+                    )}
+                  >
+                    <img src={Alert} alt="Alert" />
+                    <Typography className={classes.successText}>
+                      <Translate text="Error.ExceedsMaxTxLimit.Message" />
+                      &nbsp;({maxTx})
                     </Typography>
                   </div>
                 </div>

@@ -5,7 +5,7 @@ import { ThemeProvider, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import BridgeContainer from "./containers/BridgeContainer";
 import NavContainer from "./containers/NavContainer";
-import FooterContainer from "./containers/FooterContainer";
+// import FooterContainer from "./containers/FooterContainer";
 // import NetworkModalContainer from "./containers/NetworkModalContainer";
 import WalletModal from "./components/WalletModal";
 import TransferContainer from "./containers/TransferContainer";
@@ -18,13 +18,27 @@ import { BRIDGE_SYMBOL_MAP } from "./bridges/bridges";
 // import { initLocalWeb3 } from "./bridges/ETH_ELA/utils/walletUtils";
 require("dotenv").config();
 
-console.log(process.env.REACT_APP_INFURA_KEY);
-
 const styles = () => ({
-  container: {
-    minHeight: "100vh",
-    backgroundImage: "linear-gradient(115deg, #263040 0%, #2c2123 80%)",
-    backgroundRepeat: "no-repeat",
+  appWrapper: {
+    display: "flex",
+    flexFlow: "column",
+    alignItems: "flex-start",
+  },
+  headerWrapper: {
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  bodyWrapper: {
+    display: "flex",
+    width: "100%",
+    paddingTop: "17.5vh",
+    alignItems: "center",
+    flex: 1,
+    zIndex: 10,
+    padding: theme.spacing(1.5),
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: "2.5vh",
+    },
   },
   contentContainer: {
     flex: 1,
@@ -56,8 +70,8 @@ const initialState = {
   selectedWalletType: "MetaMask",
 
   // bridge/wallet selection
-  selectedBridge: "",
-  selectedPair: "",
+  selectedBridge: "eth",
+  selectedPair: "ela",
   confirmBridge: false,
   selectedWallet: false,
   selectedTab: 1,
@@ -77,8 +91,10 @@ const initialState = {
 
   // errors
   noWeb3: false,
-  insufficientBalance: false,
   wrongNetwork: false,
+  insufficientBalance: false,
+  belowMinTxLimit: false,
+  exceedsMaxTxLimit: false,
   txRejected: false,
   unknownError: false,
 
@@ -112,7 +128,7 @@ const initialState = {
   "convert.adapterWbtcAllowanceRequesting": "",
   "convert.transactions": [],
   "convert.pendingConvertToEthereum": [],
-  "convert.selectedFormat": "eeth",
+  "convert.selectedFormat": "elaeth",
   "convert.selectedDirection": 0,
   "convert.amount": "",
   "convert.destination": "",
@@ -145,7 +161,7 @@ class AppWrapper extends React.Component<Props> {
   }
 
   render() {
-    // window.ethereum.autoRefreshOnNetworkChange = false;
+    window.ethereum.autoRefreshOnNetworkChange = false;
     // window.ethereum.on(isVersion8 ? 'chainChanged' : 'networkChanged', network => {
     //     choiceNetwork()
     // })
@@ -163,16 +179,17 @@ class AppWrapper extends React.Component<Props> {
 
     const noWeb3 = store.get("noWeb3");
     const insufficientBalance = store.get("insufficientBalance");
+    const belowMinTxLimit = store.get("belowMinTxLimit");
+    const exceedsMaxTxLimit = store.get("exceedsMaxTxLimit");
 
     return (
       <ThemeProvider theme={theme}>
-        {/* <NetworkModalContainer /> */}
-        <Grid container className={classes.container}>
-          <Grid container className={classes.contentContainer}>
-            <Grid container alignItems="flex-start">
+        <Grid container justify="center">
+          <Grid container className={classes.appWrapper}>
+            <Grid container className={classes.headerWrapper} justify="center">
               <NavContainer />
             </Grid>
-            <Grid container justify="center" alignItems="center">
+            <Grid container className={classes.bodyWrapper} justify="center">
               {showWalletModal && <WalletModal />}
 
               {!confirmBridge && (
@@ -223,16 +240,21 @@ class AppWrapper extends React.Component<Props> {
                   <ErrorModal store={store} errorType={"noWeb3"} />
                 </div>
               )}
-
               {insufficientBalance && (
                 <div>
                   <ErrorModal store={store} errorType={"insufficientBalance"} />
                 </div>
               )}
-            </Grid>
-            <Grid container alignItems="flex-end">
-              {" "}
-              <FooterContainer />
+              {belowMinTxLimit && (
+                <div>
+                  <ErrorModal store={store} errorType={"belowMinTxLimit"} />
+                </div>
+              )}
+              {exceedsMaxTxLimit && (
+                <div>
+                  <ErrorModal store={store} errorType={"exceedsMaxTxLimit"} />
+                </div>
+              )}
             </Grid>
           </Grid>
         </Grid>

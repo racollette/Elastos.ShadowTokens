@@ -218,16 +218,10 @@ class BridgeContainer extends React.Component<Props> {
   }
 
   handleBridgeClose(event: any) {
-    const { store } = this.props;
-    const selectedBridge = store.get("selectedBridge");
-
     const value = event.target.value;
-    console.log("HANDLE BRIDGE CLOSE", value);
-    console.log(selectedBridge);
     if (value) {
       this.props.onBridgeChange(value);
       this.setState({ currency: value });
-      //   this.props.onPairChange(value);
     }
     this.setState({ bridgeOpen: false });
   }
@@ -256,7 +250,6 @@ class BridgeContainer extends React.Component<Props> {
     const chainPair = pair || items[0];
 
     let pairOptions = [...items].filter((item) => item !== selected);
-    // console.log("PAIR OPTIONS", pairOptions);
 
     return (
       <div className={classes.container}>

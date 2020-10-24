@@ -12,9 +12,9 @@ export const USDC = {
     priceFeed: 'https://api.coincap.io/v2/assets/usd-coin',
 }
 
-export const eUSDC = {
-    id: 'eUSDC',
-    name: 'eUSDC',
+export const elaUSDC = {
+    id: 'elaUSDC',
+    name: 'elaUSDC',
     network: '21',
     address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // generate on elastos
     bridgeMode: 'erc_erc_amb',

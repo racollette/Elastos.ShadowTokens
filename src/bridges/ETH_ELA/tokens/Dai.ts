@@ -12,9 +12,9 @@ export const DAI = {
     priceFeed: 'https://api.coincap.io/v2/assets/multi-collateral-dai',
 }
 
-export const eDAI = {
-    id: 'eDAI',
-    name: 'eDAI',
+export const elaDAI = {
+    id: 'elaDAI',
+    name: 'elaDAI',
     network: '21',
     address: '0x6b175474e89094c44da98b954eedeac495271d0f', // generate on elastos
     bridgeMode: 'erc_erc_amb',

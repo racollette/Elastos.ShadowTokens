@@ -467,8 +467,6 @@ class ConfirmContainer extends React.Component<any> {
                     fullWidth
                     className={classNames(classes.actionButton)}
                     onClick={() => {
-                      store.set("waitingApproval", true);
-                      store.set("transactionType", "approve");
                       handleBridgeMode(confirmTx);
                       // Dummy confirmation window timer, replace with transaction return success from metamask
                       // setTimeout(() => {

@@ -7,17 +7,17 @@ import { restoreInitialState } from "../bridges/ETH_ELA/utils/txUtils";
 import { BRIDGE_NAME_MAP, BRIDGE_ICON_MAP } from "../bridges/bridges";
 import Hidden from "@material-ui/core/Hidden";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
-import ShadowtokensLogo from "../assets/logo_title14.svg";
-import Container from "@material-ui/core/Container";
+import ShadowtokensTitle from "../assets/logo_title.svg";
+import ShadowtokensLogo from "../assets/logo.svg";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import LanguageSelect from "../components/LanguageSelect";
 import { Translate } from "../components/Translate";
+import Menu from "../components/Menu";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   navContainer: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    padding: theme.spacing(1.5),
     minHeight: 52,
     [theme.breakpoints.down("sm")]: {
       paddingTop: theme.spacing(2),
@@ -25,11 +25,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   logo: {
-    height: 48,
+    height: 40,
     width: "auto",
     marginRight: theme.spacing(1),
-    [theme.breakpoints.down("sm")]: {
-      height: 38,
+    [theme.breakpoints.down("xs")]: {
+      height: 54,
     },
   },
   branding: {
@@ -52,11 +52,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       marginLeft: theme.spacing(1),
     },
     [theme.breakpoints.down("xs")]: {
-      width: "85%",
-      marginTop: theme.spacing(1.5),
+      // width: "75%",
+      // marginTop: theme.spacing(1.5),
     },
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    // marginLeft: theme.spacing(1),
+    // marginRight: theme.spacing(1),
   },
   title: {
     fontSize: 16,
@@ -70,22 +70,10 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       display: "none",
     },
   },
-  walletActive: {
-    borderColor: theme.palette.info.contrastText,
-    // '&:hover': {
-    //     borderColor: theme.palette.primary.dark,
-    // },
-  },
-  bridgeActive: {
-    borderColor: theme.palette.info.contrastText,
-    // '&:hover': {
-    //     borderColor: theme.palette.secondary.dark,
-    // },
-  },
   icon: {
     height: 22,
     width: "auto",
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(0.75),
   },
   circle: {
     width: 10,
@@ -94,7 +82,8 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     borderRadius: 5,
     float: "left",
     marginTop: 6.85,
-    marginRight: 6,
+    marginRight: 4,
+    marginLeft: 2,
   },
   walletLabel: {
     marginRight: theme.spacing(1),
@@ -106,43 +95,63 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   navButtons: {
     justifyContent: "flex-end",
     [theme.breakpoints.down("xs")]: {
-      justifyContent: "center",
+      // justifyContent: "center",
     },
   },
-  navButtonText: {
+  walletActive: {
+    borderColor: "rgb(66, 66, 66)",
+    backgroundColor: "rgb(32,32,32)",
+    "&:hover": {
+      // backgroundColor: "rgb(54,54,54)",
+      borderColor: theme.palette.primary.main,
+    },
+  },
+  bridgeActive: {
+    borderColor: "rgb(66, 66, 66)",
+    backgroundColor: "rgb(32,32,32)",
+    "&:hover": {
+      // backgroundColor: "rgb(54,54,54)",
+      borderColor: theme.palette.secondary.main,
+    },
+  },
+  walletButtonText: {
     fontSize: 14,
+    color: "#fff",
+    marginRight: 4,
+    marginLeft: 4,
   },
-  logoMobile: {
-    [theme.breakpoints.down("xs")]: {
-      justifyContent: "center",
-    },
+  bridgeButtonText: {
+    fontSize: 14,
+    color: "#fff",
+    marginRight: 4,
+    marginLeft: 4,
   },
 });
 
 const WalletButton = withStyles({
   root: {
+    marginLeft: 8,
     textTransform: "none",
     border: "1px solid " + theme.palette.primary.main,
     borderRadius: 8,
-    backgroundColor: "rgb(32,32,32)",
+    backgroundColor: "rgb(13, 129, 207, 0.2)",
     padding: 5,
     "&:hover": {
-      borderColor: theme.palette.primary.contrastText,
-      backgroundColor: "rgb(32,32,32)",
+      backgroundColor: "rgb(13, 129, 207, 0.45)",
     },
   },
 })(Button);
 
 const BridgeButton = withStyles({
   root: {
+    marginLeft: 8,
     textTransform: "none",
     border: "1px solid " + theme.palette.secondary.main,
     borderRadius: 8,
-    backgroundColor: "rgb(32,32,33)",
+    backgroundColor: "rgb(200, 83, 103, 0.2)",
     padding: 5,
     "&:hover": {
-      borderColor: theme.palette.primary.contrastText,
-      backgroundColor: "rgb(32,32,32)",
+      backgroundColor: "rgb(200, 83, 103, 0.45)",
     },
   },
 })(Button);
@@ -167,118 +176,126 @@ class NavContainer extends React.Component<any> {
 
     return (
       <Grid item xs={12} className={classes.navContainer}>
-        <Container>
-          {
-            <Grid container alignItems="center">
-              <Grid item xs={12} sm={5}>
-                <Grid
-                  container
-                  justify="flex-start"
-                  alignItems="center"
-                  className={classes.logoMobile}
-                >
+        {
+          <Grid container alignItems="center">
+            <Grid item xs={3} sm={5}>
+              <Grid
+                container
+                justify="flex-start"
+                alignItems="center"
+                className={classes.logoMobile}
+              >
+                <img
+                  alt="ShadowTokens"
+                  className={classes.logo}
+                  src={ShadowtokensLogo}
+                />
+                <Hidden xsDown>
                   <img
-                    alt="Ren Logo"
+                    alt="ShadowTokens"
                     className={classes.logo}
-                    src={ShadowtokensLogo}
+                    src={ShadowtokensTitle}
                   />
-                  {/* <div className={classes.branding}>ShadowTokens</div> */}
-                </Grid>
+                </Hidden>
               </Grid>
-              <Grid item xs={12} sm={7}>
-                <Grid
-                  container
-                  className={classes.navButtons}
-                  alignItems="center"
+            </Grid>
+            <Grid item xs={9} sm={7}>
+              <Grid
+                container
+                className={classes.navButtons}
+                alignItems="center"
+                justify="flex-end"
+              >
+                {/* <Grid item xs={8}> */}
+                <WalletButton
+                  disableRipple
+                  onClick={() => {
+                    // if (!walletAddress) {
+                    store.set("showWalletModal", true);
+                    //   initLocalWeb3(walletType);
+                    // }
+                  }}
+                  variant="contained"
+                  size="small"
+                  className={classNames(
+                    classes.accountButton,
+                    walletAddress && classes.walletActive
+                  )}
                 >
-                  <WalletButton
+                  {walletAddress ? (
+                    <div>
+                      <div className={classes.circle}></div>
+                      <span className={classes.walletButtonText}>
+                        {walletAddress.slice(0, 7) +
+                          "..." +
+                          walletAddress.slice(walletAddress.length - 5)}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className={classes.walletButtonText}>
+                      <Translate text="Nav.Connect" />
+                      {/* <span className={classes.hideMobile}></span> */}
+                    </span>
+                  )}
+                </WalletButton>
+                {/* </Grid> */}
+                <Hidden smDown>
+                  <BridgeButton
                     disableRipple
                     onClick={() => {
-                      // if (!walletAddress) {
-                      store.set("showWalletModal", true);
-                      //   initLocalWeb3(walletType);
-                      // }
+                      restoreInitialState();
                     }}
-                    variant="outlined"
+                    variant="contained"
                     size="small"
                     className={classNames(
                       classes.accountButton,
-                      walletAddress && classes.walletActive
+                      selectedBridge && classes.bridgeActive
                     )}
                   >
-                    {walletAddress ? (
-                      <div>
-                        <div className={classes.circle}></div>
-                        <span>
-                          {walletAddress.slice(0, 7) +
-                            "..." +
-                            walletAddress.slice(walletAddress.length - 5)}
-                        </span>
-                      </div>
+                    {selectedBridge ? (
+                      <Grid
+                        container
+                        alignItems="center"
+                        justify="center"
+                        className={classes.bridgeButtonText}
+                      >
+                        <img
+                          src={BRIDGE_ICON_MAP[selectedBridge]}
+                          alt={BRIDGE_NAME_MAP[selectedBridge]}
+                          className={classes.icon}
+                        />
+                        {BRIDGE_NAME_MAP[selectedBridge]}
+                        <SwapHorizIcon />
+                        <img
+                          src={BRIDGE_ICON_MAP[selectedPair]}
+                          alt={BRIDGE_NAME_MAP[selectedPair]}
+                          className={classes.icon}
+                        />
+                        {BRIDGE_NAME_MAP[selectedPair]}
+                      </Grid>
                     ) : (
-                      <span className={classes.navButtonText}>
-                        <Translate text="Nav.Connect" />
+                      <span className={classes.bridgeButtonText}>
+                        <Translate text="Nav.Bridge" />
+
                         {/* <span className={classes.hideMobile}></span> */}
                       </span>
                     )}
-                  </WalletButton>
-
-                  <Hidden xsDown>
-                    <BridgeButton
-                      disableRipple
-                      onClick={() => {
-                        restoreInitialState();
-                      }}
-                      variant="outlined"
-                      size="small"
-                      className={classNames(
-                        classes.accountButton,
-                        selectedBridge && classes.bridgeActive
-                      )}
-                    >
-                      {selectedBridge ? (
-                        <Grid
-                          container
-                          alignItems="center"
-                          justify="center"
-                          className={classes.navButtonText}
-                        >
-                          <img
-                            src={BRIDGE_ICON_MAP[selectedBridge]}
-                            alt={BRIDGE_NAME_MAP[selectedBridge]}
-                            className={classes.icon}
-                          />
-                          {BRIDGE_NAME_MAP[selectedBridge]}
-                          <SwapHorizIcon />
-                          <img
-                            src={BRIDGE_ICON_MAP[selectedPair]}
-                            alt={BRIDGE_NAME_MAP[selectedPair]}
-                            className={classes.icon}
-                          />
-                          {BRIDGE_NAME_MAP[selectedPair]}
-                        </Grid>
-                      ) : (
-                        <span className={classes.navButtonText}>
-                          <Translate text="Nav.Bridge" />
-
-                          {/* <span className={classes.hideMobile}></span> */}
-                        </span>
-                      )}
-                    </BridgeButton>
-                  </Hidden>
-                  <Hidden smDown>
-                    <LanguageSelect
-                      className={classes.hideMobile}
-                      store={store}
-                      isVisible={true}
-                      position={{ right: 0 }}
-                    />
-                  </Hidden>
-                </Grid>
+                  </BridgeButton>
+                </Hidden>
+                <Hidden smDown>
+                  <LanguageSelect
+                    className={classes.hideMobile}
+                    store={store}
+                    isVisible={true}
+                  />
+                </Hidden>
+                {/* <Grid item xs={4}> */}
+                <Menu />
+                {/* </Grid> */}
               </Grid>
             </Grid>
-          }
-        </Container>
+          </Grid>
+        }
       </Grid>
     );
   }
