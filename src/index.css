@@ -35,9 +35,6 @@ code {
 a,
 a:visited,
 a:hover,
-a:active {
-  color: rgb(0, 0, 238);
-}
 
 div {
   outline: none;

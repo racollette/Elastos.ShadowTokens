@@ -37,7 +37,7 @@ const styles = () => ({
     zIndex: 10,
     padding: theme.spacing(1.5),
     [theme.breakpoints.down("xs")]: {
-      paddingTop: "2.5vh",
+      paddingTop: "5vh",
     },
   },
   contentContainer: {
@@ -123,22 +123,11 @@ const initialState = {
   destTxID: null as string | null,
 
   // conversions
-  // 'convert.adapterAddress': ADAPTER_TEST,
-  "convert.adapterWbtcAllowance": "",
-  "convert.adapterWbtcAllowanceRequesting": "",
   "convert.transactions": [],
-  "convert.pendingConvertToEthereum": [],
   "convert.selectedFormat": "elaeth",
   "convert.selectedDirection": 0,
   "convert.amount": "",
   "convert.destination": "",
-  "convert.destinationValid": false,
-  "convert.destinationInputFocused": false,
-  "convert.showDestinationError": false,
-  "convert.exchangeRate": "",
-  "convert.renVMFee": "",
-  "convert.networkFee": "",
-  "convert.conversionTotal": "",
 };
 
 interface Props {
@@ -193,7 +182,7 @@ class AppWrapper extends React.Component<Props> {
               {showWalletModal && <WalletModal />}
 
               {!confirmBridge && (
-                <Grid item xs={12} sm={8} md={6}>
+                <>
                   <BridgeContainer
                     active={
                       selectedBridge ? BRIDGE_SYMBOL_MAP[selectedBridge] : "ETH"
@@ -223,16 +212,16 @@ class AppWrapper extends React.Component<Props> {
                       store.set("selectedPair", pair);
                     }}
                   />
-                </Grid>
+                </>
               )}
               {confirmBridge && (
-                <Grid item xs={12} sm={8} md={6}>
+                <>
                   {confirmTx && confirmAction ? (
                     <ConfirmContainer />
                   ) : (
                     <TransferContainer />
                   )}
-                </Grid>
+                </>
               )}
 
               {noWeb3 && (

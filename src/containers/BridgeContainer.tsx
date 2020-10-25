@@ -23,14 +23,11 @@ const styles = () => ({
   container: {
     background: "rgb(32,32,32)",
     borderRadius: "40px",
-    // boxShadow:
-    //     " #FFF 0 -2px 3px, #8DFEFF 0 -3px 10px, #3596DD 0 -10px 20px, #2552B9 0 -18px 40px, 5px 5px 10px 5px rgba(0,0,0,0)",
-    maxWidth: 500,
+    width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "100%",
-      padding: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      width: "90%",
     },
   },
   title: {

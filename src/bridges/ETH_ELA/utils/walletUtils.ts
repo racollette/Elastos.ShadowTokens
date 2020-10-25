@@ -95,7 +95,7 @@ export const NETWORK_TYPE: { [key in string]: string } = {
     ela: "Elastos mainnet",
     // eth: "Ethereum mainnet",
     eth: "Kovan testnet",
-    usdt: "Ethereum mainnet",
+    usdt: "Kovan testnet",
     dai: "Ethereum mainnet",
     usdc: "Ethereum mainnet",
     main: "Kovan testnet",
@@ -434,7 +434,7 @@ export const fetchTokenBalance = async function(asset: any) {
     fetchTokenPrice(token)
     const tokenContract = new web3.eth.Contract(token.abi, token.address);
     const tokenBal = await tokenContract.methods.balanceOf(walletAddress).call();
-    store.set(`${token.id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(4));
+    store.set(`${token.id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(2));
 }
 
 export const updateBalance = async function() {
@@ -454,11 +454,11 @@ export const updateBalance = async function() {
         const ethBal = await web3.eth.getBalance(walletAddress);
         console.log(ethBal)
         console.log('ETH BALANACE', ethBal)
-        store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(4));
+        store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(2));
     } else if (walletNetwork === "Elastos mainnet" || walletNetwork === "Elastos testnet") {
         const elaBal = await web3.eth.getBalance(walletAddress);
         console.log('ELA BALANACE', elaBal)
-        store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(4));
+        store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(2));
     }
 
 

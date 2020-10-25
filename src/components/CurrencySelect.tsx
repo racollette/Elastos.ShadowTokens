@@ -19,9 +19,6 @@ const styles = () => ({
   amountField: {
     width: "100%",
   },
-  endAdornment: {
-    "& p": {},
-  },
   item: {
     display: "flex",
     fontSize: 14,
@@ -53,26 +50,14 @@ const styles = () => ({
   button: {
     fontSize: 14,
     color: "#fff",
-    display: "flex",
-    justifyContent: "flex-start",
-  },
-  arrow: {
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    "& svg": {
-      width: 22,
-      height: "auto",
-      marginLeft: theme.spacing(0.75),
-    },
+    // display: "flex",
+    // justifyContent: "flex-start",
   },
   balance: {
     fontSize: 12,
     marginTop: -2,
     color: "#797986",
   },
-  menu: {},
 });
 
 type Balances = {
@@ -120,31 +105,31 @@ class CurrencySelect extends React.Component<Props> {
   }
 
   render() {
-    const { classes, items, className, active } = this.props;
+    const { classes, items, active } = this.props;
 
     const { open } = this.state;
 
     const selected = active || items[0];
 
     return (
-      <div className={className || ""}>
+      <React.Fragment>
         <NoCapsButton
-          fullWidth
+          // fullWidth
           className={classes.button}
           ref={this.anchorEl}
           aria-controls="menu"
           aria-haspopup="true"
           onClick={this.handleOpen.bind(this)}
         >
-          <img
-            src={MINI_ICON_MAP[selected.toLowerCase()]}
-            alt={selected}
-            className={classes.icon}
-          />
-          <span className={classes.assetSymbol}>{selected}</span>
-          <div className={classes.arrow}>
+          <Grid>
+            <img
+              src={MINI_ICON_MAP[selected.toLowerCase()]}
+              alt={selected}
+              className={classes.icon}
+            />
+            <span className={classes.assetSymbol}>{selected}</span>
             <ArrowDropDown />
-          </div>
+          </Grid>
         </NoCapsButton>
         <Menu
           id="menu"
@@ -189,7 +174,7 @@ class CurrencySelect extends React.Component<Props> {
             );
           })}
         </Menu>
-      </div>
+      </React.Fragment>
     );
   }
 }

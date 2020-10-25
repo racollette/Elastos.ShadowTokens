@@ -34,18 +34,18 @@ export const FEE_STRUCTURE: { [key in string]: number } = {
 
 // Development, switch to mainnet in prod
 export const EXPLORER_URLS: { [key in string]: string } = {
-    ela: "https://explorer.elaeth.io/", // https://explorer.elaeth.io/,
+    ela: "https://explorer.elaeth.io", // https://explorer.elaeth.io/,
     eth: "https://kovan.etherscan.io", // https://etherscan.io",
-    usdt: "https://etherscan.io",
+    usdt: "https://kovan.etherscan.io",
     dai: "https://etherscan.io",
     usdc: "https://etherscan.io",
     main: "https://kovan.etherscan.io",
     ethela: "https://kovan.etherscan.io",
-    elaeth: "https://testnet.elaeth.io/",
-    elausdt: "https://explorer.elaeth.io/",
-    eladai: "https://explorer.elaeth.io/",
-    elausdc: "https://explorer.elaeth.io/",
-    elamain: "https://testnet.elaeth.io/",
+    elaeth: "https://testnet.elaeth.io",
+    elausdt: "https://testnet.elaeth.io",
+    eladai: "https://explorer.elaeth.io",
+    elausdc: "https://explorer.elaeth.io",
+    elamain: "https://testnet.elaeth.io",
 }
 
 export const issueTx = function() {
@@ -125,7 +125,6 @@ export function restoreInitialState() {
     const selectedAsset = store.get("selectedAsset")
     fetchTokenBalance(selectedAsset)
     store.set("confirmTx", false)
-    store.set("confirmAction", "")
     store.set("convert.amount", "")
     store.set("waitingApproval", false)
     store.set("confirmationProgress", false)
@@ -143,6 +142,8 @@ export function switchOriginChain(selectedDirection: number) {
         store.set("convert.selectedDirection", Number(0));
     }
 
+    store.set("confirmTx", false)
+    store.set("convert.amount", "")
     const selectedAsset = store.get("selectedAsset")
     store.set("selectedAsset", CONVERT_MAP[selectedAsset]);
     store.set("convert.selectedFormat", CONVERT_MAP[CONVERT_MAP[selectedAsset]]);

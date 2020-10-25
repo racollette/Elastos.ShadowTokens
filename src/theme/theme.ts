@@ -127,7 +127,7 @@ export default createMuiTheme({
         MuiMenu: {
             paper: {
                 boxShadow: "0px 1px 3px rgba(0, 27, 58, 0.1)",
-                border: "1px solid #FFF",
+                border: "1px solid #606060",
                 borderRadius: 8,
                 minWidth: 190,
                 backgroundColor: "rgb(32,32,32)",

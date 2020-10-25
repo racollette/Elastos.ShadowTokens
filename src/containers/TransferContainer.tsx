@@ -2,8 +2,6 @@ import React from "react";
 import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
 import { SwapCalls } from "@material-ui/icons";
-// import InfoLogo1 from "../assets/infoLogo1.svg";
-// import InfoLogo2 from "../assets/infoLogo2.svg";
 import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
 import {
@@ -28,6 +26,7 @@ import TextField from "@material-ui/core/TextField";
 import Hidden from "@material-ui/core/Hidden";
 import CurrencySelect from "../components/CurrencySelect";
 import BigCurrencyInput from "../components/BigCurrencyInput";
+import Balance from "../components/Balance";
 import ErrorModal from "../components/ErrorModal";
 import AddressValidator from "wallet-address-validator";
 import Numeral from "numeral";
@@ -39,11 +38,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     textAlign: "center",
     background: "rgb(32,32,32)",
     borderRadius: "40px",
-    maxWidth: 500,
+    width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "100%",
+    [theme.breakpoints.down("xs")]: {
+      width: "90%",
     },
   },
   headerText: {
@@ -180,12 +179,12 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    minHeight: 60,
+    minHeight: 64,
     fontSize: 16,
     "& img": {
       height: "auto",
       width: 24,
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(0.75),
     },
     "& .MuiGrid-root": {
       display: "flex",
@@ -193,7 +192,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
     [theme.breakpoints.down("xs")]: {
       padding: theme.spacing(1),
-      minHeight: 40,
+      minHeight: 54,
     },
   },
   standaloneOption: {
@@ -209,19 +208,14 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     borderRadius: 12,
     border: "1px solid" + theme.palette.divider,
   },
-  currencySelect: {
-    marginLeft: theme.spacing(-1),
-    width: "calc(100% + 8px)",
-    "& MuiButton-root": {
-      textTransform: "none !important",
-    },
-  },
+  // currencySelect: {
+  //   width: "calc(100% + 8px)",
+  //   "& MuiButton-root": {
+  //     textTransform: "none !important",
+  //   },
+  // },
   outputField: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    [theme.breakpoints.down("xs")]: {
-      justifyContent: "center",
-    },
+    display: "inline-block",
   },
   amountError: {
     textAlign: "center",
@@ -233,11 +227,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1),
   },
-  // infoLogo: {
-  //   height: 48,
-  //   marginLeft: theme.spacing(1),
-  //   marginRight: theme.spacing(1),
-  // },
   sourceLabel: {
     fontSize: 14,
     color: theme.palette.primary.contrastText,
@@ -278,17 +267,8 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     fontSize: 16,
     wordBreak: "break-word",
   },
-  large: {
-    fontSize: 16,
-  },
-  medium: {
-    fontSize: 14.5,
-  },
-  small: {
-    fontSize: 13,
-  },
-  smallest: {
-    fontSize: 11.5,
+  padding: {
+    paddingRight: 12,
   },
 });
 
@@ -419,15 +399,15 @@ class TransferContainer extends React.Component<any> {
       id: "tx-" + Math.floor(Math.random() * 10 ** 16),
       type: ASSET_CONVERSION_TYPES[asset],
       instant: false,
-      // awaiting: `${asset}-init`,
+      sourceAddress: localWeb3Address,
       sourceAsset: asset,
       sourceNetwork: NETWORK_MAP[asset],
       sourceNetworkVersion: network,
       destAddress:
         receiveAddress.length > 0 ? receiveAddress : localWeb3Address,
+      destAsset: format,
       destNetwork: NETWORK_MAP[format],
       destNetworkVersion: network,
-      destAsset: format,
       amount: Number(amount),
       error: false,
       txHash: "",
@@ -478,19 +458,17 @@ class TransferContainer extends React.Component<any> {
       ).toFixed(2);
     }
 
-    let output = `${total} ${SYMBOL_MAP[destAsset]}  (${Numeral(
-      usdValue
-    ).format("$0,0.00")})`;
+    let output = `${total} (${Numeral(usdValue).format("$0,0.00")})`;
 
-    const chars = total ? String(total) : "";
-    let size = "large";
-    if (chars.length > 8 && chars.length <= 10) {
-      size = "medium";
-    } else if (chars.length > 10 && chars.length <= 13) {
-      size = "small";
-    } else if (chars.length > 13) {
-      size = "smallest";
-    }
+    // const chars = total ? String(total) : "";
+    // let size = "large";
+    // if (chars.length > 8 && chars.length <= 10) {
+    //   size = "medium";
+    // } else if (chars.length > 10 && chars.length <= 13) {
+    //   size = "small";
+    // } else if (chars.length > 13) {
+    //   size = "smallest";
+    // }
 
     let enableButton = false;
     const showDestinationError = store.get("convert.showDestinationError");
@@ -527,44 +505,65 @@ class TransferContainer extends React.Component<any> {
     // const showAmountError = store.get("convert.showAmountError");
 
     return (
-      <React.Fragment>
-        <div
-          className={classNames(
-            selectedDirection ? classes.solar : classes.lunar,
-            classes.container
-          )}
-        >
-          <div className={classes.headerText}>
-            <img
-              className={classes.back}
-              src={BackArrow}
-              alt="Back"
-              onClick={() => {
-                // store.set("selectedWallet", false);
-                store.set("confirmBridge", false);
-                // store.set("localWeb3Address", "");
-                store.set("walletConnecting", false);
-                store.set("spaceRequesting", false);
-              }}
-            />
-            <Typography variant="overline" className={classes.navTitle}>
-              <Translate text="Transfer.Header" />
-            </Typography>
-          </div>
-          {
-            <div className={classes.actionsContainer}>
-              <Grid className={classes.actions}>
-                {selectedDirection === 0 && (
-                  /// ETH to ELA
-                  <React.Fragment>
-                    <Grid
-                      container
-                      className={classNames(
-                        classes.standaloneOption,
-                        classes.option
-                      )}
-                    >
-                      <Grid item xs={3}>
+      <div className={classes.container}>
+        <div className={classes.headerText}>
+          <img
+            className={classes.back}
+            src={BackArrow}
+            alt="Back"
+            onClick={() => {
+              // store.set("selectedWallet", false);
+              store.set("confirmBridge", false);
+              // store.set("localWeb3Address", "");
+              store.set("walletConnecting", false);
+              store.set("spaceRequesting", false);
+            }}
+          />
+          <Typography variant="overline" className={classes.navTitle}>
+            <Translate text="Transfer.Header" />
+          </Typography>
+        </div>
+        {
+          <div className={classes.actionsContainer}>
+            <Grid className={classes.actions}>
+              {/* Ethereum to Elastos */}
+              {selectedDirection === 0 && (
+                <React.Fragment>
+                  <Grid
+                    container
+                    className={classNames(
+                      classes.standaloneOption,
+                      classes.option
+                    )}
+                  >
+                    <Grid item xs={5} sm={6}>
+                      <BigCurrencyInput
+                        active={SYMBOL_MAP[selectedAsset]}
+                        className={classes.currencySelect}
+                        usdValue={usdValue}
+                        value={amount}
+                        placeholder={"0.00"}
+                        onChange={(event: any) => {
+                          let value = event.value || "";
+                          store.set("convert.amount", String(value));
+                          gatherFeeData();
+                        }}
+                      />
+                      {/* {showAmountError && (
+                          <Typography className={classes.amountError}>
+                            Minimum mint amount is{" "}
+                            {MIN_TX_AMOUNTS[selectedAsset]}{" "}
+                            {SYMBOL_MAP[selectedAsset]}
+                          </Typography>
+                        )} */}
+                    </Grid>
+                    <Grid item xs={7} sm={6}>
+                      <Grid container justify="flex-end">
+                        <Balance
+                          balance={balance}
+                          direction={selectedDirection}
+                          store={store}
+                        />
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
@@ -596,133 +595,41 @@ class TransferContainer extends React.Component<any> {
                           }}
                         />
                       </Grid>
-                      <Grid item xs={9}>
-                        <BigCurrencyInput
-                          active={SYMBOL_MAP[selectedAsset]}
-                          className={classes.currencySelect}
-                          usdValue={usdValue}
-                          value={amount}
+                    </Grid>
+                  </Grid>
+                </React.Fragment>
+              )}
+              {/* Elastos to Ethereum */}
+              {selectedDirection === 1 && (
+                <React.Fragment>
+                  <Grid
+                    container
+                    className={classNames(
+                      classes.standaloneOption,
+                      classes.option
+                    )}
+                  >
+                    <Grid item xs={5} sm={6}>
+                      <BigCurrencyInput
+                        active={SYMBOL_MAP[selectedAsset]}
+                        className={classes.currencySelect}
+                        usdValue={usdValue}
+                        value={amount}
+                        placeholder={"0.00"}
+                        onChange={(event: any) => {
+                          const value = event.value || "";
+                          store.set("convert.amount", String(value));
+                          gatherFeeData();
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={7} sm={6}>
+                      <Grid container justify="flex-end">
+                        <Balance
                           balance={balance}
                           direction={selectedDirection}
-                          placeholder={"0.00"}
-                          onChange={(event: any) => {
-                            let value = event.value || "";
-                            store.set("convert.amount", String(value));
-                            gatherFeeData();
-                          }}
+                          store={store}
                         />
-                        {/* {showAmountError && (
-                          <Typography className={classes.amountError}>
-                            Minimum mint amount is{" "}
-                            {MIN_TX_AMOUNTS[selectedAsset]}{" "}
-                            {SYMBOL_MAP[selectedAsset]}
-                          </Typography>
-                        )} */}
-                      </Grid>
-                    </Grid>
-
-                    {/* Network direction indicator */}
-                    <Grid
-                      container
-                      className={classes.switchDirection}
-                      alignItems="center"
-                    >
-                      {/* <Grid item xs={4}>
-                        <Grid container justify="flex-end">
-                          <img
-                            className={classes.infoLogo}
-                            alt="Show More"
-                            src={InfoLogo1}
-                          />
-                        </Grid>
-                      </Grid> */}
-                      <Grid item xs={12}>
-                        <Grid container justify="center">
-                          <Typography className={classes.sourceLabel}>
-                            <Translate text="Transfer.From" />
-                            &nbsp;{NETWORK_MAP[selectedAsset]}
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          container
-                          justify="center"
-                          onClick={() => {
-                            switchOriginChain(selectedDirection);
-                          }}
-                        >
-                          <SwapCalls color="primary" fontSize="large" />
-                          {/* <img
-                          src={SwitchLogo}
-                          className={classes.switchLogo}
-                          alt="Switch Direction"
-                        /> */}
-                        </Grid>
-                        <Grid container justify="center">
-                          <Typography className={classes.destLabel}>
-                            <Translate text="Transfer.To" />
-                            &nbsp;{NETWORK_MAP[destAsset]}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                      {/* <Grid item xs={4}>
-                        <Grid container justify="flex-start">
-                          <img
-                            className={classes.infoLogo}
-                            alt="Show More"
-                            src={InfoLogo2}
-                          />
-                        </Grid>
-                      </Grid> */}
-                    </Grid>
-
-                    <Grid
-                      container
-                      className={classNames(
-                        classes.standaloneOption,
-                        classes.option
-                      )}
-                      justify="center"
-                    >
-                      <Hidden xsDown>
-                        <Grid item className={classes.grayText} sm={4}>
-                          <Translate text={`Transfer.${assetConvertType}`} />
-                        </Grid>
-                      </Hidden>
-
-                      <Grid
-                        item
-                        sm={8}
-                        className={classNames(
-                          classes.currencySelect,
-                          classes[size]
-                        )}
-                      >
-                        <Grid
-                          container
-                          justify="center"
-                          className={classNames(
-                            classes[size],
-                            classes.outputField
-                          )}
-                        >
-                          <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />
-                          <Typography>{output}</Typography>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </React.Fragment>
-                )}
-                {selectedDirection === 1 && (
-                  // / ELA to ETH
-                  <React.Fragment>
-                    <Grid
-                      container
-                      className={classNames(
-                        classes.standaloneOption,
-                        classes.option
-                      )}
-                    >
-                      <Grid item xs={3}>
                         <CurrencySelect
                           active={SYMBOL_MAP[selectedAsset]}
                           className={classes.currencySelect}
@@ -745,144 +652,145 @@ class TransferContainer extends React.Component<any> {
                           }}
                         />
                       </Grid>
-                      <Grid item xs={9}>
-                        <BigCurrencyInput
-                          active={SYMBOL_MAP[selectedAsset]}
-                          className={classes.currencySelect}
-                          usdValue={usdValue}
-                          value={amount}
-                          balance={balance}
-                          direction={selectedDirection}
-                          placeholder={"0.00"}
-                          onChange={(event: any) => {
-                            const value = event.value || "";
-                            store.set("convert.amount", String(value));
-                            gatherFeeData();
-                          }}
-                        />
-                      </Grid>
                     </Grid>
+                  </Grid>
+                </React.Fragment>
+              )}
 
-                    {/* Network direction indicator */}
-                    <Grid
-                      className={classes.switchDirection}
-                      onClick={() => {
-                        switchOriginChain(selectedDirection);
-                      }}
-                    >
-                      <Grid container justify="center">
-                        <Typography className={classes.sourceLabel}>
-                          <Translate text="Transfer.From" />
-                          &nbsp;{NETWORK_MAP[selectedAsset]}
-                        </Typography>
-                      </Grid>
-                      <Grid container justify="center">
-                        <SwapCalls color="secondary" fontSize="large" />
-                        {/* <img
+              {/* Network direction indicator */}
+              <Grid
+                className={classes.switchDirection}
+                onClick={() => {
+                  switchOriginChain(selectedDirection);
+                }}
+              >
+                <Grid container justify="center">
+                  <Typography className={classes.sourceLabel}>
+                    <Translate text="Transfer.From" />
+                    &nbsp;{NETWORK_MAP[selectedAsset]}
+                  </Typography>
+                </Grid>
+                <Grid container justify="center">
+                  <SwapCalls
+                    color={selectedDirection ? "secondary" : "primary"}
+                    fontSize="large"
+                  />
+                  {/* <img
                           src={SwitchLogo}
                           className={classes.switchLogo}
                           alt="Switch Direction"
                         /> */}
-                      </Grid>
-                      <Grid container justify="center">
-                        <Typography className={classes.destLabel}>
-                          <Translate text="Transfer.To" />
-                          &nbsp;{NETWORK_MAP[destAsset]}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Grid
-                      container
-                      className={classNames(
-                        classes.standaloneOption,
-                        classes.option
-                      )}
-                      justify="center"
-                    >
-                      <Hidden xsDown>
-                        <Grid item className={classes.grayText} sm={4}>
-                          <Translate text={`Transfer.${assetConvertType}`} />
-                        </Grid>
-                      </Hidden>
-
-                      <Grid
-                        item
-                        sm={8}
-                        className={classNames(
-                          classes.currencySelect,
-                          classes[size]
-                        )}
-                      >
-                        <Grid
-                          container
-                          justify="center"
-                          className={classNames(
-                            classes[size],
-                            classes.outputField
-                          )}
-                        >
-                          <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />
-                          <Typography>{output}</Typography>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </React.Fragment>
-                )}
-                {/* Destination Address input */}
-                <Grid>
-                  <div className={classes.addressInput}>
-                    <TextField
-                      color={selectedDirection ? "secondary" : "primary"}
-                      label={<Translate text="Transfer.Destination" />}
-                      placeholder={
-                        localWeb3Address && localWeb3Address.length > 0
-                          ? localWeb3Address
-                          : placeholder
-                      }
-                      size="medium"
-                      fullWidth={true}
-                      error={showDestinationError}
-                      helperText={showDestinationError ? inputError : ""}
-                      InputProps={{ disableUnderline: true }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{
-                        onFocus: () => {
-                          store.set("convert.destinationInputFocused", true);
-                        },
-                        onBlur: () => {
-                          store.set("convert.destinationInputFocused", false);
-                        },
-                      }}
-                      onChange={(event) => {
-                        const value = event.target.value;
-                        let address = value;
-                        if (value.length > 0) {
-                          store.set("convert.destination", value);
-                          // Address validator hard coded to ethereum
-                        } else {
-                          address = localWeb3Address;
-                          store.set("convert.destination", localWeb3Address);
-                        }
-                        store.set(
-                          "convert.destinationValid",
-                          AddressValidator.validate(address, "ETH", "prod")
-                        );
-                      }}
-                    />
-                  </div>
                 </Grid>
-                {/* /// */}
-                <Grid
-                  container
-                  justify="center"
-                  className={classes.actionButtonContainer}
-                >
-                  <Grid item xs={12}>
-                    {!selectedWallet ? (
+                <Grid container justify="center">
+                  <Typography className={classes.destLabel}>
+                    <Translate text="Transfer.To" />
+                    &nbsp;{NETWORK_MAP[destAsset]}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              {/* Output Field */}
+              <Grid
+                container
+                className={classNames(classes.standaloneOption, classes.option)}
+                justify="center"
+              >
+                <Grid item xs={7} sm={7}>
+                  <Grid container justify="flex-start" wrap="nowrap">
+                    <Grid item zeroMinWidth>
+                      <Typography noWrap>&nbsp;{output}</Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={5} sm={5}>
+                  <Grid
+                    container
+                    className={classes.padding}
+                    justify="flex-end"
+                  >
+                    <Hidden xsDown>
+                      <span className={classes.grayText}>
+                        <Translate text={`Transfer.${assetConvertType}`} />
+                      </span>
+                      &nbsp;&nbsp;
+                    </Hidden>
+                    <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />
+                    {SYMBOL_MAP[destAsset]}
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              {/* Destination Address input */}
+              <Grid>
+                <div className={classes.addressInput}>
+                  <TextField
+                    color={selectedDirection ? "secondary" : "primary"}
+                    label={<Translate text="Transfer.Destination" />}
+                    placeholder={
+                      localWeb3Address && localWeb3Address.length > 0
+                        ? localWeb3Address
+                        : placeholder
+                    }
+                    size="medium"
+                    fullWidth={true}
+                    error={showDestinationError}
+                    helperText={showDestinationError ? inputError : ""}
+                    InputProps={{ disableUnderline: true }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      onFocus: () => {
+                        store.set("convert.destinationInputFocused", true);
+                      },
+                      onBlur: () => {
+                        store.set("convert.destinationInputFocused", false);
+                      },
+                    }}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      let address = value;
+                      if (value.length > 0) {
+                        store.set("convert.destination", value);
+                        // Address validator hard coded to ethereum
+                      } else {
+                        address = localWeb3Address;
+                        store.set("convert.destination", localWeb3Address);
+                      }
+                      store.set(
+                        "convert.destinationValid",
+                        AddressValidator.validate(address, "ETH", "prod")
+                      );
+                    }}
+                  />
+                </div>
+              </Grid>
+
+              {/* Button */}
+              <Grid
+                container
+                justify="center"
+                className={classes.actionButtonContainer}
+              >
+                <Grid item xs={12}>
+                  {!selectedWallet ? (
+                    <Button
+                      variant={"contained"}
+                      disableRipple
+                      color={selectedDirection ? "secondary" : "primary"}
+                      size="large"
+                      fullWidth
+                      className={classNames(classes.actionButton)}
+                      onClick={() => {
+                        store.set("showWalletModal", true);
+                      }}
+                    >
+                      <Translate text="Transfer.Connect" />
+                    </Button>
+                  ) : (
+                    <div>
                       <Button
+                        disabled={!enableButton}
                         variant={"contained"}
                         disableRipple
                         color={selectedDirection ? "secondary" : "primary"}
@@ -890,48 +798,31 @@ class TransferContainer extends React.Component<any> {
                         fullWidth
                         className={classNames(classes.actionButton)}
                         onClick={() => {
-                          store.set("showWalletModal", true);
+                          if (this.isSelectedNetwork()) {
+                            this.isBalanceEnough();
+                          }
                         }}
                       >
-                        <Translate text="Transfer.Connect" />
+                        <Translate text="Transfer.Next" />
                       </Button>
-                    ) : (
-                      <div>
-                        <Button
-                          disabled={!enableButton}
-                          variant={"contained"}
-                          disableRipple
-                          color={selectedDirection ? "secondary" : "primary"}
-                          size="large"
-                          fullWidth
-                          className={classNames(classes.actionButton)}
-                          onClick={() => {
-                            if (this.isSelectedNetwork()) {
-                              this.isBalanceEnough();
-                            }
-                          }}
-                        >
-                          <Translate text="Transfer.Next" />
-                        </Button>
-                        {wrongNetwork && (
-                          <div>
-                            <ErrorModal
-                              currentNetwork={store.get("localWeb3Network")}
-                              targetNetwork={NETWORK_TYPE[selectedAsset]}
-                              store={store}
-                              errorType={"wrongNetwork"}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </Grid>
+                      {wrongNetwork && (
+                        <div>
+                          <ErrorModal
+                            currentNetwork={store.get("localWeb3Network")}
+                            targetNetwork={NETWORK_TYPE[selectedAsset]}
+                            store={store}
+                            errorType={"wrongNetwork"}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </Grid>
               </Grid>
-            </div>
-          }
-        </div>
-      </React.Fragment>
+            </Grid>
+          </div>
+        }
+      </div>
     );
   }
 }

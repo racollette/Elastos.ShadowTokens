@@ -2,10 +2,10 @@ import ERC20_ABI from "../abis/ERC20_ABI.json";
 
 export const DAI = {
     id: 'DAI',
-    name: 'DAI',
+    name: 'Dai',
     network: '42',
     address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-    bridgeMode: 'erc_erc_amb',
+    bridgeMode: 'multi_amb_erc_erc',
     abi: ERC20_ABI,
     confirmations: 8,
     priceTicker: 'dai',
@@ -14,10 +14,10 @@ export const DAI = {
 
 export const elaDAI = {
     id: 'elaDAI',
-    name: 'elaDAI',
+    name: 'Dai on Elastos',
     network: '21',
     address: '0x6b175474e89094c44da98b954eedeac495271d0f', // generate on elastos
-    bridgeMode: 'erc_erc_amb',
+    bridgeMode: 'multi_amb_erc_erc',
     abi: ERC20_ABI,
     confirmations: 1,
     priceTicker: 'dai',

@@ -5,10 +5,10 @@ import ERC20_ABI from "../abis/ERC20_ABI.json";
 
 export const MAIN = {
     id: 'MAIN',
-    name: 'MAIN',
+    name: 'Main',
     network: '42',
     address: '0x41c16473b12211892c813f52815f700440471aa0',
-    bridgeMode: 'erc_erc_amb',
+    bridgeMode: 'multi_amb_erc_erc',
     abi: ERC20_ABI,
     confirmations: 8,
     priceTicker: 'main',
@@ -17,10 +17,10 @@ export const MAIN = {
 
 export const elaMAIN = {
     id: 'elaMAIN',
-    name: 'elaMAIN',
+    name: 'Main on Elastos',
     network: '21',
     address: '0xE3eB44F609Af7dEa9CAA1dF28BbA9032f603aC55',
-    bridgeMode: 'erc_erc_amb',
+    bridgeMode: 'multi_amb_erc_erc',
     abi: ERC20_ABI,
     confirmations: 1,
     priceTicker: 'main',

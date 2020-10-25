@@ -26,14 +26,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     textAlign: "center",
     background: "rgb(32,32,32)",
     borderRadius: "40px",
-    // border: "1px solid #ff8000",
-    // boxShadow:
-    //   "#FFF 0 -2px 3px, #ff0 0 -3px 10px, #ff8000 0 -10px 20px, red 0 -9px 20px, 5px 5px 10px 5px rgba(0,0,0,0)",
-    maxWidth: 500,
+    width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
-    padding: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "100%",
+    padding: theme.spacing(2.5),
+    [theme.breakpoints.down("xs")]: {
+      width: "90%",
     },
   },
   transferActionTabs: {
@@ -140,7 +137,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& :last-child": {
       borderBottom: "1px solid transparent",
     },
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       paddingLeft: 0,
       paddingRight: 0,
     },
