@@ -48,7 +48,7 @@ const styles = () => ({
     marginRight: 10,
   },
   button: {
-    fontSize: 14,
+    fontSize: 17.5,
     color: "#fff",
     // display: "flex",
     // justifyContent: "flex-start",

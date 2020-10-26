@@ -46,18 +46,20 @@
     "name": "relayTokens",
     "outputs": [],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "",
+        "indexed": true,
+        "name": "recipient",
         "type": "address"
       },
       {
-        "name": "",
+        "indexed": false,
+        "name": "value",
         "type": "uint256"
       }
     ],
@@ -84,6 +86,20 @@
       }
     ],
     "name": "relayTokens",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "nativeTransfer",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

@@ -16,7 +16,8 @@ const styles: Styles<any, any> = () => ({
     },
   },
   input: {
-    fontSize: 16,
+    fontSize: 17.5,
+    fontWeight: 500,
     width: "100%",
     outline: "none",
     textAlign: "left",

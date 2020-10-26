@@ -244,6 +244,7 @@ class NavContainer extends React.Component<any> {
                     disableRipple
                     onClick={() => {
                       restoreInitialState();
+                      store.set("confirmBridge", false);
                     }}
                     variant="contained"
                     size="small"

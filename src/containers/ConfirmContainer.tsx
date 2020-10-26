@@ -18,8 +18,10 @@ import {
   abbreviateAddress,
   MINI_ICON_MAP,
   SYMBOL_MAP,
+  ASSET_CONVERSION_TYPES,
 } from "../bridges/ETH_ELA/utils/walletUtils";
 import { handleBridgeMode } from "../bridges/ETH_ELA/utils/transferUtils";
+import { TOKENS } from "../bridges/ETH_ELA/tokens";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
@@ -297,7 +299,7 @@ class ConfirmContainer extends React.Component<any> {
       Number(store.get("convert.networkFee")) * Number(amount)
     ).toFixed(4);
     // const networkFee = store.get("convert.networkFee");
-    const total = Number(store.get("convert.conversionTotal")).toFixed(2);
+    const total = Number(store.get("convert.conversionTotal")).toFixed(4);
     const canConvertTo = amount > 0.00010001;
 
     const confirmationError = store.get("confirmationError");
@@ -323,11 +325,12 @@ class ConfirmContainer extends React.Component<any> {
     const type = store.get("transactionType");
     const transferSuccess = store.get("transferSuccess");
 
-    // Replace 'w' to retrieve price of native asset, assuming they are equivalent
-    // Careful if asset ticket contains a w
-    const usdValue = Number(
-      store.get(`${selectedAsset.replace("w", "")}usd`) * amount
-    ).toFixed(2);
+    let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
+    if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
+      usdValue = Number(
+        store.get(`${TOKENS[selectedAsset].destAsset}usd`) * amount
+      ).toFixed(2);
+    }
 
     const chars = String(amount).replace(".", "");
 
@@ -465,12 +468,8 @@ class ConfirmContainer extends React.Component<any> {
                     className={classNames(classes.actionButton)}
                     onClick={() => {
                       handleBridgeMode(confirmTx);
-                      // Dummy confirmation window timer, replace with transaction return success from metamask
-                      // setTimeout(() => {
-                      //     store.set("waitingApproval", false);
-                      //     store.set("confirmationProgress", true);
-                      //     this.trackConfirmations();
-                      // }, 5000);
+                      // store.set("transactionType", "relay");
+                      // store.set("waitingApproval", true);
                     }}
                   >
                     <Translate text="Confirm.Start" />

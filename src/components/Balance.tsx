@@ -2,20 +2,20 @@ import React from "react";
 import theme from "../theme/theme";
 import { Styles, withStyles } from "@material-ui/styles";
 import classNames from "classnames";
-import Hidden from "@material-ui/core/Hidden";
 import { Translate } from "./Translate";
 
 const styles: Styles<any, any> = () => ({
   button: {
-    marginRight: theme.spacing(0.75),
+    // marginRight: theme.spacing(0.75),
     fontSize: 14,
     borderRadius: 8,
-    padding: theme.spacing(1),
+    paddingTop: theme.spacing(0.75),
+    paddingBottom: theme.spacing(0.75),
+    paddingLeft: theme.spacing(1.25),
+    paddingRight: theme.spacing(1.25),
     [theme.breakpoints.down("xs")]: {
-      paddingTop: theme.spacing(0.5),
-      paddingBottom: theme.spacing(0.5),
-      paddingLeft: theme.spacing(0.75),
-      paddingRight: theme.spacing(0.75),
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
     },
   },
   primary: {
@@ -65,7 +65,7 @@ const Balance: React.FC<Props> = function (props) {
         }}
       >
         <Translate text="Transfer.Max" />
-        <Hidden xsDown>&nbsp;{balance || "0.00"}</Hidden>
+        &nbsp;{balance || "0.00"}
       </div>
     </React.Fragment>
   );

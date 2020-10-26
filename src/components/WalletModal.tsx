@@ -19,7 +19,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     textAlign: "center",
     background: "rgb(37,37,37)",
     borderRadius: "40px",
-    width: 400,
+    width: 450,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
       width: "75%",

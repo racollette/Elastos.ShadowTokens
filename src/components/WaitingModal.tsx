@@ -75,8 +75,8 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   assetText: {
     color: theme.palette.info.contrastText,
     fontSize: 18,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
     [theme.breakpoints.down("sm")]: {
       fontSize: 16,
     },
@@ -88,14 +88,14 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     justifyContent: "center",
   },
   assetIcon: {
-    height: 50,
+    height: 42,
     width: "auto",
   },
   fromToIcon: {
-    height: 40,
+    height: 34,
     width: "auto",
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(1.5),
+    marginRight: theme.spacing(1.5),
   },
   spinnerContainer: {
     paddingTop: theme.spacing(4),

@@ -6,6 +6,7 @@ export const DAI = {
     network: '42',
     address: '0x6b175474e89094c44da98b954eedeac495271d0f',
     bridgeMode: 'multi_amb_erc_erc',
+    destAsset: "eladai",
     abi: ERC20_ABI,
     confirmations: 8,
     priceTicker: 'dai',
@@ -18,6 +19,7 @@ export const elaDAI = {
     network: '21',
     address: '0x6b175474e89094c44da98b954eedeac495271d0f', // generate on elastos
     bridgeMode: 'multi_amb_erc_erc',
+    destAsset: "dai",
     abi: ERC20_ABI,
     confirmations: 1,
     priceTicker: 'dai',

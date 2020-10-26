@@ -1,18 +1,29 @@
 import { DAI, elaDAI } from './Dai'
-import { MAIN, elaMAIN } from './Main'
 import { USDT, elaUSDT } from './Tether'
 import { USDC, elaUSDC } from './USD Coin'
 
-import { elaETH } from './ETH'
+import { ETH, elaETH } from './ETH'
+import { ELA, ethELA } from './ELA'
+
+import { MAIN, elaMAIN } from './Main'
 
 export const TOKENS: any = {
+
+    // Native tokens
+    eth: ETH,
     elaeth: elaETH,
+    ela: ELA,
+    ethela: ethELA,
+
+    // ERC20 tokens
     dai: DAI,
     eladai: elaDAI,
-    main: MAIN,
-    elamain: elaMAIN,
     usdt: USDT,
     elausdt: elaUSDT,
     usdc: USDC,
-    elausdc: elaUSDC
+    elausdc: elaUSDC,
+
+    // Test ERC20 tokens
+    main: MAIN,
+    elamain: elaMAIN,
 }

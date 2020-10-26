@@ -4,6 +4,10 @@ import { Styles, withStyles } from "@material-ui/styles";
 import { SwapCalls } from "@material-ui/icons";
 import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
+import Lock from "../assets/lock.svg";
+import Release from "../assets/unlock.svg";
+import Mint from "../assets/mint.svg";
+import Burn from "../assets/burn.svg";
 import {
   gatherFeeData,
   switchOriginChain,
@@ -18,6 +22,7 @@ import {
   ASSET_CONVERSION_TYPES,
   fetchTokenBalance,
 } from "../bridges/ETH_ELA/utils/walletUtils";
+import { TOKENS } from "../bridges/ETH_ELA/tokens";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -68,20 +73,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       opacity: 0.75,
     },
   },
-  transferActionTabs: {
-    margin: "0px auto",
-    marginBottom: theme.spacing(1),
-    "& div.MuiToggleButtonGroup-root": {
-      width: "100%",
-    },
-    "& button": {
-      width: "50%",
-    },
-  },
-  depositAddressContainer: {},
-  depositAddress: {
-    width: "100%",
-  },
   actionButtonContainer: {
     marginTop: theme.spacing(2),
 
@@ -96,81 +87,23 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   actionButton: {
     borderRadius: "16px",
   },
-  amountField: {
-    width: "100%",
-  },
-  transactionsContainer: {
-    padding: theme.spacing(3),
-    paddingTop: theme.spacing(0),
-    marginTop: theme.spacing(2),
-    borderTop: "1px solid #EBEBEB",
-  },
   actionsContainer: {
     borderRadius: theme.shape.borderRadius,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-  },
-  destChooser: {
-    width: "100%",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
-    "& div.MuiToggleButtonGroup-root": {
-      width: "100%",
-    },
-    "& button": {
-      width: "50%",
-    },
-  },
-  fees: {
-    width: "100%",
-    border: "1px solid " + theme.palette.divider,
-    fontSize: 12,
-    padding: theme.spacing(1),
-    paddingBottom: 0,
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(3),
-    display: "flex",
-    flexDirection: "column",
-    "& span": {
-      marginBottom: theme.spacing(1),
-    },
   },
   icon: {
     width: 16,
     height: 16,
     marginRight: theme.spacing(0.75),
   },
-  toggle: {
-    "& button": {
-      minHeight: "auto",
-      border: "1px solid transparent",
-      borderBottom: "1px solid " + theme.palette.divider,
-      height: 56,
-      backgroundColor: "#fff",
-      "&:first-child": {
-        borderRight: "1px solid " + theme.palette.divider,
-      },
-      "&.MuiToggleButton-root": {},
-      "&.Mui-selected": {
-        borderBottom: "1px solid transparent",
-        color: theme.palette.primary.main,
-        backgroundColor: "#transparent !important",
-      },
-      "& .MuiToggleButton-label": {
-        fontSize: 16,
-      },
-      "& span": {
-        textTransform: "capitalize !important",
-      },
-    },
-  },
   title: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
-  optionsContainer: {
-    borderBottom: "none",
-    borderRadius: 4,
+  standaloneOption: {
+    border: "1px solid" + theme.palette.divider,
+    borderRadius: 12,
     boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
   },
   option: {
@@ -179,7 +112,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    minHeight: 64,
     fontSize: 16,
     "& img": {
       height: "auto",
@@ -191,14 +123,20 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       alignItems: "center",
     },
     [theme.breakpoints.down("xs")]: {
-      padding: theme.spacing(1),
-      minHeight: 54,
+      paddingLeft: theme.spacing(1.5),
+      paddingRight: theme.spacing(1.5),
     },
   },
-  standaloneOption: {
-    border: "1px solid" + theme.palette.divider,
-    borderRadius: 12,
-    boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
+  optionRow1: {
+    height: 34,
+    "& img": {
+      height: "auto",
+      width: 20,
+      marginRight: theme.spacing(0.75),
+    },
+  },
+  optionRow2: {
+    height: 38,
   },
   addressInput: {
     marginTop: theme.spacing(2),
@@ -208,20 +146,8 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     borderRadius: 12,
     border: "1px solid" + theme.palette.divider,
   },
-  // currencySelect: {
-  //   width: "calc(100% + 8px)",
-  //   "& MuiButton-root": {
-  //     textTransform: "none !important",
-  //   },
-  // },
   outputField: {
     display: "inline-block",
-  },
-  amountError: {
-    textAlign: "center",
-    color: "#FF4545",
-    fontSize: 12,
-    margin: "0px auto",
   },
   switchDirection: {
     marginBottom: theme.spacing(1),
@@ -230,34 +156,26 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   sourceLabel: {
     fontSize: 14,
     color: theme.palette.primary.contrastText,
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
   destLabel: {
     fontSize: 14,
     color: theme.palette.info.contrastText,
-  },
-  switchLogo: {
-    height: 20,
-    width: "auto",
-  },
-  disclosure: {
-    width: "100%",
-    maxWidth: 370,
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "center",
-    boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
-    padding: theme.spacing(2),
-    color: theme.palette.primary.main,
-    border: "1px solid " + theme.palette.primary.main,
-    fontSize: 12,
-    lineHeight: "17px",
-    borderRadius: 4,
-    marginBottom: theme.spacing(3),
-    "& a": {
-      color: "inherit",
+    "&:hover": {
+      cursor: "pointer",
     },
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "100%",
+  },
+  destAssetTicker: {
+    fontSize: 17.5,
+  },
+  destAssetText: {
+    fontSize: "0.9rem",
+  },
+  swapContainer: {
+    "&:hover": {
+      cursor: "pointer",
     },
   },
   grayText: {
@@ -279,14 +197,6 @@ class TransferContainer extends React.Component<any> {
     this.state = props.store.getState();
   }
 
-  showDepositModal(tx: any) {
-    const { store } = this.props;
-    store.set("showDepositModal", true);
-    store.set("depositModalTx", tx);
-  }
-
-  async gatherFeeData() {}
-
   getBalance(asset: string) {
     console.log("getBalance");
     const { store } = this.props;
@@ -300,9 +210,9 @@ class TransferContainer extends React.Component<any> {
       "selectedAsset"
     );
     const localWeb3Network = store.get("localWeb3Network");
-    // console.log(localWeb3Network);
+    console.log(localWeb3Network);
     const targetWeb3Network = NETWORK_TYPE[selectedAsset];
-    // console.log(targetWeb3Network);
+    console.log(targetWeb3Network);
     const correctNetwork = localWeb3Network === targetWeb3Network;
 
     if (!correctNetwork) {
@@ -325,57 +235,6 @@ class TransferContainer extends React.Component<any> {
       store.set("insufficientBalance", true);
     } else {
       this.newTransfer();
-    }
-  }
-
-  validateDeposit() {
-    const { store } = this.props;
-    const selectedAsset = store.get("selectedAsset");
-    const amount = store.get("convert.amount");
-    const amountValid =
-      Number(amount) >=
-      MIN_TX_AMOUNTS[selectedAsset as keyof typeof MIN_TX_AMOUNTS];
-
-    if (!amount || !amountValid) {
-      store.set("convert.showAmountError", true);
-      return false;
-    } else {
-      store.set("convert.showAmountError", false);
-      return true;
-    }
-  }
-
-  validateWithdraw() {
-    const { store } = this.props;
-    const amount = store.get("convert.amount");
-    const convertAddressValid = store.get("convert.destinationValid");
-    const showAddressError = !convertAddressValid;
-    const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
-      "selectedAsset"
-    );
-    const selectedFormat = store.get("convert.selectedFormat");
-    const balance = store.get(SYMBOL_MAP[selectedFormat] + "Balance");
-
-    const amountValid =
-      Number(amount) >= MIN_TX_AMOUNTS[selectedAsset] &&
-      amount <= Number(balance);
-
-    if (showAddressError) {
-      store.set("convert.showDestinationError", true);
-    } else {
-      store.set("convert.showDestinationError", false);
-    }
-
-    if (!amount || !amountValid) {
-      store.set("convert.showAmountError", true);
-    } else {
-      store.set("convert.showAmountError", false);
-    }
-
-    if (showAddressError || !amount || !amountValid) {
-      return false;
-    } else {
-      return true;
     }
   }
 
@@ -413,10 +272,6 @@ class TransferContainer extends React.Component<any> {
       txHash: "",
     };
 
-    if (!this.validateDeposit()) {
-      return;
-    }
-
     store.set("confirmTx", tx);
     store.set("confirmAction", ASSET_CONVERSION_TYPES[format]);
   }
@@ -434,9 +289,13 @@ class TransferContainer extends React.Component<any> {
       "selectedAsset"
     );
     const destAsset = selectedFormat;
+    const destAssetName = TOKENS[destAsset].name;
+
     let assetConvertType = "Mint";
+    let sourceAssetAction = "Lock";
     if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
       assetConvertType = "Release";
+      sourceAssetAction = "Burn";
     }
     const balance = store.get(SYMBOL_MAP[selectedAsset] + "Balance");
     const amount = store.get("convert.amount");
@@ -454,21 +313,11 @@ class TransferContainer extends React.Component<any> {
     let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
     if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
       usdValue = Number(
-        store.get(`${selectedAsset.substring(3)}usd`) * amount
+        store.get(`${TOKENS[selectedAsset].destAsset}usd`) * amount
       ).toFixed(2);
     }
 
     let output = `${total} (${Numeral(usdValue).format("$0,0.00")})`;
-
-    // const chars = total ? String(total) : "";
-    // let size = "large";
-    // if (chars.length > 8 && chars.length <= 10) {
-    //   size = "medium";
-    // } else if (chars.length > 10 && chars.length <= 13) {
-    //   size = "small";
-    // } else if (chars.length > 13) {
-    //   size = "smallest";
-    // }
 
     let enableButton = false;
     const showDestinationError = store.get("convert.showDestinationError");
@@ -492,17 +341,9 @@ class TransferContainer extends React.Component<any> {
         : `请输入一个有效的 ${NETWORK_MAP[destAsset]} 地址`;
 
     // const allowance = store.get("convert.adapterWbtcAllowance");
-    // const convertAddressValid = store.get("convert.destinationValid");
     // const hasAllowance = Number(amount) <= Number(allowance);
     // const allowanceRequesting = store.get(
     //     "convert.adapterWbtcAllowanceRequesting"
-    // );
-    // const canConvertTo = amount >= MIN_TX_AMOUNTS[selectedAsset];
-    // const canConvertFrom =
-    //     Number(amount) >= MIN_TX_AMOUNTS[selectedAsset] &&
-    //     amount <= Number(balance) &&
-    //     convertAddressValid;
-    // const showAmountError = store.get("convert.showAmountError");
 
     return (
       <div className={classes.container}>
@@ -526,17 +367,35 @@ class TransferContainer extends React.Component<any> {
         {
           <div className={classes.actionsContainer}>
             <Grid className={classes.actions}>
-              {/* Ethereum to Elastos */}
-              {selectedDirection === 0 && (
-                <React.Fragment>
-                  <Grid
-                    container
-                    className={classNames(
-                      classes.standaloneOption,
-                      classes.option
-                    )}
-                  >
-                    <Grid item xs={5} sm={6}>
+              <React.Fragment>
+                <Grid
+                  container
+                  className={classNames(
+                    classes.standaloneOption,
+                    classes.option
+                  )}
+                >
+                  <Grid container className={classes.optionRow1}>
+                    <Grid item xs={6} className={classes.grayText}>
+                      {sourceAssetAction === "Lock" ? (
+                        <img src={Lock} alt="Lock" />
+                      ) : (
+                        <img src={Burn} alt="Burn" />
+                      )}
+                      <Translate text={`Transfer.${sourceAssetAction}`} />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Grid container justify="flex-end">
+                        <Balance
+                          balance={balance}
+                          direction={selectedDirection}
+                          store={store}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid container className={classes.optionRow2}>
+                    <Grid item xs={7}>
                       <BigCurrencyInput
                         active={SYMBOL_MAP[selectedAsset]}
                         className={classes.currencySelect}
@@ -549,143 +408,107 @@ class TransferContainer extends React.Component<any> {
                           gatherFeeData();
                         }}
                       />
-                      {/* {showAmountError && (
-                          <Typography className={classes.amountError}>
-                            Minimum mint amount is{" "}
-                            {MIN_TX_AMOUNTS[selectedAsset]}{" "}
-                            {SYMBOL_MAP[selectedAsset]}
-                          </Typography>
-                        )} */}
                     </Grid>
-                    <Grid item xs={7} sm={6}>
+                    <Grid item xs={5}>
                       <Grid container justify="flex-end">
-                        <Balance
-                          balance={balance}
-                          direction={selectedDirection}
-                          store={store}
-                        />
-                        <CurrencySelect
-                          active={SYMBOL_MAP[selectedAsset]}
-                          className={classes.currencySelect}
-                          items={[
-                            "ETH",
-                            "ethELA",
-                            "USDT",
-                            "DAI",
-                            "USDC",
-                            "MAIN",
-                          ]}
-                          onCurrencyChange={(v: string) => {
-                            const asset = v.toLowerCase();
-                            if (asset === "ethela") {
-                              store.set(
-                                "convert.selectedFormat",
-                                `${asset.replace("eth", "")}`
-                              );
+                        {selectedDirection === 0 ? (
+                          <CurrencySelect
+                            active={SYMBOL_MAP[selectedAsset]}
+                            className={classes.currencySelect}
+                            items={[
+                              "ETH",
+                              "ethELA",
+                              "USDT",
+                              "DAI",
+                              "USDC",
+                              "MAIN",
+                            ]}
+                            onCurrencyChange={(v: string) => {
+                              const asset = v.toLowerCase();
+                              if (asset === "ethela") {
+                                store.set(
+                                  "convert.selectedFormat",
+                                  `${asset.replace("eth", "")}`
+                                );
+                                store.set("selectedAsset", asset);
+                              } else {
+                                store.set(
+                                  "convert.selectedFormat",
+                                  `ela${asset}`
+                                );
+                                store.set("selectedAsset", asset);
+                              }
+                              gatherFeeData();
+                              fetchTokenBalance(asset);
+                            }}
+                          />
+                        ) : (
+                          <CurrencySelect
+                            active={SYMBOL_MAP[selectedAsset]}
+                            className={classes.currencySelect}
+                            items={[
+                              "ELA",
+                              "elaETH",
+                              "elaUSDT",
+                              "elaDAI",
+                              "elaUSDC",
+                              "elaMAIN",
+                            ]}
+                            // ETHBalance={store.get("ethbal")}
+                            onCurrencyChange={(v: string) => {
+                              const asset = v.toLowerCase();
+                              const destAsset = CONVERT_MAP[asset];
                               store.set("selectedAsset", asset);
-                            } else {
-                              store.set(
-                                "convert.selectedFormat",
-                                `ela${asset}`
-                              );
-                              store.set("selectedAsset", asset);
-                            }
-                            gatherFeeData();
-                            fetchTokenBalance(asset);
-                          }}
-                        />
+                              store.set("convert.selectedFormat", destAsset);
+                              fetchTokenBalance(asset);
+                              gatherFeeData();
+                            }}
+                          />
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>
-                </React.Fragment>
-              )}
-              {/* Elastos to Ethereum */}
-              {selectedDirection === 1 && (
-                <React.Fragment>
-                  <Grid
-                    container
-                    className={classNames(
-                      classes.standaloneOption,
-                      classes.option
-                    )}
-                  >
-                    <Grid item xs={5} sm={6}>
-                      <BigCurrencyInput
-                        active={SYMBOL_MAP[selectedAsset]}
-                        className={classes.currencySelect}
-                        usdValue={usdValue}
-                        value={amount}
-                        placeholder={"0.00"}
-                        onChange={(event: any) => {
-                          const value = event.value || "";
-                          store.set("convert.amount", String(value));
-                          gatherFeeData();
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={7} sm={6}>
-                      <Grid container justify="flex-end">
-                        <Balance
-                          balance={balance}
-                          direction={selectedDirection}
-                          store={store}
-                        />
-                        <CurrencySelect
-                          active={SYMBOL_MAP[selectedAsset]}
-                          className={classes.currencySelect}
-                          items={[
-                            "ELA",
-                            "elaETH",
-                            "elaUSDT",
-                            "elaDAI",
-                            "elaUSDC",
-                            "elaMAIN",
-                          ]}
-                          // ETHBalance={store.get("ethbal")}
-                          onCurrencyChange={(v: string) => {
-                            const asset = v.toLowerCase();
-                            const destAsset = CONVERT_MAP[asset];
-                            store.set("selectedAsset", asset);
-                            store.set("convert.selectedFormat", destAsset);
-                            fetchTokenBalance(asset);
-                            gatherFeeData();
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </React.Fragment>
-              )}
+                </Grid>
+              </React.Fragment>
 
               {/* Network direction indicator */}
-              <Grid
-                className={classes.switchDirection}
-                onClick={() => {
-                  switchOriginChain(selectedDirection);
-                }}
-              >
+              <Grid className={classes.switchDirection}>
                 <Grid container justify="center">
-                  <Typography className={classes.sourceLabel}>
-                    <Translate text="Transfer.From" />
-                    &nbsp;{NETWORK_MAP[selectedAsset]}
-                  </Typography>
-                </Grid>
-                <Grid container justify="center">
-                  <SwapCalls
-                    color={selectedDirection ? "secondary" : "primary"}
-                    fontSize="large"
-                  />
-                  {/* <img
+                  <Grid
+                    item
+                    xs={4}
+                    className={classes.swapContainer}
+                    onClick={() => {
+                      switchOriginChain(selectedDirection);
+                    }}
+                  >
+                    <Typography className={classes.sourceLabel}>
+                      <Translate text="Transfer.From" />
+                      &nbsp;{NETWORK_MAP[selectedAsset]}
+                      {/* &nbsp;
+                      <Translate text="Transfer.Mainnet" /> */}
+                    </Typography>
+
+                    <Grid container justify="center">
+                      <SwapCalls
+                        color={selectedDirection ? "secondary" : "primary"}
+                        fontSize="large"
+                      />
+                      {/* <img
                           src={SwitchLogo}
                           className={classes.switchLogo}
                           alt="Switch Direction"
                         /> */}
-                </Grid>
-                <Grid container justify="center">
-                  <Typography className={classes.destLabel}>
-                    <Translate text="Transfer.To" />
-                    &nbsp;{NETWORK_MAP[destAsset]}
-                  </Typography>
+                    </Grid>
+                    <Grid container justify="center">
+                      <Typography className={classes.destLabel}>
+                        <Translate text="Transfer.To" />
+                        &nbsp;{NETWORK_MAP[destAsset]}
+                        {/* &nbsp;
+                        <Translate text="Transfer.Mainnet" /> */}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
 
@@ -695,28 +518,62 @@ class TransferContainer extends React.Component<any> {
                 className={classNames(classes.standaloneOption, classes.option)}
                 justify="center"
               >
-                <Grid item xs={7} sm={7}>
-                  <Grid container justify="flex-start" wrap="nowrap">
-                    <Grid item zeroMinWidth>
-                      <Typography noWrap>&nbsp;{output}</Typography>
+                <Grid container className={classes.optionRow1}>
+                  <Grid item xs={7} sm={7} className={classes.grayText}>
+                    {assetConvertType === "Mint" ? (
+                      <img src={Mint} alt="Mint" />
+                    ) : (
+                      <img src={Release} alt="Release" />
+                    )}
+
+                    <Translate text={`Transfer.${assetConvertType}`} />
+                  </Grid>
+                  <Grid item xs={5} sm={5}>
+                    <Grid
+                      container
+                      className={classes.padding}
+                      justify="flex-end"
+                    >
+                      <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />
+                      <Typography className={classes.destAssetTicker}>
+                        {SYMBOL_MAP[destAsset]}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={5} sm={5}>
-                  <Grid
-                    container
-                    className={classes.padding}
-                    justify="flex-end"
-                  >
-                    <Hidden xsDown>
-                      <span className={classes.grayText}>
-                        <Translate text={`Transfer.${assetConvertType}`} />
-                      </span>
-                      &nbsp;&nbsp;
-                    </Hidden>
-                    <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />
-                    {SYMBOL_MAP[destAsset]}
+                <Grid container className={classes.optionRow2}>
+                  <Grid item xs={12} sm={7}>
+                    <Grid container justify="flex-start" wrap="nowrap">
+                      <Grid item zeroMinWidth>
+                        <Typography
+                          className={
+                            Number(amount) === 0 ? classes.grayText : null
+                          }
+                          noWrap
+                        >
+                          {output}
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   </Grid>
+                  <Hidden xsDown>
+                    <Grid item sm={5}>
+                      <Grid
+                        container
+                        className={classes.padding}
+                        justify="flex-end"
+                      >
+                        <Typography
+                          className={classNames(
+                            classes.destAssetText,
+                            classes.grayText
+                          )}
+                        >
+                          {destAssetName}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Hidden>
                 </Grid>
               </Grid>
 

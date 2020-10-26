@@ -13,9 +13,10 @@ import ConfirmContainer from "./containers/ConfirmContainer";
 import ErrorModal from "./components/ErrorModal";
 import { storeListener } from "./services/storeService";
 import theme from "./theme/theme";
-// import { setNetwork } from "./utils/walletUtils";
 import { BRIDGE_SYMBOL_MAP } from "./bridges/bridges";
-// import { initLocalWeb3 } from "./bridges/ETH_ELA/utils/walletUtils";
+
+import { init } from "./bridges/ETH_ELA/utils/walletUtils";
+
 require("dotenv").config();
 
 const styles = () => ({
@@ -54,7 +55,6 @@ const styles = () => ({
 
 const initialState = {
   // networking
-  // USDTAddress: USDT_ADDRESS_TEST,
   selectedNetwork: "",
   queryParams: {},
 
@@ -145,7 +145,7 @@ class AppWrapper extends React.Component<Props> {
     const { store } = this.props;
     const params = queryString.parse(window.location.search);
     store.set("queryParams", params);
-    // setNetwork("mainnet");
+    init();
     // initLocalWeb3();
   }
 
@@ -190,20 +190,16 @@ class AppWrapper extends React.Component<Props> {
                     pair={
                       selectedPair ? BRIDGE_SYMBOL_MAP[selectedPair] : "ELA"
                     }
-                    items={["ELA", "ETH", "TRX"]}
+                    items={["ETH", "ELA"]}
                     onBridgeChange={(v: string) => {
                       const bridge = v.toLowerCase();
                       store.set("selectedBridge", bridge);
                       if (bridge === selectedPair) {
-                        console.log("Same asset detected switching pair menu");
                         if (bridge === "eth") {
                           store.set("selectedPair", "ela");
                         }
                         if (bridge === "ela") {
                           store.set("selectedPair", "eth");
-                        }
-                        if (bridge === "trx") {
-                          store.set("selectedPair", "ela");
                         }
                       }
                     }}

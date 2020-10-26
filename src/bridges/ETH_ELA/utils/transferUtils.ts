@@ -26,107 +26,6 @@ export const handleBridgeMode = function(confirmTx: any) {
 
 }
 
-export const nativeTransfer = async function(confirmTx: any, contracts: any) {
-    const store = getStore();
-    const web3 = store.get("localWeb3")
-    const sourceMediator = contracts.source
-    const from = confirmTx.sourceAddress
-    // const recipient = confirmTx.destAddress
-    const value = web3.utils.toWei(String(confirmTx.amount), "ether")
-
-    store.set("transactionType", "relay")
-    store.set("waitingApproval", true)
-
-    if (confirmTx.sourceAsset === 'eth') {
-        const mediatorConfs = 8
-        store.set("confirmationTotal", mediatorConfs)
-
-        store.set("transactionType", "relay")
-        store.set("waitingApproval", true)
-        await web3.eth.sendTransaction({
-            from: from, to: sourceMediator, value: value
-        }, (error: any, hash: any) => {
-            if (error) {
-                if (error.code === 4001) {
-                    store.set("waitingApproval", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("waitingApproval", false)
-                    store.set("unknownError", true)
-                }
-                return console.error(error);
-            } else {
-                // return callback(hash);
-                store.set("sourceTxID", hash)
-            }
-        })
-            .on("transactionHash", (tx: any) => {
-                store.set("waitingApproval", false);
-                store.set("confirmationProgress", true);
-            })
-            .on('receipt', function(receipt: any) {
-                console.log('receipt')
-                console.log(receipt)
-            })
-            .on('confirmation', function(confirmationNumber: number, receipt: any) {
-                updateRelayConfirmations(confirmationNumber, mediatorConfs);
-                detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork)
-            })
-            .on('error', function(error: any) {
-                if (error.code === 4001) {
-                    store.set("confirmationProgress", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("confirmationProgress", false)
-                    store.set("unknownError", true)
-                }
-            })
-
-    } else if (confirmTx.sourceAsset === 'elaeth') {
-
-        const asset = TOKENS[confirmTx.sourceAsset]
-        const token = new web3.eth.Contract(asset.abi, asset.address);
-
-        const mediatorConfs = asset.confirmations
-        store.set("confirmationTotal", mediatorConfs)
-
-        await token.methods.transfer(contracts.source, value).send({ from }, (error: any, hash: any) => {
-            if (error) {
-                if (error.code === 4001) {
-                    store.set("waitingApproval", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("waitingApproval", false)
-                    store.set("unknownError", true)
-                }
-                return console.error(error);
-            } else {
-                // return callback(hash);
-                store.set("sourceTxID", hash)
-                store.set("transactionType", "approveConfs")
-            }
-        })
-            .on("transactionHash", (tx: any) => {
-                store.set("waitingApproval", false);
-                store.set("confirmationProgress", true);
-            })
-            .on('confirmation', function(confirmationNumber: number, receipt: any) {
-                updateRelayConfirmations(confirmationNumber, mediatorConfs);
-                detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork)
-            })
-            .on('error', function(error: any) {
-                if (error.code === 4001) {
-                    store.set("confirmationProgress", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("confirmationProgress", false)
-                    store.set("unknownError", true)
-                }
-            })
-    }
-
-}
-
 export const getMediatorContracts = function(confirmTx: any) {
     const store = getStore();
     const web3 = store.get("localWeb3")
@@ -154,6 +53,130 @@ export const getMediatorContracts = function(confirmTx: any) {
     }
 
     return contracts
+}
+
+
+export const nativeTransfer = async function(confirmTx: any, contracts: any) {
+    const store = getStore();
+    const web3 = store.get("localWeb3")
+    const from = confirmTx.sourceAddress
+    const recipient = confirmTx.destAddress
+    const value = web3.utils.toWei(String(confirmTx.amount), "ether")
+
+    const asset = TOKENS[confirmTx.sourceAsset]
+    const mediatorConfs = asset.confirmations
+    store.set("confirmationTotal", mediatorConfs)
+
+    console.log(contracts.sourceMediator)
+
+    if (confirmTx.sourceAsset === 'eth') {
+
+        store.set("transactionType", "relay")
+        store.set("waitingApproval", true)
+        await contracts.sourceMediator.methods.relayTokens(recipient).send({
+            from: from,
+            value: value,
+        }, (error: any, hash: any) => {
+            if (error) {
+                if (error.code === 4001) {
+                    store.set("waitingApproval", false)
+                    store.set("txRejected", true)
+                } else {
+                    store.set("waitingApproval", false)
+                    store.set("unknownError", true)
+                }
+                return console.error(error);
+            } else {
+                // return callback(hash);
+                store.set("sourceTxID", hash)
+            }
+        })
+            .on("transactionHash", (tx: any) => {
+                store.set("waitingApproval", false);
+                store.set("confirmationProgress", true);
+            })
+            .on('receipt', function(receipt: any) {
+                console.log('receipt')
+                console.log(receipt)
+            })
+            .on('confirmation', function(confirmationNumber: number, receipt: any) {
+                updateRelayConfirmations(confirmationNumber, mediatorConfs);
+                detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
+            })
+            .on('error', function(error: any) {
+                if (error.code === 4001) {
+                    store.set("confirmationProgress", false)
+                    store.set("txRejected", true)
+                } else {
+                    store.set("confirmationProgress", false)
+                    store.set("unknownError", true)
+                }
+            })
+
+    } else if (confirmTx.sourceAsset === 'elaeth') {
+
+        const asset = TOKENS[confirmTx.sourceAsset]
+        const token = new web3.eth.Contract(asset.abi, asset.address);
+
+        store.set("waitingApproval", true);
+        store.set("transactionType", "approve")
+        await token.methods.approve(contracts.source, value).send({ from }, (error: any, hash: any) => {
+            if (error) {
+                if (error.code === 4001) {
+                    store.set("waitingApproval", false)
+                    store.set("txRejected", true)
+                } else {
+                    store.set("waitingApproval", false)
+                    store.set("unknownError", true)
+                }
+                return console.error(error);
+            } else {
+                // return callback(hash);
+                store.set("sourceTxID", hash)
+                store.set("transactionType", "approveConfs")
+            }
+        })
+            .on('receipt', function(receipt: any) {
+                store.set("waitingApproval", false);
+            })
+
+        store.set("transactionType", "relay")
+        store.set("waitingApproval", true)
+        await contracts.sourceMediator.methods.relayTokens(recipient, value).send({ from }, (error: any, hash: any) => {
+            if (error) {
+                if (error.code === 4001) {
+                    store.set("waitingApproval", false)
+                    store.set("txRejected", true)
+                } else {
+                    store.set("waitingApproval", false)
+                    store.set("unknownError", true)
+                }
+                return console.error(error);
+            } else {
+                // return callback(hash);
+                store.set("sourceTxID", hash)
+                store.set("transactionType", "approveConfs")
+            }
+        })
+            .on("transactionHash", (tx: any) => {
+                store.set("waitingApproval", false);
+                store.set("confirmationProgress", true);
+            })
+            .on('confirmation', function(confirmationNumber: number, receipt: any) {
+                updateRelayConfirmations(confirmationNumber, mediatorConfs);
+                detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
+            })
+            .on('error', function(error: any) {
+                if (error.code === 4001) {
+                    store.set("confirmationProgress", false)
+                    store.set("txRejected", true)
+                } else {
+                    store.set("confirmationProgress", false)
+                    store.set("unknownError", true)
+                }
+            })
+    }
+
 }
 
 export const tokenTransfer = async function(confirmTx: any, contracts: any) {
@@ -242,7 +265,7 @@ export const relayTokens = async function(contracts: any, tokenAddress: string, 
         })
         .on('confirmation', function(confirmationNumber: number, receipt: any) {
             updateRelayConfirmations(confirmationNumber, mediatorConfs);
-            detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork)
+            detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "multi_amb_erc_erc")
         })
         .on('error', function(error: any) {
             if (error.code === 4001) {
@@ -273,51 +296,16 @@ export const updateRelayConfirmations = function(confirmationNumber: number, con
 const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time))
 const TIMEOUT = 360000
 
-export const detectExchangeFinished = async function(recipient: any, value: any, dest: string, destNetwork: string) {
+export const detectExchangeFinished = async function(recipient: any, value: any, dest: string, destNetwork: string, type: string) {
     const store = getStore();
     const web3 = new Web3(new Web3.providers.HttpProvider(SUPPORTED_RPC_URLS[destNetwork]))
-    const contract = new web3.eth.Contract([
-        {
-            "anonymous": false,
-            "inputs": [
-                { "indexed": true, "name": "recipient", "type": "address" },
-                { "indexed": false, "name": "value", "type": "uint256" },
-                { "indexed": true, "name": "messageId", "type": "bytes32" }
-            ],
-            "name": "TokensBridged",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                { "indexed": true, "name": "token", "type": "address" },
-                { "indexed": true, "name": "recipient", "type": "address" },
-                { "indexed": false, "name": "value", "type": "uint256" },
-                { "indexed": true, "name": "messageId", "type": "bytes32" }
-            ],
-            "name": "TokensBridged",
-            "type": "event"
-        },
-        {
-            "type": "event",
-            "name": "NewTokenRegistered",
-            "inputs": [
-                {
-                    "type": "address",
-                    "name": "foreignToken",
-                    "indexed": true
-                },
-                {
-                    "type": "address",
-                    "name": "homeToken",
-                    "indexed": true
-                }
-            ],
-            "anonymous": false
-        }
-    ], dest)
 
-    console.log(contract)
+    let abi = NATIVE_ERC_MEDIATOR_ABI
+    if (type === "multi_amb_erc_erc") {
+        abi = ERC_ERC_MEDIATOR_ABI
+    }
+    // Odd issue with importing mediator ABI. TokensBridged 3 vs 4 inputs
+    const contract = new web3.eth.Contract(abi, dest)
 
     let fromBlock = await web3.eth.getBlockNumber()
     const stopTime = Date.now() + TIMEOUT
@@ -343,3 +331,46 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
         await wait(4000);
     }
 }
+
+export const ERC_ERC_MEDIATOR_ABI: any = [
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "name": "token", "type": "address" },
+            { "indexed": true, "name": "recipient", "type": "address" },
+            { "indexed": false, "name": "value", "type": "uint256" },
+            { "indexed": true, "name": "messageId", "type": "bytes32" }
+        ],
+        "name": "TokensBridged",
+        "type": "event"
+    },
+    {
+        "type": "event",
+        "name": "NewTokenRegistered",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "foreignToken",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "homeToken",
+                "indexed": true
+            }
+        ],
+        "anonymous": false
+    }]
+
+export const NATIVE_ERC_MEDIATOR_ABI: any =
+    [{
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "name": "recipient", "type": "address" },
+            { "indexed": false, "name": "value", "type": "uint256" },
+            { "indexed": true, "name": "messageId", "type": "bytes32" }
+        ],
+        "name": "TokensBridged",
+        "type": "event"
+    }]
+

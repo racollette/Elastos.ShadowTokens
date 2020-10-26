@@ -1,5 +1,5 @@
 import { getStore } from "../../../services/storeService";
-import { CONVERT_MAP, NETWORK_TYPE, fetchTokenBalance } from "./walletUtils";
+import { CONVERT_MAP, fetchTokenBalance } from "./walletUtils";
 
 export const MIN_TX_AMOUNTS = {
     ela: 0.0035036,
@@ -147,6 +147,12 @@ export function switchOriginChain(selectedDirection: number) {
     const selectedAsset = store.get("selectedAsset")
     store.set("selectedAsset", CONVERT_MAP[selectedAsset]);
     store.set("convert.selectedFormat", CONVERT_MAP[CONVERT_MAP[selectedAsset]]);
-    store.set("localWeb3Network", NETWORK_TYPE[CONVERT_MAP[selectedAsset]])
     fetchTokenBalance(CONVERT_MAP[selectedAsset])
+
+    // Swap bridge direction
+    const bridge = store.get("selectedBridge")
+    const pair = store.get("selectedPair")
+    store.set("selectedBridge", pair)
+    store.set("selectedPair", bridge)
+
 }

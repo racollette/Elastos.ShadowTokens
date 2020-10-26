@@ -21,7 +21,7 @@ import { TOKENS } from '../tokens';
 import { switchOriginChain } from "./txUtils";
 
 // used for montoring balances
-let walletDataInterval: any = null;
+// let walletDataInterval: any = null;
 
 // Supported wallets
 export const WALLET_ICON_MAP: { [key in string]: string } = {
@@ -92,19 +92,18 @@ export const NETWORK_MAP: { [key in string]: string } = {
 
 // Development networks
 export const NETWORK_TYPE: { [key in string]: string } = {
-    ela: "Elastos mainnet",
-    // eth: "Ethereum mainnet",
+    ela: "Elastos testnet",
     eth: "Kovan testnet",
     usdt: "Kovan testnet",
-    dai: "Ethereum mainnet",
-    usdc: "Ethereum mainnet",
+    dai: "Kovan testnet",
+    usdc: "Kovan testnet",
     main: "Kovan testnet",
     ethela: "Kovan testnet",
-    elaeth: "Elastos mainnet",
-    elausdt: "Elastos mainnet",
-    eladai: "Elastos mainnet",
-    elausdc: "Elastos mainnet",
-    elamain: "Elastos mainnet"
+    elaeth: "Elastos testnet",
+    elausdt: "Elastos testnet",
+    eladai: "Elastos testnet",
+    elausdc: "Elastos testnet",
+    elamain: "Elastos testnet",
 };
 
 export const ASSET_CONVERSION_TYPES: { [key in string]: string } = {
@@ -141,6 +140,8 @@ export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
     1: 'Ethereum mainnet',
     3: 'Ropsten',
     4: 'Rinkeby',
+    20: 'Elastos mainnet',
+    21: 'Elastos testnet', // testnet
     30: 'RSK mainnet',
     31: 'RSK testnet',
     42: 'Kovan testnet',
@@ -155,6 +156,12 @@ export const SUPPORTED_NETWORK_NAMES: { [key in string]: string } = {
     private: 'Unknown',
     elastosMainnet: 'Elastos mainnet',
     elastosTestnet: 'Elastos mainnet',
+}
+
+export const init = function() {
+    const store = getStore();
+    const initialAsset = store.get("selectedAsset")
+    fetchTokenBalance(initialAsset)
 }
 
 export const getNetworkName = function(id: any, type: string) {
@@ -222,20 +229,22 @@ export const initLocalWeb3 = async function(type?: any) {
             if (!web3.currentProvider) return;
             accounts = await web3.eth.getAccounts();
             netId = await web3.eth.net.getId();
+            network = SUPPORTED_NETWORK_IDS[netId]
+
             // network = getNetworkName(netId, "id")
-            let networkId = await web3.eth.net.getNetworkType()
+            // let networkId = await web3.eth.net.getNetworkType()
             // console.log('netId', netId)
             // console.log('networkId', networkId)
-            if (netId === 20 && networkId === "private") {
-                networkId = "elastosMainnet"
-                network = getNetworkName(networkId, "name")
-            } else if (netId === 21 && networkId === "private") {
-                networkId = "elastosTestnet"
-                network = getNetworkName(networkId, "name")
-            } else {
-                network = getNetworkName(netId, "id")
-                console.log(network)
-            }
+            // if (netId === 20 && networkId === "private") {
+            //     networkId = "elastosMainnet"
+            //     network = getNetworkName(networkId, "name")
+            // } else if (netId === 21 && networkId === "private") {
+            //     networkId = "elastosTestnet"
+            //     network = getNetworkName(networkId, "name")
+            // } else {
+            //     network = getNetworkName(netId, "id")
+            //     console.log(network)
+            // }
             // } else if (type === "mew-connect") {
             //     const chainId = selectedNetwork === "testnet" ? 42 : 1;
             //     const jsonRpcUrl = `wss://${
@@ -278,18 +287,8 @@ export const initLocalWeb3 = async function(type?: any) {
             if (!web3.currentProvider) return;
             accounts = await web3.eth.getAccounts();
             netId = await web3.eth.net.getId();
-            // network = getNetworkName(netId, "id")
-            let networkId = await web3.eth.net.getNetworkType()
-            if (netId === 20 && networkId === "private") {
-                networkId = "elastosMainnet"
-                network = getNetworkName(networkId, "name")
-            } else if (netId === 21 && networkId === "private") {
-                networkId = "elastosTestnet"
-                network = getNetworkName(networkId, "name")
-            } else {
-                network = getNetworkName(netId, "id")
-                console.log(network)
-            }
+            network = SUPPORTED_NETWORK_IDS[netId]
+
         } else if (type === "Elaphant") {
             console.log('Elaphant wallet not yet supported')
             return
@@ -320,21 +319,22 @@ export const initLocalWeb3 = async function(type?: any) {
     store.set("walletConnecting", false);
     store.set("selectedWallet", true);
     store.set("convert.destinationValid", true);
-    updateBalance();
+    fetchTokenBalance(store.get("selectedAsset"))
     return;
 };
 
 export const setBridgeDirection = async function(netId: number) {
     const store = getStore();
     const selectedDirection = store.get("convert.selectedDirection")
+    const selectedAsset = store.get("selectedAsset")
     // Set default transfer direction
     switch (netId) {
         case 42:
-            if (selectedDirection === 0) return
+            if (selectedDirection === 0) { fetchTokenBalance(selectedAsset); return }
             switchOriginChain(selectedDirection)
             break
         case 21:
-            if (selectedDirection === 1) return
+            if (selectedDirection === 1) { fetchTokenBalance(selectedAsset); return }
             switchOriginChain(selectedDirection)
             break
     }
@@ -353,55 +353,38 @@ export const clearWeb3 = async function() {
     store.set("selectedWallet", false);
 }
 
-export const updateMarketData = async function() {
-    console.log('updateMarketData')
+export const fetchTokenBalance = async function(asset: any) {
+    const token = TOKENS[asset]
+    fetchTokenPrice(token)
+    if (!token) return
+
     const store = getStore();
 
-    try {
-        const eth = await fetch(`https://api.coincap.io/v2/assets/ethereum`, {
-            method: "GET",
-        });
+    const web3 = store.get("localWeb3");
+    const walletAddress = store.get("localWeb3Address");
+    const walletNetwork = store.get("localWeb3Network");
 
-        store.set("ethusd", (await eth.json()).data.priceUsd);
-    } catch (e) {
-        console.error(e);
-        Sentry.withScope(function(scope) {
-            scope.setTag("error-hint", "updating market data");
-            Sentry.captureException(e);
-        });
+    if (!web3 || !walletAddress) return
+
+    // enable in prod
+    if (NETWORK_TYPE[asset] !== walletNetwork) return
+
+    // if native coin
+    if (!token.address) {
+        const coinBal = await web3.eth.getBalance(walletAddress)
+        store.set(`${token.id}Balance`, Number(web3.utils.fromWei(coinBal)).toFixed(4));
+        return
     }
 
-    try {
-        const ela = await fetch(`https://api.coincap.io/v2/assets/elastos`, {
-            method: "GET",
-        });
+    // if token
+    const tokenContract = new web3.eth.Contract(token.abi, token.address);
+    const tokenBal = await tokenContract.methods.balanceOf(walletAddress).call();
+    store.set(`${token.id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(4));
 
-        store.set("elausd", (await ela.json()).data.priceUsd);
-    } catch (e) {
-        console.error(e);
-        Sentry.withScope(function(scope) {
-            scope.setTag("error-hint", "updating market data");
-            Sentry.captureException(e);
-        });
-    }
-
-    // try {
-    //     const usdt = await fetch(`https://api.coincap.io/v2/assets/tether`, {
-    //         method: "GET",
-    //     });
-
-    //     store.set("usdtusd", (await usdt.json()).data.priceUsd);
-    // } catch (e) {
-    //     console.error(e);
-    //     Sentry.withScope(function(scope) {
-    //         scope.setTag("error-hint", "updating market data");
-    //         Sentry.captureException(e);
-    //     });
-    // }
-};
+    store.set("loadingBalances", false);
+}
 
 export const fetchTokenPrice = async function(token: any) {
-    console.log('updateMarketData')
     const store = getStore();
 
     if (token.priceFeed.length === 0) return
@@ -410,107 +393,25 @@ export const fetchTokenPrice = async function(token: any) {
             method: "GET",
         });
         store.set(`${token.priceTicker}usd`, (await price.json()).data.priceUsd);
-        console.log('price object', price)
     } catch (e) {
         console.error(e);
     }
 }
 
-export const fetchTokenBalance = async function(asset: any) {
-    const store = getStore();
-
-    const web3 = store.get("localWeb3");
-    const walletAddress = store.get("localWeb3Address");
-    // const walletNetwork = store.get("localWeb3Network");
-    if (!web3 || !walletAddress) {
-        return;
-    }
-    // Enable in prod
-    // if (NETWORK_TYPE[asset] !== walletNetwork) return
-
-    const token = TOKENS[asset]
-    if (!token) return
-
-    fetchTokenPrice(token)
-    const tokenContract = new web3.eth.Contract(token.abi, token.address);
-    const tokenBal = await tokenContract.methods.balanceOf(walletAddress).call();
-    store.set(`${token.id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(2));
-}
-
-export const updateBalance = async function() {
-    console.log('Update Balances')
-    const store = getStore();
-
-    const web3 = store.get("localWeb3");
-    const walletAddress = store.get("localWeb3Address");
-    const walletNetwork = store.get("localWeb3Network");
-    // const USDTAddress = store.get("USDTAddress");
-
-    if (!web3 || !walletAddress) {
-        return;
-    }
-
-    if (walletNetwork === "Ethereum mainnet" || walletNetwork === "Kovan testnet" || walletNetwork === "Rinkeby") {
-        const ethBal = await web3.eth.getBalance(walletAddress);
-        console.log(ethBal)
-        console.log('ETH BALANACE', ethBal)
-        store.set("ETHBalance", Number(web3.utils.fromWei(ethBal)).toFixed(2));
-    } else if (walletNetwork === "Elastos mainnet" || walletNetwork === "Elastos testnet") {
-        const elaBal = await web3.eth.getBalance(walletAddress);
-        console.log('ELA BALANACE', elaBal)
-        store.set("ELABalance", Number(web3.utils.fromWei(elaBal)).toFixed(2));
-    }
-
-
-    // Mana test
-    // const usdt = new web3.eth.Contract(ERC20_ABI, "0x0f5d2fb29fb7d3cfee444a200298f468908cc942");
-    // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
-    // store.set("USDTBalance", Number(web3.utils.fromWei(usdtBal)).toFixed(4));
-
-    // Enigma test
-    // const usdt = new web3.eth.Contract(ERC20_ABI, "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4");
-    // console.log(usdt)
-    // const usdtBal = await usdt.methods.balanceOf(walletAddress).call();
-    // store.set("USDTBalance", Number(usdtBal / (Math.pow(10, 8))).toFixed(4));
-
-    // store.set("USDTBalance", Number(parseInt(usdtBal.toString()) / 10 ** 8).toFixed(8));
-    store.set("loadingBalances", false);
-
-    updateMarketData();
-};
-
-export const watchWalletData = async function() {
-    if (walletDataInterval) {
-        clearInterval(walletDataInterval);
-    }
-    // await updateAllowance()
-    await updateBalance();
-    walletDataInterval = setInterval(async () => {
-        // await updateAllowance()
-        await updateBalance();
-    }, 10 * 1000);
-};
-
-export const initDataWeb3 = async function() {
-    const store = getStore();
-    const network = store.get("selectedNetwork");
-    store.set(
-        "dataWeb3",
-        new Web3(
-            `https://${
-            network === "testnet" ? "rinkeby" : "mainnet"
-            }.infura.io/v3/bd80ce1ca1f94da48e151bb6868bb150`
-        )
-    );
-
-};
-
-// export const setNetwork = async function(network: any) {
-//     const store = getStore();
-//     setAddresses.bind(this)();
+// export const watchWalletData = async function() {
+//     if (walletDataInterval) {
+//         clearInterval(walletDataInterval);
+//     }
+//     // await updateAllowance()
+//     await updateBalance();
+//     walletDataInterval = setInterval(async () => {
+//         // await updateAllowance()
+//         await updateBalance();
+//     }, 10 * 1000);
 // };
 
 export const setListener = async function(web3: any) {
+    const store = getStore();
     // @ts-ignore
     if ((!web3.currentProvider as any).on) return;
     // @ts-ignore FIXME: provide propper provider type
@@ -518,11 +419,14 @@ export const setListener = async function(web3: any) {
     if (listeningProvider.on) {
         // listen for changes
         listeningProvider.on("accountsChanged", async () => {
+            clearWeb3()
             initLocalWeb3()
         });
         listeningProvider.on("chainChanged", async () => {
             // window.location.reload();
             const netId = await web3.eth.net.getId();
+            store.set("localWeb3Network", SUPPORTED_NETWORK_IDS[netId])
+            // store.set("localWeb3Network", NETWORK_TYPE[CONVERT_MAP[selectedAsset]])
             setBridgeDirection(netId)
         });
         // listeningProvider.on("disconnected", async () => {
