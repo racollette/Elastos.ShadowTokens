@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 
-import { MINI_ICON_MAP, NAME_MAP } from "../bridges/ETH_ELA/utils/walletUtils";
+import { TOKENS } from "../bridges/ETH_ELA/tokens";
 
 const NoCapsButton = withStyles({
   root: {
@@ -66,7 +66,7 @@ type Balances = {
 
 interface Props extends Balances {
   onCurrencyChange: (newCurrency: string) => void;
-  items: Array<keyof typeof NAME_MAP>;
+  items: any;
   className: string;
   classes: { [key in string]: string };
   active?: string;
@@ -106,9 +106,7 @@ class CurrencySelect extends React.Component<Props> {
 
   render() {
     const { classes, items, active } = this.props;
-
     const { open } = this.state;
-
     const selected = active || items[0];
 
     return (
@@ -123,7 +121,7 @@ class CurrencySelect extends React.Component<Props> {
         >
           <Grid>
             <img
-              src={MINI_ICON_MAP[selected.toLowerCase()]}
+              src={TOKENS[selected.toLowerCase()].icon}
               alt={selected}
               className={classes.icon}
             />
@@ -139,8 +137,8 @@ class CurrencySelect extends React.Component<Props> {
           open={open}
           onClose={this.handleClose.bind(this)}
         >
-          {items.map((i, index) => {
-            const balance = this.props[`${i}Balance`];
+          {items.map((i: any, index: any) => {
+            // const balance = this.props[`${i.sourceID}Balance`];
 
             return (
               <MenuItem
@@ -148,26 +146,21 @@ class CurrencySelect extends React.Component<Props> {
                 onClick={() => {
                   this.handleClose.bind(this)({
                     target: {
-                      value: i,
+                      value: i.sourceID,
                     },
                   });
                 }}
                 key={index}
-                value={i}
+                value={i.symbol}
               >
                 <div>
-                  <img
-                    src={MINI_ICON_MAP[i.toLowerCase()]}
-                    alt={i}
-                    className={classes.icon}
-                  />
+                  <img src={i.icon} alt={i.name} className={classes.icon} />
                 </div>
                 <Grid container direction="column" alignItems="flex-start">
-                  <span>{i}</span>
+                  <span>{i.symbol}</span>
                   <span className={classes.balance}>
-                    {balance
-                      ? `${balance} ${i}`
-                      : NAME_MAP[i.toLowerCase() as keyof typeof NAME_MAP]}
+                    {i.name}
+                    {/* {balance ? `${balance} ${i.name}` : i.name} */}
                   </span>
                 </Grid>
               </MenuItem>

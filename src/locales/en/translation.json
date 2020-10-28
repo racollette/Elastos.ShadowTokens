@@ -61,6 +61,9 @@
   "Progress.Sent": "Transfer request sent",
   "Progress.Blocks": "Waiting for block confirmations...",
   "Progress.Oracles": "Oracles validating transaction...",
+  "Progress.Busy.Title": "Oracles Busy",
+  "Progress.Busy.Message": "The transfer is taking longer than expected. Please monitor the block explorer for confirmation.",
+
   "Progress.Accept": "OKAY",
 
   "Warning.Title": "Warning",

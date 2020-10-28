@@ -1,12 +1,9 @@
 import React from "react";
 import { createStore, withStore } from "@spyna/react-store";
-import queryString from "query-string";
 import { ThemeProvider, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import BridgeContainer from "./containers/BridgeContainer";
 import NavContainer from "./containers/NavContainer";
-// import FooterContainer from "./containers/FooterContainer";
-// import NetworkModalContainer from "./containers/NetworkModalContainer";
 import WalletModal from "./components/WalletModal";
 import TransferContainer from "./containers/TransferContainer";
 import ConfirmContainer from "./containers/ConfirmContainer";
@@ -15,6 +12,7 @@ import { storeListener } from "./services/storeService";
 import theme from "./theme/theme";
 import { BRIDGE_SYMBOL_MAP } from "./bridges/bridges";
 
+import { INITIAL_STATE } from "./bridges/ETH_ELA/utils/config";
 import { init } from "./bridges/ETH_ELA/utils/walletUtils";
 
 require("dotenv").config();
@@ -53,83 +51,6 @@ const styles = () => ({
   },
 });
 
-const initialState = {
-  // networking
-  selectedNetwork: "",
-  queryParams: {},
-
-  // wallet & web3
-  dataWeb3: null,
-  localWeb3: null,
-  localWeb3Address: "",
-  localWeb3Network: "",
-  walletConnecting: false,
-  loadingBalances: true,
-  ethBalance: 0,
-  fees: null,
-  selectedWalletType: "MetaMask",
-
-  // bridge/wallet selection
-  selectedBridge: "eth",
-  selectedPair: "ela",
-  confirmBridge: false,
-  selectedWallet: false,
-  selectedTab: 1,
-  selectedAsset: "eth",
-
-  // modals
-  localesOpen: false,
-  showWalletModal: false,
-  showNetworkMenu: false,
-  showDepositModal: false,
-  depositDisclosureChecked: false,
-  showCancelModal: false,
-  cancelModalTx: null,
-  showGatewayModal: false,
-  gatewayModalTx: null,
-  showAboutModal: false,
-
-  // errors
-  noWeb3: false,
-  wrongNetwork: false,
-  insufficientBalance: false,
-  belowMinTxLimit: false,
-  exceedsMaxTxLimit: false,
-  txRejected: false,
-  unknownError: false,
-
-  // warnings
-  walletConnectWarning: false,
-
-  // awaiting user
-  waitingApproval: false,
-
-  // confirmations
-  confirmTx: null,
-  confirmAction: "",
-  confirmationNumber: 0,
-  confirmationTotal: null,
-  confirmationError: null as string | null,
-  confirmationProgress: false,
-  validatorStep: false,
-  transactionType: "",
-  transferSuccess: false,
-
-  // contracts
-  _contractInput: null,
-
-  // txIDs
-  sourceTxID: null as string | null,
-  destTxID: null as string | null,
-
-  // conversions
-  "convert.transactions": [],
-  "convert.selectedFormat": "elaeth",
-  "convert.selectedDirection": 0,
-  "convert.amount": "",
-  "convert.destination": "",
-};
-
 interface Props {
   store: any;
   classes: { [key in string]: string };
@@ -142,11 +63,7 @@ class AppWrapper extends React.Component<Props> {
   }
 
   async componentDidMount() {
-    const { store } = this.props;
-    const params = queryString.parse(window.location.search);
-    store.set("queryParams", params);
     init();
-    // initLocalWeb3();
   }
 
   render() {
@@ -197,9 +114,15 @@ class AppWrapper extends React.Component<Props> {
                       if (bridge === selectedPair) {
                         if (bridge === "eth") {
                           store.set("selectedPair", "ela");
+                          store.set("selectedAsset", "eth");
+                          store.set("convert.selectedFormat", "elaeth");
+                          store.set("convert.selectedDirection", 0);
                         }
                         if (bridge === "ela") {
                           store.set("selectedPair", "eth");
+                          store.set("selectedAsset", "ela");
+                          store.set("convert.selectedFormat", "ethela");
+                          store.set("convert.selectedDirection", 1);
                         }
                       }
                     }}
@@ -257,4 +180,4 @@ class App extends React.Component<Props> {
   }
 }
 
-export default createStore(withStyles(styles)(App), initialState);
+export default createStore(withStyles(styles)(App), INITIAL_STATE);

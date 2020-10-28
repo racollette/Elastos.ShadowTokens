@@ -9,20 +9,12 @@ import Release from "../assets/unlock.svg";
 import Mint from "../assets/mint.svg";
 import Burn from "../assets/burn.svg";
 import {
+  convertWei,
   gatherFeeData,
   switchOriginChain,
-  MIN_TX_AMOUNTS,
 } from "../bridges/ETH_ELA/utils/txUtils";
-import {
-  MINI_ICON_MAP,
-  SYMBOL_MAP,
-  CONVERT_MAP,
-  NETWORK_MAP,
-  NETWORK_TYPE,
-  ASSET_CONVERSION_TYPES,
-  fetchTokenBalance,
-} from "../bridges/ETH_ELA/utils/walletUtils";
-import { TOKENS } from "../bridges/ETH_ELA/tokens";
+import { fetchTokenBalance } from "../bridges/ETH_ELA/utils/walletUtils";
+import { TOKENS, ETH_DEFAULTS, ELA_DEFAULTS } from "../bridges/ETH_ELA/tokens";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -197,22 +189,11 @@ class TransferContainer extends React.Component<any> {
     this.state = props.store.getState();
   }
 
-  getBalance(asset: string) {
-    console.log("getBalance");
-    const { store } = this.props;
-    console.log(store.get("ethBalance"));
-    return store.get(`${asset}Balance`);
-  }
-
   isSelectedNetwork() {
     const { store } = this.props;
-    const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
-      "selectedAsset"
-    );
+    const selectedAsset = store.get("selectedAsset");
     const localWeb3Network = store.get("localWeb3Network");
-    console.log(localWeb3Network);
-    const targetWeb3Network = NETWORK_TYPE[selectedAsset];
-    console.log(targetWeb3Network);
+    const targetWeb3Network = TOKENS[selectedAsset].network;
     const correctNetwork = localWeb3Network === targetWeb3Network;
 
     if (!correctNetwork) {
@@ -224,10 +205,8 @@ class TransferContainer extends React.Component<any> {
 
   isBalanceEnough() {
     const { store } = this.props;
-    const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
-      "selectedAsset"
-    );
-    let balance = Number(store.get(SYMBOL_MAP[selectedAsset] + "Balance"));
+    const selectedAsset = store.get("selectedAsset");
+    let balance = Number(store.get(TOKENS[selectedAsset].sourceID + "Balance"));
     if (isNaN(balance)) balance = 0;
     const inputAmount = Number(store.get("convert.amount"));
 
@@ -249,23 +228,21 @@ class TransferContainer extends React.Component<any> {
       receiveAddress = inputAddress;
     }
     const network = store.get("selectedNetwork");
-    const format: keyof typeof NETWORK_MAP = store.get(
-      "convert.selectedFormat"
-    );
-    const asset: keyof typeof NETWORK_MAP = store.get("selectedAsset");
+    const format = store.get("convert.selectedFormat");
+    const asset = store.get("selectedAsset");
 
     const tx = {
       id: "tx-" + Math.floor(Math.random() * 10 ** 16),
-      type: ASSET_CONVERSION_TYPES[asset],
+      type: TOKENS[asset].transferType,
       instant: false,
       sourceAddress: localWeb3Address,
       sourceAsset: asset,
-      sourceNetwork: NETWORK_MAP[asset],
+      sourceNetwork: TOKENS[asset].network,
       sourceNetworkVersion: network,
       destAddress:
         receiveAddress.length > 0 ? receiveAddress : localWeb3Address,
       destAsset: format,
-      destNetwork: NETWORK_MAP[format],
+      destNetwork: TOKENS[format].network,
       destNetworkVersion: network,
       amount: Number(amount),
       error: false,
@@ -273,7 +250,7 @@ class TransferContainer extends React.Component<any> {
     };
 
     store.set("confirmTx", tx);
-    store.set("confirmAction", ASSET_CONVERSION_TYPES[format]);
+    store.set("confirmAction", TOKENS[format].transferType);
   }
 
   render() {
@@ -282,22 +259,17 @@ class TransferContainer extends React.Component<any> {
     // Transaction parameters
     const selectedWallet = store.get("selectedWallet");
     const selectedDirection = store.get("convert.selectedDirection");
-    const selectedFormat: keyof typeof SYMBOL_MAP = store.get(
-      "convert.selectedFormat"
-    );
-    const selectedAsset: keyof typeof MIN_TX_AMOUNTS = store.get(
-      "selectedAsset"
-    );
-    const destAsset = selectedFormat;
+    const selectedAsset = store.get("selectedAsset");
+    const destAsset = store.get("convert.selectedFormat");
     const destAssetName = TOKENS[destAsset].name;
 
     let assetConvertType = "Mint";
     let sourceAssetAction = "Lock";
-    if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
+    if (TOKENS[selectedAsset].transferType === "release") {
       assetConvertType = "Release";
       sourceAssetAction = "Burn";
     }
-    const balance = store.get(SYMBOL_MAP[selectedAsset] + "Balance");
+    const balance = store.get(TOKENS[selectedAsset].sourceID + "Balance");
     const amount = store.get("convert.amount");
     let total = Number(store.get("convert.conversionTotal")).toFixed(4);
 
@@ -311,7 +283,7 @@ class TransferContainer extends React.Component<any> {
     }
 
     let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
-    if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
+    if (TOKENS[selectedAsset].transferType === "release") {
       usdValue = Number(
         store.get(`${TOKENS[selectedAsset].destAsset}usd`) * amount
       ).toFixed(2);
@@ -333,12 +305,12 @@ class TransferContainer extends React.Component<any> {
     const locale = i18n.language;
     const placeholder =
       locale === "en"
-        ? `Enter ${NETWORK_MAP[destAsset]} Address`
-        : `输入 ${NETWORK_MAP[destAsset]} 地址`;
+        ? `Enter ${TOKENS[destAsset].network} Address`
+        : `输入 ${TOKENS[destAsset].network} 地址`;
     const inputError =
       locale === "en"
-        ? `Please enter a valid ${NETWORK_MAP[destAsset]} address`
-        : `请输入一个有效的 ${NETWORK_MAP[destAsset]} 地址`;
+        ? `Please enter a valid ${TOKENS[destAsset].network} address`
+        : `请输入一个有效的 ${TOKENS[destAsset].network} 地址`;
 
     // const allowance = store.get("convert.adapterWbtcAllowance");
     // const hasAllowance = Number(amount) <= Number(allowance);
@@ -397,7 +369,6 @@ class TransferContainer extends React.Component<any> {
                   <Grid container className={classes.optionRow2}>
                     <Grid item xs={7}>
                       <BigCurrencyInput
-                        active={SYMBOL_MAP[selectedAsset]}
                         className={classes.currencySelect}
                         usdValue={usdValue}
                         value={amount}
@@ -411,60 +382,24 @@ class TransferContainer extends React.Component<any> {
                     </Grid>
                     <Grid item xs={5}>
                       <Grid container justify="flex-end">
-                        {selectedDirection === 0 ? (
-                          <CurrencySelect
-                            active={SYMBOL_MAP[selectedAsset]}
-                            className={classes.currencySelect}
-                            items={[
-                              "ETH",
-                              "ethELA",
-                              "USDT",
-                              "DAI",
-                              "USDC",
-                              "MAIN",
-                            ]}
-                            onCurrencyChange={(v: string) => {
-                              const asset = v.toLowerCase();
-                              if (asset === "ethela") {
-                                store.set(
-                                  "convert.selectedFormat",
-                                  `${asset.replace("eth", "")}`
-                                );
-                                store.set("selectedAsset", asset);
-                              } else {
-                                store.set(
-                                  "convert.selectedFormat",
-                                  `ela${asset}`
-                                );
-                                store.set("selectedAsset", asset);
-                              }
-                              gatherFeeData();
-                              fetchTokenBalance(asset);
-                            }}
-                          />
-                        ) : (
-                          <CurrencySelect
-                            active={SYMBOL_MAP[selectedAsset]}
-                            className={classes.currencySelect}
-                            items={[
-                              "ELA",
-                              "elaETH",
-                              "elaUSDT",
-                              "elaDAI",
-                              "elaUSDC",
-                              "elaMAIN",
-                            ]}
-                            // ETHBalance={store.get("ethbal")}
-                            onCurrencyChange={(v: string) => {
-                              const asset = v.toLowerCase();
-                              const destAsset = CONVERT_MAP[asset];
-                              store.set("selectedAsset", asset);
-                              store.set("convert.selectedFormat", destAsset);
-                              fetchTokenBalance(asset);
-                              gatherFeeData();
-                            }}
-                          />
-                        )}
+                        <CurrencySelect
+                          active={TOKENS[selectedAsset].symbol}
+                          className={classes.currencySelect}
+                          items={
+                            selectedDirection === 0
+                              ? ETH_DEFAULTS
+                              : ELA_DEFAULTS
+                          }
+                          onCurrencyChange={(v: string) => {
+                            store.set("selectedAsset", TOKENS[v].sourceID);
+                            store.set(
+                              "convert.selectedFormat",
+                              TOKENS[v].destID
+                            );
+                            fetchTokenBalance(v);
+                            gatherFeeData();
+                          }}
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -484,7 +419,7 @@ class TransferContainer extends React.Component<any> {
                   >
                     <Typography className={classes.sourceLabel}>
                       <Translate text="Transfer.From" />
-                      &nbsp;{NETWORK_MAP[selectedAsset]}
+                      &nbsp;{TOKENS[selectedAsset].network}
                       {/* &nbsp;
                       <Translate text="Transfer.Mainnet" /> */}
                     </Typography>
@@ -494,16 +429,11 @@ class TransferContainer extends React.Component<any> {
                         color={selectedDirection ? "secondary" : "primary"}
                         fontSize="large"
                       />
-                      {/* <img
-                          src={SwitchLogo}
-                          className={classes.switchLogo}
-                          alt="Switch Direction"
-                        /> */}
                     </Grid>
                     <Grid container justify="center">
                       <Typography className={classes.destLabel}>
                         <Translate text="Transfer.To" />
-                        &nbsp;{NETWORK_MAP[destAsset]}
+                        &nbsp;{TOKENS[destAsset].network}
                         {/* &nbsp;
                         <Translate text="Transfer.Mainnet" /> */}
                       </Typography>
@@ -534,9 +464,9 @@ class TransferContainer extends React.Component<any> {
                       className={classes.padding}
                       justify="flex-end"
                     >
-                      <img src={MINI_ICON_MAP[destAsset]} alt={destAsset} />
+                      <img src={TOKENS[destAsset].icon} alt={destAsset} />
                       <Typography className={classes.destAssetTicker}>
-                        {SYMBOL_MAP[destAsset]}
+                        {TOKENS[destAsset].symbol}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -655,6 +585,20 @@ class TransferContainer extends React.Component<any> {
                         fullWidth
                         className={classNames(classes.actionButton)}
                         onClick={() => {
+                          const minTx = TOKENS[selectedAsset].minTx;
+                          const value = convertWei(String(amount), "to");
+
+                          if (value < minTx) {
+                            store.set(
+                              "minTx",
+                              Number(convertWei(String(minTx), "from")).toFixed(
+                                2
+                              )
+                            );
+                            store.set("belowMinTxLimit", true);
+                            return;
+                          }
+
                           if (this.isSelectedNetwork()) {
                             this.isBalanceEnough();
                           }
@@ -666,7 +610,7 @@ class TransferContainer extends React.Component<any> {
                         <div>
                           <ErrorModal
                             currentNetwork={store.get("localWeb3Network")}
-                            targetNetwork={NETWORK_TYPE[selectedAsset]}
+                            targetNetwork={TOKENS[selectedAsset].network}
                             store={store}
                             errorType={"wrongNetwork"}
                           />

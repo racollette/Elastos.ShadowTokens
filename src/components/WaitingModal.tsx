@@ -4,11 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import theme from "../theme/theme";
 import DoubleArrow from "../assets/double-arrow.svg";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {
-  MINI_ICON_MAP,
-  WALLET_ICON_MAP,
-  SYMBOL_MAP,
-} from "../bridges/ETH_ELA/utils/walletUtils";
+import { WALLET_ICON_MAP } from "../bridges/ETH_ELA/utils/config";
+import { TOKENS } from "../bridges/ETH_ELA/tokens";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -180,10 +177,10 @@ const WaitingModal: React.FC<Props> = function (props) {
                 <div className={classes.container}>
                   <div className={classes.spacer} />
                   <div className={classes.walletIconContainer}>
-                    <img src={MINI_ICON_MAP[sourceAsset]} alt={sourceAsset} />
+                    <img src={TOKENS[sourceAsset].icon} alt={sourceAsset} />
                     <Typography className={classes.walletText}>
                       <Translate text="Waiting.ApproveSpend" />
-                      &nbsp;{SYMBOL_MAP[sourceAsset]}
+                      &nbsp;{TOKENS[sourceAsset].symbol}
                     </Typography>
                   </div>
                   <div className={classes.spacer} />
@@ -199,10 +196,10 @@ const WaitingModal: React.FC<Props> = function (props) {
                 <div className={classes.container}>
                   <div className={classes.spacer} />
                   <div className={classes.walletIconContainer}>
-                    <img src={MINI_ICON_MAP[sourceAsset]} alt={sourceAsset} />
+                    <img src={TOKENS[sourceAsset].icon} alt={sourceAsset} />
                     <Typography className={classes.walletText}>
                       <Translate text="Waiting.SpendApproved1" />
-                      &nbsp;{SYMBOL_MAP[sourceAsset]}&nbsp;
+                      &nbsp;{TOKENS[sourceAsset].symbol}&nbsp;
                       <Translate text="Waiting.SpendApproved2" />
                     </Typography>
                   </div>
@@ -227,13 +224,11 @@ const WaitingModal: React.FC<Props> = function (props) {
                   <div className={classes.tokenMapContainer}>
                     <div className={classes.assetText}>
                       <Typography>{Number(amount).toFixed(2)}</Typography>
-                      <Typography>
-                        {SYMBOL_MAP[sourceAsset as keyof typeof SYMBOL_MAP]}
-                      </Typography>
+                      <Typography>{TOKENS[sourceAsset].symbol}</Typography>
                     </div>
                     <img
                       className={classes.assetIcon}
-                      src={MINI_ICON_MAP[sourceAsset]}
+                      src={TOKENS[sourceAsset].icon}
                       alt={sourceAsset}
                     />
                     <img
@@ -243,14 +238,12 @@ const WaitingModal: React.FC<Props> = function (props) {
                     />
                     <img
                       className={classes.assetIcon}
-                      src={MINI_ICON_MAP[destAsset]}
+                      src={TOKENS[destAsset].icon}
                       alt={destAsset}
                     />
                     <div className={classes.assetText}>
                       <Typography>{Number(total).toFixed(2)}</Typography>
-                      <Typography>
-                        {SYMBOL_MAP[destAsset as keyof typeof SYMBOL_MAP]}
-                      </Typography>
+                      <Typography>{TOKENS[destAsset].symbol}</Typography>
                     </div>
                   </div>
 

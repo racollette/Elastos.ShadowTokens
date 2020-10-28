@@ -1,64 +1,11 @@
 import { getStore } from "../../../services/storeService";
-import { CONVERT_MAP, fetchTokenBalance } from "./walletUtils";
-
-export const MIN_TX_AMOUNTS = {
-    ela: 0.0035036,
-    eth: 0.0035036,
-    usdt: 0.0035036,
-    dai: 0.0035036,
-    usdc: 0.0035036,
-    main: 0.0035036,
-    ethela: 0.0035036,
-    elaeth: 0.0035036,
-    elausdt: 0.0035036,
-    eladai: 0.0035036,
-    elausdc: 0.0035036,
-    elamain: 0.0035036,
-};
-
-// Percentage fees
-export const FEE_STRUCTURE: { [key in string]: number } = {
-    ela: 0.1,
-    eth: 0.1,
-    usdt: 0.1,
-    dai: 0.1,
-    usdc: 0.1,
-    main: 0.1,
-    ethela: 0.1,
-    elaeth: 0.1,
-    elausdt: 0.1,
-    eladai: 0.1,
-    elausdc: 0.1,
-    elamain: 0.1,
-}
-
-// Development, switch to mainnet in prod
-export const EXPLORER_URLS: { [key in string]: string } = {
-    ela: "https://explorer.elaeth.io", // https://explorer.elaeth.io/,
-    eth: "https://kovan.etherscan.io", // https://etherscan.io",
-    usdt: "https://kovan.etherscan.io",
-    dai: "https://etherscan.io",
-    usdc: "https://etherscan.io",
-    main: "https://kovan.etherscan.io",
-    ethela: "https://kovan.etherscan.io",
-    elaeth: "https://testnet.elaeth.io",
-    elausdt: "https://testnet.elaeth.io",
-    eladai: "https://explorer.elaeth.io",
-    elausdc: "https://explorer.elaeth.io",
-    elamain: "https://testnet.elaeth.io",
-}
-
-export const issueTx = function() {
-    const store = getStore();
-    store.set("confirmationError", null);
-    store.set("waitingApproval", true);
-    // const confirmTx = store.get("confirmTx");
-}
+import { EXPLORER_URLS } from "./config";
+import { fetchTokenBalance } from "./walletUtils";
+import { TOKENS } from "../tokens";
 
 export const windowBlocker = function(event: any) {
     // Cancel the event as stated by the standard.
     event.preventDefault();
-
     const msg =
         "WARNING: closing the browser window now may result in loss of funds. Are you sure?";
 
@@ -75,24 +22,30 @@ export const removeWindowBlocker = function() {
     window.removeEventListener("beforeunload", windowBlocker);
 };
 
-/**
- * Calculate Fees for a Transaction
- */
+export const convertWei = function(value: string, type: 'from' | 'to') {
+    const store = getStore();
+    const web3 = store.get("localWeb3")
+    switch (type) {
+        case 'from': {
+            return web3.utils.fromWei(value)
+        }
+        case 'to': {
+            return web3.utils.toWei(value)
+        }
+    }
+}
+
 export const gatherFeeData = async function() {
     const store = getStore();
     const amount = store.get("convert.amount");
     let selectedAsset = store.get("selectedAsset");
 
-    // const selectedDirection = store.get("convert.selectedDirection");
-    // const fixedFeeKey = selectedDirection ? "release" : "lock";
-    // const dynamicFeeKey = selectedDirection ? "burn" : "mint";
-
     if (!amount) {
         return;
     }
 
-    const fixedFee = Number(FEE_STRUCTURE[selectedAsset]) / 100
-    const feeFraction = (100 - Number(FEE_STRUCTURE[selectedAsset])) / 100
+    const fixedFee = TOKENS[selectedAsset].fee / 100
+    const feeFraction = (100 - TOKENS[selectedAsset].fee) / 100
 
     const total =
         Number(amount * feeFraction) > 0
@@ -105,7 +58,7 @@ export const gatherFeeData = async function() {
 
 export function getExplorerLink(network: 'source' | 'dest', type: 'transaction' | 'token' | 'address', txInputs: any, id: string): string {
     const symbol = txInputs[`${network}Asset`]
-    const prefix = EXPLORER_URLS[symbol]
+    const prefix = EXPLORER_URLS[TOKENS[symbol].network]
     switch (type) {
         case 'transaction': {
             return `${prefix}/tx/${id}`
@@ -129,9 +82,12 @@ export function restoreInitialState() {
     store.set("waitingApproval", false)
     store.set("confirmationProgress", false)
     store.set("confirmationNumber", 0)
-    store.set("validatorStep", false)
-    store.set("validatorProgress", 0)
+    store.set("transferInProgress", false)
+    store.set("confirming", false)
+    store.set("confirmationStep", 0)
     store.set("transferSuccess", false)
+    store.set("validatorTimeout", false)
+
 }
 
 export function switchOriginChain(selectedDirection: number) {
@@ -145,14 +101,13 @@ export function switchOriginChain(selectedDirection: number) {
     store.set("confirmTx", false)
     store.set("convert.amount", "")
     const selectedAsset = store.get("selectedAsset")
-    store.set("selectedAsset", CONVERT_MAP[selectedAsset]);
-    store.set("convert.selectedFormat", CONVERT_MAP[CONVERT_MAP[selectedAsset]]);
-    fetchTokenBalance(CONVERT_MAP[selectedAsset])
+    store.set("selectedAsset", TOKENS[selectedAsset].destID);
+    store.set("convert.selectedFormat", selectedAsset);
+    fetchTokenBalance(TOKENS[selectedAsset].destID)
 
     // Swap bridge direction
     const bridge = store.get("selectedBridge")
     const pair = store.get("selectedPair")
     store.set("selectedBridge", pair)
     store.set("selectedPair", bridge)
-
 }

@@ -62,6 +62,8 @@
   "Progress.Blocks": "等待区块链确认...",
   "Progress.Oracles": "见证人正在验证交易...",
   "Progress.Accept": "好的",
+  "Progress.Busy.Title": "Oracles Busy",
+  "Progress.Busy.Message": "The transfer is taking longer than expected. Please monitor the block explorer for confirmation.",
 
   "Warning.Title": "警告",
   "Warning.Message": "请注意，从其他区块链中检索基于Ethereum的资产需要一个能够切换网络的钱包。目前，这包括MetaMask等钱包。",

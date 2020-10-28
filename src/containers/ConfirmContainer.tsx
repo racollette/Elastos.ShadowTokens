@@ -14,12 +14,7 @@ import TxProgressModal from "../components/TxProgressModal";
 import ErrorModal from "../components/ErrorModal";
 import { Translate } from "../components/Translate";
 import theme from "../theme/theme";
-import {
-  abbreviateAddress,
-  MINI_ICON_MAP,
-  SYMBOL_MAP,
-  ASSET_CONVERSION_TYPES,
-} from "../bridges/ETH_ELA/utils/walletUtils";
+import { abbreviateAddress } from "../bridges/ETH_ELA/utils/walletUtils";
 import { handleBridgeMode } from "../bridges/ETH_ELA/utils/transferUtils";
 import { TOKENS } from "../bridges/ETH_ELA/tokens";
 
@@ -255,37 +250,6 @@ class ConfirmContainer extends React.Component<any> {
     store.set("depositModalTx", tx);
   }
 
-  async issueTx() {
-    const { store } = this.props;
-    store.set("confirmationError", null);
-    store.set("waitingApproval", true);
-    // const confirmTx = store.get("confirmTx");
-  }
-
-  /// Dummy timers for now
-  // trackConfirmations() {
-  //     const { store } = this.props;
-  //     let confirmationNumber = store.get("confirmationNumber");
-  //     const confirmationTotal = store.get("confirmationTotal");
-  //     let interval = setInterval(displayProgress, 2000);
-
-  //     function displayProgress() {
-  //         if (confirmationNumber === confirmationTotal) {
-  //             clearInterval(interval);
-  //             store.set("validatorStep", true);
-  //             setTimeout(() => {
-  //                 store.set("validatorProgress", 1);
-  //                 setTimeout(() => {
-  //                     store.set("transferSuccess", true);
-  //                 }, 2000);
-  //             }, 5000);
-  //         } else {
-  //             confirmationNumber++;
-  //             store.set("confirmationNumber", confirmationNumber);
-  //         }
-  //     }
-  // }
-
   render() {
     const { classes, store } = this.props;
 
@@ -302,7 +266,7 @@ class ConfirmContainer extends React.Component<any> {
     const total = Number(store.get("convert.conversionTotal")).toFixed(4);
     const canConvertTo = amount > 0.00010001;
 
-    const confirmationError = store.get("confirmationError");
+    // const confirmationError = store.get("confirmationError");
     const sourceAsset = confirmTx.sourceAsset;
     const sourceNetwork = confirmTx.sourceNetwork;
     const destAsset = confirmTx.destAsset;
@@ -315,18 +279,20 @@ class ConfirmContainer extends React.Component<any> {
     const sourceTxID = store.get("sourceTxID");
     const destTxID = store.get("destTxID");
 
-    const confirmationProgress = store.get("confirmationProgress");
     const confirmationNumber = store.get("confirmationNumber");
     const confirmationTotal = store.get("confirmationTotal");
 
-    const validatorStep = store.get("validatorStep");
-    const validatorProgress = store.get("validatorProgress");
-
-    const type = store.get("transactionType");
+    // Tx progress watcher
+    const transferInProgress = store.get("transferInProgress");
+    const confirming = store.get("confirming");
+    const confirmationStep = store.get("confirmationStep");
+    const validatorTimeout = store.get("validatorTimeout");
     const transferSuccess = store.get("transferSuccess");
 
+    const type = store.get("transactionType");
+
     let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
-    if (ASSET_CONVERSION_TYPES[selectedAsset] === "release") {
+    if (TOKENS[selectedAsset].transferType === "release") {
       usdValue = Number(
         store.get(`${TOKENS[selectedAsset].destAsset}usd`) * amount
       ).toFixed(2);
@@ -366,7 +332,7 @@ class ConfirmContainer extends React.Component<any> {
 
             <Typography variant="h4" className={classNames(classes[size])}>
               {Numeral(confirmTx.amount).format("0,0.00")}{" "}
-              {SYMBOL_MAP[sourceAsset as keyof typeof SYMBOL_MAP]}
+              {TOKENS[sourceAsset].symbol}
             </Typography>
 
             <Typography variant="body1">
@@ -399,8 +365,8 @@ class ConfirmContainer extends React.Component<any> {
                         <Translate text="Confirm.Asset" />
                       </Grid>
                       <Grid item xs={6}>
-                        <img alt={destAsset} src={MINI_ICON_MAP[destAsset]} />
-                        {SYMBOL_MAP[destAsset as keyof typeof SYMBOL_MAP]}
+                        <img alt={destAsset} src={TOKENS[destAsset].icon} />
+                        {TOKENS[destAsset].symbol}
                       </Grid>
                     </Grid>
 
@@ -427,12 +393,8 @@ class ConfirmContainer extends React.Component<any> {
                         <Translate text="Confirm.Fee" />
                       </Grid>
                       <Grid item xs={6} className={classes.amountCell}>
-                        <img
-                          alt={sourceAsset}
-                          src={MINI_ICON_MAP[sourceAsset]}
-                        />
-                        {serviceFee}{" "}
-                        {SYMBOL_MAP[sourceAsset as keyof typeof SYMBOL_MAP]}
+                        <img alt={sourceAsset} src={TOKENS[sourceAsset].icon} />
+                        {serviceFee} {TOKENS[sourceAsset].symbol}
                       </Grid>
                     </Grid>
 
@@ -442,9 +404,8 @@ class ConfirmContainer extends React.Component<any> {
                           <Translate text="Confirm.Receive" />
                         </Grid>
                         <Grid item xs={6} className={classes.amountCell}>
-                          <img alt={destAsset} src={MINI_ICON_MAP[destAsset]} />
-                          {total}{" "}
-                          {SYMBOL_MAP[destAsset as keyof typeof SYMBOL_MAP]}
+                          <img alt={destAsset} src={TOKENS[destAsset].icon} />
+                          {total} {TOKENS[destAsset].symbol}
                         </Grid>
                       </Grid>
                     </div>
@@ -474,6 +435,7 @@ class ConfirmContainer extends React.Component<any> {
                   >
                     <Translate text="Confirm.Start" />
                   </Button>
+
                   {waitingApproval && (
                     <WaitingModal
                       wallet={selectedWallet}
@@ -490,13 +452,35 @@ class ConfirmContainer extends React.Component<any> {
                       type={type}
                     />
                   )}
+
                   {txRejected && (
                     <ErrorModal store={store} errorType={"txRejected"} />
                   )}
+
                   {unknownError && (
                     <ErrorModal store={store} errorType={"unknownError"} />
                   )}
-                  {confirmationProgress && (
+
+                  {transferInProgress && (
+                    <TxProgressModal
+                      txInput={confirmTx}
+                      wallet={selectedWallet}
+                      onClick={() => {
+                        store.set("waitingApproval", false);
+                      }}
+                      open={transferInProgress}
+                      confirmation={confirmationNumber}
+                      total={confirmationTotal}
+                      confirming={confirming}
+                      confirmationStep={confirmationStep}
+                      transferSuccess={transferSuccess}
+                      validatorTimeout={validatorTimeout}
+                      sourceTxID={sourceTxID}
+                      destTxID={destTxID}
+                    />
+                  )}
+
+                  {/* {confirmationProgress && (
                     <TxProgressModal
                       txInput={confirmTx}
                       wallet={selectedWallet}
@@ -526,13 +510,13 @@ class ConfirmContainer extends React.Component<any> {
                       transferSuccess={transferSuccess}
                       destTxID={destTxID}
                     />
-                  )}
+                  )} */}
                 </Grid>
-                {confirmationError && (
+                {/* {confirmationError && (
                   <Typography variant="caption" className={classes.error}>
                     {confirmationError}
                   </Typography>
-                )}
+                )} */}
               </Grid>
             </Grid>
           </div>

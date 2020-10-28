@@ -1,14 +1,14 @@
 import React from "react";
 import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
-import { initLocalWeb3, clearWeb3 } from "../bridges/ETH_ELA/utils/walletUtils";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { WALLET_ICON_MAP } from "../bridges/ETH_ELA/utils/walletUtils";
+import { WALLET_ICON_MAP } from "../bridges/ETH_ELA/utils/config";
+import { initLocalWeb3, clearWeb3 } from "../bridges/ETH_ELA/utils/walletUtils";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { grey } from "@material-ui/core/colors";
 import { Translate } from "./Translate";

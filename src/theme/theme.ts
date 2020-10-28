@@ -43,11 +43,6 @@ export default createMuiTheme({
         divider: "#606060",
     },
     overrides: {
-        // MuiCssBaseline: {
-        //     '@global': {
-        //         '@font-face': [WorkSans],
-        //     },
-        // },
         MuiButton: {
             root: {
                 textTransform: "none",
@@ -99,11 +94,6 @@ export default createMuiTheme({
                 paddingBottom: 11.5,
             },
         },
-        // MuiInputBase: {
-        //     input: {
-        //         textAlign: "center"
-        //     }
-        // },
         //@ts-ignore
         MuiToggleButtonGroup: {
             root: {
