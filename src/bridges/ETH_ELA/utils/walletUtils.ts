@@ -156,9 +156,10 @@ export const generateCustomTokenDetails = async function(tokenAddress: string, n
     const networkID = await web3.eth.net.getId();
     const home = getHomeNetwork(networkID)
 
-    const tokenContract = new web3.eth.Contract(ERC20_ABI, tokenAddress);
-    if (!tokenContract) return
+    const contractExists = await web3.eth.getCode(tokenAddress) === '0x' ? false : true;
+    if (!contractExists) return false
 
+    const tokenContract = new web3.eth.Contract(ERC20_ABI, tokenAddress);
     const [name, symbol, decimals] = await Promise.all([
         tokenContract.methods.name().call(),
         tokenContract.methods.symbol().call(),

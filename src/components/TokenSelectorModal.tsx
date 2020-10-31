@@ -186,10 +186,13 @@ const TokenSelectorModal: React.FC<Props> = function (props) {
       ) {
         setSearching(true);
         generateCustomTokenDetails(lowercaseSearch, network).then(
-          (data: any) => {
-            if (data) {
-              setFilteredTokenList(newFilteredTokenList.concat(data));
+          (response: any) => {
+            console.log("response", response);
+            if (response) {
+              setFilteredTokenList(newFilteredTokenList.concat(response));
               setFoundCustom(true);
+              setSearching(false);
+            } else {
               setSearching(false);
             }
           }
