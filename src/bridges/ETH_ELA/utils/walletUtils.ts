@@ -69,6 +69,7 @@ export const initLocalWeb3 = async function(type?: any) {
             accounts = await web3.eth.getAccounts();
             netId = await web3.eth.net.getId();
             network = SUPPORTED_NETWORK_IDS[netId]
+            store.set("walletConnecting", false);
 
         } else if (type === "WalletConnect") {
             console.log('WalletConnect not yet supported')
@@ -94,6 +95,8 @@ export const initLocalWeb3 = async function(type?: any) {
             accounts = await web3.eth.getAccounts();
             netId = await web3.eth.net.getId();
             network = SUPPORTED_NETWORK_IDS[netId]
+            store.set("walletConnecting", false);
+
 
         } else if (type === "Elaphant") {
             console.log('Elaphant wallet not yet supported')
@@ -117,18 +120,12 @@ export const initLocalWeb3 = async function(type?: any) {
         return;
     }
 
-    setBridgeDirection(netId)
+    // Configure current network tokens
     store.set("localWeb3", web3);
     store.set("localWeb3Address", accounts[0]);
     store.set("localWeb3Network", network);
-    store.set("spaceRequesting", false);
-    store.set("walletConnecting", false);
     store.set("selectedWallet", true);
-    store.set("convert.destinationValid", true);
-    const defaults = getDefaultTokens(network)
-    store.set("token", defaults[0])
-    fetchTokenBalance(store.get("token"))
-    appendCustomTokens(defaults)
+    setBridgeDirection(netId)
     return;
 };
 
@@ -379,27 +376,29 @@ export const setBridgeDirection = async function(netId: number) {
     const store = getStore();
     const selectedDirection = store.get("convert.selectedDirection")
     const token = store.get("token")
-    appendCustomTokens(getDefaultTokens(SUPPORTED_NETWORK_IDS[netId]))
+    const DEFAULTS = getDefaultTokens(SUPPORTED_NETWORK_IDS[netId])
+    store.set("token", DEFAULTS[0])
+    appendCustomTokens(DEFAULTS)
     // Set default transfer direction
     switch (netId) {
         case 1:
-            if (selectedDirection === 0) { fetchTokenBalance(token); return }
             store.set("localWeb3Network", "Ethereum")
+            if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 42:
-            if (selectedDirection === 0) { fetchTokenBalance(token); return }
             store.set("localWeb3Network", "Kovan")
+            if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 20:
-            if (selectedDirection === 1) { fetchTokenBalance(token); return }
             store.set("localWeb3Network", "Elastos")
+            if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 21:
-            if (selectedDirection === 1) { fetchTokenBalance(token); return }
             store.set("localWeb3Network", "Elastos Testnet")
+            if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
     }
@@ -482,9 +481,9 @@ export const setListener = async function(web3: any) {
             initLocalWeb3()
         });
         listeningProvider.on("chainChanged", async () => {
-            const netId = await web3.eth.net.getId();
-            store.set("localWeb3Network", SUPPORTED_NETWORK_IDS[netId])
-            setBridgeDirection(netId)
+            clearWeb3()
+            store.set("wrongNetwork", false)
+            initLocalWeb3()
         });
         listeningProvider.on("disconnected", async () => {
             window.location.reload();
