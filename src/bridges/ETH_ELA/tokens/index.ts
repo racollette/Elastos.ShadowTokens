@@ -1,69 +1,55 @@
-// Default imports
+// Native coins
+import { ETH } from './ETH'
+import { ELA } from './ELA'
 
 // Tokens
-import { DAI, ethDAI } from './DAI'
-import { USDT, ethUSDT } from './USDT'
-import { USDC, ethUSDC } from './USDC'
-import { HFIL, ethHFIL } from './HFIL'
-import { WBTC, ethWBTC } from './WBTC'
+import { DAI } from './DAI'
+import { USDT } from './USDT'
+import { USDC } from './USDC'
+import { HFIL } from './HFIL'
+import { WBTC } from './WBTC'
 
-// Native coins
-import { ETH, elaETH } from './ETH'
-import { ELA, ethELA } from './ELA'
+// Dev imports
+import { ETH_DEV } from './ETH_DEV'
+import { ELA_DEV } from './ELA_DEV'
+import { MAIN } from './MAIN'
 
-// Testnet tokens
-import { MAIN, ethMAIN } from './MAIN'
-
-export const TOKENS: any = {
-
-    // Native coins
-    eth: ETH,
-    elaeth: elaETH,
-    ela: ELA,
-    ethela: ethELA,
-
-    // ERC20 tokens
-    dai: DAI,
-    ethdai: ethDAI,
-    usdt: USDT,
-    ethusdt: ethUSDT,
-    usdc: USDC,
-    ethusdc: ethUSDC,
-    wbtc: WBTC,
-    ethwbtc: ethWBTC,
-    hfil: HFIL,
-    ethhfil: ethHFIL,
-
-    // Test ERC20 tokens
-    main: MAIN,
-    ethmain: ethMAIN,
-}
-
-export const ETH_DEFAULTS: any = [
+export const ETH_DEFAULTS = [
     // Native coins
     ETH,
     // ERC20 tokens
-    ethELA,
+    ELA,
     WBTC,
     DAI,
     USDT,
     USDC,
     HFIL,
-    // Test ERC20 tokens
-    MAIN,
 ]
 
-
-export const ELA_DEFAULTS: any = [
+export const ELA_DEFAULTS = [
     // Native coins
     ELA,
     // ERC20 tokens
-    elaETH,
-    ethWBTC,
-    ethDAI,
-    ethUSDT,
-    ethUSDC,
-    ethHFIL,
-    // Test ERC20 tokens
-    ethMAIN,
+    ETH,
+    WBTC,
+    DAI,
+    USDT,
+    USDC,
+    HFIL,
+]
+
+///////////////////////////////////////////
+/// Dev mode: Kovan and Elastos Testnet ///
+///////////////////////////////////////////
+
+export const ETH_DEV_DEFAULTS = [
+    ETH_DEV,
+    ELA_DEV,
+    MAIN,
+]
+
+export const ELA_DEV_DEFAULTS = [
+    ELA_DEV,
+    ETH_DEV,
+    MAIN,
 ]

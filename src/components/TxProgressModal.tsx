@@ -9,7 +9,6 @@ import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import LinearDeterminate from "./LinearDeterminate";
 import ActionLink from "../components/ActionLink";
-import { TOKENS } from "../bridges/ETH_ELA/tokens";
 import {
   getExplorerLink,
   restoreInitialState,
@@ -25,8 +24,8 @@ import { Translate } from "./Translate";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(37,37,37)",
-    borderRadius: "40px",
+    background: "rgb(36,36,36)",
+    borderRadius: "30px",
     width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
@@ -44,7 +43,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     cursor: "pointer",
     transition: "all 0.2s ease-in-out",
     "& img": {
-      height: 65,
+      height: 60,
       width: "auto",
       marginBottom: theme.spacing(1),
     },
@@ -191,7 +190,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
                   </div>
                   <div className={classes.generalContainer}>
                     <Typography className={classes.confirmationText}>
-                      {TOKENS[txInput.destAsset].symbol}&nbsp;
+                      {txInput.destSymbol}&nbsp;
                       <Translate text="Progress.Received" />
                       &nbsp;{txInput.destNetwork}&nbsp;
                       <Translate text="Progress.Chain" />

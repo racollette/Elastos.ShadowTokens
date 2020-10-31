@@ -6,22 +6,24 @@ import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
 import Lock from "../assets/lock.svg";
 import Release from "../assets/unlock.svg";
-import Mint from "../assets/mint.svg";
+import Mint from "../assets/mint1.svg";
 import Burn from "../assets/burn.svg";
 import {
   convertWei,
   gatherFeeData,
   switchOriginChain,
 } from "../bridges/ETH_ELA/utils/txUtils";
-import { fetchTokenBalance } from "../bridges/ETH_ELA/utils/walletUtils";
-import { TOKENS, ETH_DEFAULTS, ELA_DEFAULTS } from "../bridges/ETH_ELA/tokens";
+import {
+  fetchTokenBalance,
+  isSelectedNetwork,
+} from "../bridges/ETH_ELA/utils/walletUtils";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Hidden from "@material-ui/core/Hidden";
-import CurrencySelect from "../components/CurrencySelect";
+import TokenSelectorModal from "../components/TokenSelectorModal";
 import BigCurrencyInput from "../components/BigCurrencyInput";
 import Balance from "../components/Balance";
 import ErrorModal from "../components/ErrorModal";
@@ -34,7 +36,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
     background: "rgb(32,32,32)",
-    borderRadius: "40px",
+    borderRadius: "30px",
     width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),
@@ -100,10 +102,10 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   option: {
     color: "#fff",
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(0.5),
+    paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingRight: theme.spacing(1),
     fontSize: 16,
     "& img": {
       height: "auto",
@@ -123,7 +125,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     height: 34,
     "& img": {
       height: "auto",
-      width: 20,
+      width: 24,
       marginRight: theme.spacing(0.75),
     },
   },
@@ -189,24 +191,11 @@ class TransferContainer extends React.Component<any> {
     this.state = props.store.getState();
   }
 
-  isSelectedNetwork() {
-    const { store } = this.props;
-    const selectedAsset = store.get("selectedAsset");
-    const localWeb3Network = store.get("localWeb3Network");
-    const targetWeb3Network = TOKENS[selectedAsset].network;
-    const correctNetwork = localWeb3Network === targetWeb3Network;
-
-    if (!correctNetwork) {
-      store.set("wrongNetwork", true);
-    } else {
-      return true;
-    }
-  }
-
   isBalanceEnough() {
     const { store } = this.props;
-    const selectedAsset = store.get("selectedAsset");
-    let balance = Number(store.get(TOKENS[selectedAsset].sourceID + "Balance"));
+    const direction = store.get("convert.selectedDirection");
+    const token = store.get("token");
+    let balance = Number(store.get(token[direction].id + "Balance"));
     if (isNaN(balance)) balance = 0;
     const inputAmount = Number(store.get("convert.amount"));
 
@@ -221,75 +210,81 @@ class TransferContainer extends React.Component<any> {
     const { store } = this.props;
 
     const amount = store.get("convert.amount");
+    const total = store.get("convert.conversionTotal");
+
     const inputAddress = store.get("convert.destination");
     const localWeb3Address = store.get("localWeb3Address");
     let receiveAddress = localWeb3Address;
     if (inputAddress.length > 0) {
       receiveAddress = inputAddress;
     }
-    const network = store.get("selectedNetwork");
-    const format = store.get("convert.selectedFormat");
-    const asset = store.get("selectedAsset");
+    const direction = store.get("convert.selectedDirection");
+    const token = store.get("token");
 
     const tx = {
       id: "tx-" + Math.floor(Math.random() * 10 ** 16),
-      type: TOKENS[asset].transferType,
-      instant: false,
+      type: token[direction].transferType,
       sourceAddress: localWeb3Address,
-      sourceAsset: asset,
-      sourceNetwork: TOKENS[asset].network,
-      sourceNetworkVersion: network,
+      sourceSymbol: token[direction].symbol,
+      sourceAsset: token[direction].id,
+      sourceNetwork: token[direction].network,
       destAddress:
         receiveAddress.length > 0 ? receiveAddress : localWeb3Address,
-      destAsset: format,
-      destNetwork: TOKENS[format].network,
-      destNetworkVersion: network,
+      destSymbol: token[Number(!direction)].symbol,
+      destAsset: token[Number(!direction)].id,
+      destNetwork: token[Number(!direction)].network,
+      icon: token.icon,
       amount: Number(amount),
+      total: Number(total),
+      address: token[direction].address,
+      confirmations: token[direction].confirmations,
       error: false,
       txHash: "",
     };
 
     store.set("confirmTx", tx);
-    store.set("confirmAction", TOKENS[format].transferType);
+    store.set("confirmAction", token[direction].transferType);
   }
 
   render() {
     const { classes, store } = this.props;
 
-    // Transaction parameters
-    const selectedWallet = store.get("selectedWallet");
-    const selectedDirection = store.get("convert.selectedDirection");
-    const selectedAsset = store.get("selectedAsset");
-    const destAsset = store.get("convert.selectedFormat");
-    const destAssetName = TOKENS[destAsset].name;
-
-    let assetConvertType = "Mint";
-    let sourceAssetAction = "Lock";
-    if (TOKENS[selectedAsset].transferType === "release") {
-      assetConvertType = "Release";
-      sourceAssetAction = "Burn";
-    }
-    const balance = store.get(TOKENS[selectedAsset].sourceID + "Balance");
-    const amount = store.get("convert.amount");
-    let total = Number(store.get("convert.conversionTotal")).toFixed(4);
+    // Asset
+    const token = store.get("token");
 
     // Account parameters
     const localWeb3Address = store.get("localWeb3Address");
-    // const localWeb3Network = store.get("localWeb3Network");
+    const localWeb3Network = store.get("localWeb3Network");
+
+    // Transaction parameters
+    const selectedWallet = store.get("selectedWallet");
+    const selectedDirection = store.get("convert.selectedDirection");
+
+    // const selectedAsset = store.get("selectedAsset");
+    // const destAsset = store.get("convert.selectedFormat");
+    // const destAssetName = TOKENS[destAsset].name;
+
+    let assetConvertType = "Mint";
+    let sourceAssetAction = "Lock";
+    if (token[selectedDirection].transferType === "release") {
+      assetConvertType = "Release";
+      sourceAssetAction = "Burn";
+    }
+
+    const balance = store.get(token[selectedDirection].id + "Balance");
+    const amount = store.get("convert.amount");
+    let total = Number(store.get("convert.conversionTotal")).toFixed(4);
 
     // Conditionals
     if (amount.length < 1) {
       total = "0.00";
     }
 
-    let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
-    if (TOKENS[selectedAsset].transferType === "release") {
-      usdValue = Number(
-        store.get(`${TOKENS[selectedAsset].destAsset}usd`) * amount
-      ).toFixed(2);
-    }
+    let price = store.get(`${token[token.home].id}usd`);
+    let usdValue =
+      price > 0 ? `(${Numeral(price * amount).format("$0,0.00")})` : "";
 
-    let output = `${total} (${Numeral(usdValue).format("$0,0.00")})`;
+    let output = `${total} ${usdValue}`;
 
     let enableButton = false;
     const showDestinationError = store.get("convert.showDestinationError");
@@ -305,12 +300,12 @@ class TransferContainer extends React.Component<any> {
     const locale = i18n.language;
     const placeholder =
       locale === "en"
-        ? `Enter ${TOKENS[destAsset].network} Address`
-        : `输入 ${TOKENS[destAsset].network} 地址`;
+        ? `Enter ${token[selectedDirection].network} Address`
+        : `输入 ${token[selectedDirection].network} 地址`;
     const inputError =
       locale === "en"
-        ? `Please enter a valid ${TOKENS[destAsset].network} address`
-        : `请输入一个有效的 ${TOKENS[destAsset].network} 地址`;
+        ? `Please enter a valid ${token[selectedDirection].network} address`
+        : `请输入一个有效的 ${token[selectedDirection].network} 地址`;
 
     // const allowance = store.get("convert.adapterWbtcAllowance");
     // const hasAllowance = Number(amount) <= Number(allowance);
@@ -382,21 +377,14 @@ class TransferContainer extends React.Component<any> {
                     </Grid>
                     <Grid item xs={5}>
                       <Grid container justify="flex-end">
-                        <CurrencySelect
-                          active={TOKENS[selectedAsset].symbol}
+                        <TokenSelectorModal
+                          selected={token}
                           className={classes.currencySelect}
-                          items={
-                            selectedDirection === 0
-                              ? ETH_DEFAULTS
-                              : ELA_DEFAULTS
-                          }
-                          onCurrencyChange={(v: string) => {
-                            store.set("selectedAsset", TOKENS[v].sourceID);
-                            store.set(
-                              "convert.selectedFormat",
-                              TOKENS[v].destID
-                            );
-                            fetchTokenBalance(v);
+                          tokenList={store.get("tokenList")}
+                          network={localWeb3Network}
+                          onAssetChange={(token: any) => {
+                            store.set("token", token);
+                            fetchTokenBalance(token);
                             gatherFeeData();
                           }}
                         />
@@ -411,7 +399,7 @@ class TransferContainer extends React.Component<any> {
                 <Grid container justify="center">
                   <Grid
                     item
-                    xs={4}
+                    xs={6}
                     className={classes.swapContainer}
                     onClick={() => {
                       switchOriginChain(selectedDirection);
@@ -419,7 +407,7 @@ class TransferContainer extends React.Component<any> {
                   >
                     <Typography className={classes.sourceLabel}>
                       <Translate text="Transfer.From" />
-                      &nbsp;{TOKENS[selectedAsset].network}
+                      &nbsp;{token[selectedDirection].network}
                       {/* &nbsp;
                       <Translate text="Transfer.Mainnet" /> */}
                     </Typography>
@@ -433,7 +421,7 @@ class TransferContainer extends React.Component<any> {
                     <Grid container justify="center">
                       <Typography className={classes.destLabel}>
                         <Translate text="Transfer.To" />
-                        &nbsp;{TOKENS[destAsset].network}
+                        &nbsp;{token[Number(!selectedDirection)].network}
                         {/* &nbsp;
                         <Translate text="Transfer.Mainnet" /> */}
                       </Typography>
@@ -464,9 +452,12 @@ class TransferContainer extends React.Component<any> {
                       className={classes.padding}
                       justify="flex-end"
                     >
-                      <img src={TOKENS[destAsset].icon} alt={destAsset} />
+                      <img
+                        src={token.icon}
+                        alt={token[Number(!selectedDirection)].id}
+                      />
                       <Typography className={classes.destAssetTicker}>
-                        {TOKENS[destAsset].symbol}
+                        {token[Number(!selectedDirection)].symbol}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -499,7 +490,7 @@ class TransferContainer extends React.Component<any> {
                             classes.grayText
                           )}
                         >
-                          {destAssetName}
+                          {token[Number(!selectedDirection)].name}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -585,21 +576,20 @@ class TransferContainer extends React.Component<any> {
                         fullWidth
                         className={classNames(classes.actionButton)}
                         onClick={() => {
-                          const minTx = TOKENS[selectedAsset].minTx;
                           const value = convertWei(String(amount), "to");
 
-                          if (value < minTx) {
+                          if (value < token.minTx) {
                             store.set(
                               "minTx",
-                              Number(convertWei(String(minTx), "from")).toFixed(
-                                2
-                              )
+                              Number(
+                                convertWei(String(token.minTx), "from")
+                              ).toFixed(2)
                             );
                             store.set("belowMinTxLimit", true);
                             return;
                           }
 
-                          if (this.isSelectedNetwork()) {
+                          if (isSelectedNetwork()) {
                             this.isBalanceEnough();
                           }
                         }}
@@ -610,7 +600,7 @@ class TransferContainer extends React.Component<any> {
                         <div>
                           <ErrorModal
                             currentNetwork={store.get("localWeb3Network")}
-                            targetNetwork={TOKENS[selectedAsset].network}
+                            targetNetwork={token[selectedDirection].network}
                             store={store}
                             errorType={"wrongNetwork"}
                           />

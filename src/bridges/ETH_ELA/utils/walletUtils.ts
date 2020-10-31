@@ -6,17 +6,20 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // import { toBN } from 'web3-utils';
 
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS } from './config';
-import { TOKENS } from '../tokens';
+import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS } from "../tokens";
 import { switchOriginChain } from "./txUtils";
+import ERC20_ABI from "../abis/ERC20_ABI.json";
+import ELA_ICON from "../../../assets/ela.png";
+import ETH_ICON from "../../../assets/eth.png";
 
 // used for montoring balances
 // let walletDataInterval: any = null;
 
-
 export const init = function() {
     const store = getStore();
-    const initialAsset = store.get("selectedAsset")
+    const initialAsset = store.get("token")
     fetchTokenBalance(initialAsset)
 }
 
@@ -122,22 +125,281 @@ export const initLocalWeb3 = async function(type?: any) {
     store.set("walletConnecting", false);
     store.set("selectedWallet", true);
     store.set("convert.destinationValid", true);
-    fetchTokenBalance(store.get("selectedAsset"))
+    const defaults = getDefaultTokens(network)
+    store.set("token", defaults[0])
+    fetchTokenBalance(store.get("token"))
+    appendCustomTokens(defaults)
     return;
 };
+
+export const isSelectedNetwork = function() {
+    const store = getStore();
+    // const selectedAsset = store.get("selectedAsset");
+    const token = store.get("token");
+    const direction = store.get("convert.selectedDirection");
+    const localWeb3Network = store.get("localWeb3Network");
+    const targetWeb3Network = token[direction].network;
+    const correctNetwork = localWeb3Network === targetWeb3Network;
+
+    if (!correctNetwork) {
+        store.set("wrongNetwork", true);
+    } else {
+        return true;
+    }
+}
+
+export const generateCustomTokenDetails = async function(tokenAddress: string, network: string) {
+
+    const store = getStore();
+    let web3 = store.get("localWeb3");
+    if (!web3) {
+        return
+    }
+
+    const networkID = await web3.eth.net.getId();
+    const home = getHomeNetwork(networkID)
+
+    const tokenContract = new web3.eth.Contract(ERC20_ABI, tokenAddress);
+    if (!tokenContract) return
+
+    const [name, symbol, decimals] = await Promise.all([
+        tokenContract.methods.name().call(),
+        tokenContract.methods.symbol().call(),
+        tokenContract.methods.decimals().call(),
+    ]);
+
+    const alreadyBridged = detectBridgedToken(name, symbol)
+    const pairNetwork = getPairNetwork(networkID, 'id')
+
+    const details = {
+        0: {
+            symbol: home ? getDestToken(symbol, 0, 'symbol', alreadyBridged) : symbol,
+            name: home ? getDestToken(name, 0, 'name', alreadyBridged) : name,
+            id: home ? getDestToken(symbol, 0, 'id', alreadyBridged) : symbol.toLowerCase(),
+            transferType: getTransferType(Number(home), 0, alreadyBridged),
+            network: home ? getPairNetwork(networkID, 'name') : getPairNetwork(Number(pairNetwork), 'name'),
+            networkID: home ? pairNetwork : getPairNetwork(Number(pairNetwork), 'id'),
+            address: home ? '' : tokenAddress,
+            confirmations: getRequiredConfirmations(0),
+        },
+        1: {
+            symbol: home ? symbol : getDestToken(symbol, 1, 'symbol', alreadyBridged),
+            name: home ? name : getDestToken(name, 1, 'name', alreadyBridged),
+            id: home ? symbol.toLowerCase() : getDestToken(symbol, 1, 'id', alreadyBridged),
+            transferType: getTransferType(Number(home), 1, alreadyBridged),
+            network: home ? getPairNetwork(Number(pairNetwork), 'name') : getPairNetwork(networkID, 'name'),
+            networkID: home ? getPairNetwork(Number(pairNetwork), 'id') : pairNetwork,
+            address: home ? tokenAddress : '',
+            confirmations: getRequiredConfirmations(1),
+        },
+        home: home,
+        foreign: Number(!home),
+        icon: home ? ELA_ICON : ETH_ICON,
+        bridgeMode: 'multi_amb_erc_erc',
+        decimals: Number(decimals),
+        minTx: MULTI_AMB_ERC_ERC_MIN_TX,
+        fee: MULTI_AMB_ERC_ERC_FEE,
+        priceTicker: '',
+        priceFeed: '',
+    };
+
+    return details;
+}
+
+export const addCustomToken = (customToken: any, network: string) => {
+    let localTokensList = window.localStorage.getItem('customTokens') as any
+    let customTokensList = []
+
+    if (!localTokensList) {
+        localTokensList = []
+    }
+    if (localTokensList.length < 1) {
+        customTokensList = localTokensList.concat([customToken]);
+    } else {
+        customTokensList = JSON.parse(localTokensList);
+        customTokensList.push(customToken);
+    }
+    customTokensList = uniqueTokens(customTokensList);
+    console.log(customTokensList)
+    window.localStorage.setItem(
+        'customTokens',
+        JSON.stringify(customTokensList),
+    );
+    appendCustomTokens(getDefaultTokens(network));
+}
+
+export const uniqueTokens = (list: any) => {
+    const seen: any = {};
+    return list.filter((token: any) => {
+        const { address } = token[token.home];
+        const lowerCaseAddress = address.toLowerCase();
+        const isDuplicate = Object.prototype.hasOwnProperty.call(
+            seen,
+            lowerCaseAddress,
+        )
+            ? false
+            : (seen[lowerCaseAddress] = true);
+        return isDuplicate;
+    });
+};
+
+export const appendCustomTokens = (defaultTokens: any) => {
+    const store = getStore();
+    const network = store.get("localWeb3Network");
+    const direction = store.get("convert.selectedDirection");
+    let localTokenList = JSON.parse(
+        window.localStorage.getItem("customTokens") as any
+    );
+    if (!localTokenList) {
+        updateAllTokenBalances(defaultTokens)
+        store.set("token", defaultTokens[0])
+        store.set("tokenList", defaultTokens)
+        return
+    }
+    const customTokenList = localTokenList.filter(
+        (token: any) => token[direction].network === network && token[direction].address.length > 0
+    );
+    const tokenList = defaultTokens.concat(customTokenList);
+    updateAllTokenBalances(tokenList)
+    store.set("tokenList", tokenList)
+    return
+
+};
+
+export const updateAllTokenBalances = async function(tokenList: any) {
+    const tokenListWithBalances = // await Promise.all(
+        tokenList.forEach((token: any) => {
+            fetchTokenBalance(token)
+        })
+    return tokenListWithBalances
+}
+
+export const getDefaultTokens = (network: string) => {
+    switch (network) {
+        case 'Ethereum':
+            return ETH_DEFAULTS
+        case 'Elastos':
+            return ELA_DEFAULTS
+        case 'Kovan':
+            return ETH_DEV_DEFAULTS
+        case 'Elastos Testnet':
+            return ELA_DEV_DEFAULTS
+        default:
+            return ETH_DEFAULTS
+    }
+}
+
+const detectBridgedToken = (name: string, symbol: string) => {
+    const prefix = symbol.substring(0, 3) === 'eth' || symbol.substring(0, 3) === 'ela'
+    const ela = name.includes('on Elastos')
+    const eth = name.includes('on Ethereum')
+
+    if (prefix || ela || eth) return true
+    return false
+}
+
+const getDestToken = (data: string, home: number, type: 'name' | 'symbol' | 'id', alreadyBridged: boolean) => {
+    switch (type) {
+        case 'name':
+            if (alreadyBridged) return data.split(" ")[0]
+            if (home === 1) {
+                return `${data} on Elastos`
+            }
+            return `${data} on Ethereum`
+        case 'symbol':
+            if (alreadyBridged) return data.slice(3)
+            if (home === 0) {
+                return 'ela'.concat(data)
+            }
+            return 'eth'.concat(data)
+        case 'id':
+            if (alreadyBridged) return data.slice(3).toLowerCase()
+            if (home === 0) {
+                return 'ela'.concat(data.toLowerCase())
+            }
+            return 'eth'.concat(data.toLowerCase())
+    }
+
+}
+
+const getTransferType = (home: number, network: number, alreadyBridged: boolean) => {
+    switch (alreadyBridged) {
+        case true:
+            if (home === network) return 'release'
+            return 'mint'
+        case false:
+            if (home === network) return 'mint'
+            return 'release'
+    }
+}
+
+const getRequiredConfirmations = (home: number) => {
+    switch (home) {
+        case 0:
+            return ETH_CONFIRMATIONS
+        case 1:
+            return ELA_CONFIRMATIONS
+        default:
+            return ETH_CONFIRMATIONS
+    }
+}
+
+const getHomeNetwork = (networkID: number) => {
+    switch (networkID) {
+        case 20:
+            return 1
+        case 21:
+            return 1
+        case 1:
+            return 0
+        case 42:
+            return 0
+    }
+}
+
+const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
+    switch (networkID) {
+        case 20:
+            if (type === 'id') return 1
+            return 'Ethereum'
+        case 21:
+            if (type === 'id') return 42
+            return 'Kovan'
+        case 1:
+            if (type === 'id') return 20
+            return 'Elastos'
+        case 42:
+            if (type === 'id') return 21
+            return 'Elastos Testnet'
+    }
+}
+
 
 export const setBridgeDirection = async function(netId: number) {
     const store = getStore();
     const selectedDirection = store.get("convert.selectedDirection")
-    const selectedAsset = store.get("selectedAsset")
+    const token = store.get("token")
+    appendCustomTokens(getDefaultTokens(SUPPORTED_NETWORK_IDS[netId]))
     // Set default transfer direction
     switch (netId) {
+        case 1:
+            if (selectedDirection === 0) { fetchTokenBalance(token); return }
+            store.set("localWeb3Network", "Ethereum")
+            switchOriginChain(selectedDirection)
+            break
         case 42:
-            if (selectedDirection === 0) { fetchTokenBalance(selectedAsset); return }
+            if (selectedDirection === 0) { fetchTokenBalance(token); return }
+            store.set("localWeb3Network", "Kovan")
+            switchOriginChain(selectedDirection)
+            break
+        case 20:
+            if (selectedDirection === 1) { fetchTokenBalance(token); return }
+            store.set("localWeb3Network", "Elastos")
             switchOriginChain(selectedDirection)
             break
         case 21:
-            if (selectedDirection === 1) { fetchTokenBalance(selectedAsset); return }
+            if (selectedDirection === 1) { fetchTokenBalance(token); return }
+            store.set("localWeb3Network", "Elastos Testnet")
             switchOriginChain(selectedDirection)
             break
     }
@@ -152,35 +414,33 @@ export const clearWeb3 = async function() {
     store.set("selectedWallet", false);
 }
 
-export const fetchTokenBalance = async function(asset: any) {
-    const token = TOKENS[asset]
+export const fetchTokenBalance = async function(token: any) {
     fetchTokenPrice(token)
     if (!token) return
 
     const store = getStore();
-
     const web3 = store.get("localWeb3");
     const walletAddress = store.get("localWeb3Address");
     const walletNetwork = store.get("localWeb3Network");
+    const direction = store.get("convert.selectedDirection");
 
     if (!web3 || !walletAddress) return
-
-    // enable in prod
-    if (TOKENS[asset].network !== walletNetwork) return
+    if (token[direction].network !== walletNetwork) return
 
     // if native coin
-    if (!token.address) {
+    if (!token[direction].address) {
         const coinBal = await web3.eth.getBalance(walletAddress)
-        store.set(`${token.sourceID}Balance`, Number(web3.utils.fromWei(coinBal)).toFixed(4));
+        store.set(`${token[direction].id}Balance`, Number(web3.utils.fromWei(coinBal)).toFixed(4));
         return
     }
 
     // if token
-    const tokenContract = new web3.eth.Contract(token.abi, token.address);
+    const tokenContract = new web3.eth.Contract(ERC20_ABI, token[direction].address);
     const tokenBal = await tokenContract.methods.balanceOf(walletAddress).call();
 
-    store.set(`${token.sourceID}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(4));
+    store.set(`${token[direction].id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(4));
     store.set("loadingBalances", false);
+    return
 }
 
 export const fetchTokenPrice = async function(token: any) {
@@ -222,15 +482,13 @@ export const setListener = async function(web3: any) {
             initLocalWeb3()
         });
         listeningProvider.on("chainChanged", async () => {
-            // window.location.reload();
             const netId = await web3.eth.net.getId();
             store.set("localWeb3Network", SUPPORTED_NETWORK_IDS[netId])
-            // store.set("localWeb3Network", NETWORK_TYPE[CONVERT_MAP[selectedAsset]])
             setBridgeDirection(netId)
         });
-        // listeningProvider.on("disconnected", async () => {
-        //     window.location.reload();
-        // });
+        listeningProvider.on("disconnected", async () => {
+            window.location.reload();
+        });
     }
 }
 
@@ -245,6 +503,7 @@ export const abbreviateAddress = function(walletAddress: string) {
         );
     }
 };
+
 
 export default {};
 

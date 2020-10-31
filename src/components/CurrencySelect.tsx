@@ -5,9 +5,8 @@ import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
+import TokenSelectorModal from "./TokenSelectorModal";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
-
-import { TOKENS } from "../bridges/ETH_ELA/tokens";
 
 const NoCapsButton = withStyles({
   root: {
@@ -70,6 +69,7 @@ interface Props extends Balances {
   className: string;
   classes: { [key in string]: string };
   active?: string;
+  network: string;
   disabled?: boolean;
 }
 
@@ -86,6 +86,17 @@ class CurrencySelect extends React.Component<Props> {
       open: false,
     };
     this.anchorEl = React.createRef();
+  }
+
+  appendCustomTokens(items: any, network: string) {
+    let localTokenList = JSON.parse(
+      window.localStorage.getItem("customTokens") as any
+    );
+    if (!localTokenList) return items;
+    const customTokenList = localTokenList.filter(
+      (token: any) => token.network === network
+    );
+    return items.concat(customTokenList);
   }
 
   handleOpen() {
@@ -105,19 +116,23 @@ class CurrencySelect extends React.Component<Props> {
   }
 
   render() {
-    const { classes, items, active } = this.props;
+    const { classes, active, network } = this.props;
+    let { items } = this.props;
     const { open } = this.state;
     const selected = active || items[0];
 
     return (
       <React.Fragment>
-        <NoCapsButton
+        {/* <NoCapsButton
           // fullWidth
           className={classes.button}
           ref={this.anchorEl}
           aria-controls="menu"
           aria-haspopup="true"
-          onClick={this.handleOpen.bind(this)}
+          onClick={() => {
+            this.appendCustomTokens(items, network);
+            this.handleOpen();
+          }}
         >
           <Grid>
             <img
@@ -129,6 +144,7 @@ class CurrencySelect extends React.Component<Props> {
             <ArrowDropDown />
           </Grid>
         </NoCapsButton>
+        <TokenSelectorModal open={open} items={items}></TokenSelectorModal>
         <Menu
           id="menu"
           anchorEl={this.anchorEl.current}
@@ -160,13 +176,13 @@ class CurrencySelect extends React.Component<Props> {
                   <span>{i.symbol}</span>
                   <span className={classes.balance}>
                     {i.name}
-                    {/* {balance ? `${balance} ${i.name}` : i.name} */}
+                    {balance ? `${balance} ${i.name}` : i.name}
                   </span>
                 </Grid>
               </MenuItem>
             );
           })}
-        </Menu>
+        </Menu> */}
       </React.Fragment>
     );
   }

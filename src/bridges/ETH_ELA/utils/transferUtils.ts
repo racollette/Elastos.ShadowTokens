@@ -1,10 +1,11 @@
 import { getStore } from "../../../services/storeService";
 import Web3 from "web3";
-import { SUPPORTED_RPC_URLS, VALIDATOR_TIMEOUT } from './config';
+import { VALIDATOR_TIMEOUT } from '../tokens/config';
+import { SUPPORTED_RPC_URLS } from './config';
 import { EventData } from 'web3-eth-contract'
 import ERC20_ABI from "../abis/ERC20_ABI.json";
+import ERC677_ABI from "../abis/ERC677_ABI.json";
 import MEDIATOR_ABI from "../abis/MEDIATOR_ABI.json";
-import { TOKENS } from '../tokens'
 import { MEDIATOR_CONTRACTS } from "./contracts";
 
 export const handleBridgeMode = function(confirmTx: any) {
@@ -17,7 +18,6 @@ export const handleBridgeMode = function(confirmTx: any) {
             tokenTransfer(confirmTx, contracts)
             break
     }
-
 }
 
 export const getMediatorContracts = function(confirmTx: any) {
@@ -58,13 +58,11 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
     const recipient = confirmTx.destAddress
     const value = web3.utils.toWei(String(confirmTx.amount), "ether")
 
-    const asset = TOKENS[confirmTx.sourceAsset]
-    const mediatorConfs = asset.confirmations
+    // const asset = store.get("token")
+    const mediatorConfs = confirmTx.confirmations
     store.set("confirmationTotal", mediatorConfs)
 
-    console.log(contracts.sourceMediator)
-
-    if (confirmTx.sourceAsset === 'eth') {
+    if (confirmTx.type === 'mint') {
 
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)
@@ -109,36 +107,13 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 }
             })
 
-    } else if (confirmTx.sourceAsset === 'elaeth') {
+    } else if (confirmTx.type === 'release') {
 
-        const asset = TOKENS[confirmTx.sourceAsset]
-        const token = new web3.eth.Contract(asset.abi, asset.address);
+        const token = new web3.eth.Contract(ERC677_ABI, confirmTx.address);
 
         store.set("waitingApproval", true);
-        store.set("transactionType", "approve")
-        await token.methods.approve(contracts.source, value).send({ from }, (error: any, hash: any) => {
-            if (error) {
-                if (error.code === 4001) {
-                    store.set("waitingApproval", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("waitingApproval", false)
-                    store.set("unknownError", true)
-                }
-                return console.error(error);
-            } else {
-                // return callback(hash);
-                store.set("sourceTxID", hash)
-                store.set("transactionType", "approveConfs")
-            }
-        })
-            .on('receipt', function(receipt: any) {
-                store.set("waitingApproval", false);
-            })
-
         store.set("transactionType", "relay")
-        store.set("waitingApproval", true)
-        await contracts.sourceMediator.methods.relayTokens(recipient, value).send({ from }, (error: any, hash: any) => {
+        await token.methods.transferAndCall(contracts.source, value, recipient).send({ from }, (error: any, hash: any) => {
             if (error) {
                 if (error.code === 4001) {
                     store.set("waitingApproval", false)
@@ -149,7 +124,6 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 }
                 return console.error(error);
             } else {
-                // return callback(hash);
                 store.set("sourceTxID", hash)
                 store.set("transactionType", "approveConfs")
             }
@@ -181,10 +155,7 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
     const store = getStore();
     const web3 = store.get("localWeb3")
     const from = store.get("localWeb3Address")
-
-    const asset = TOKENS[confirmTx.sourceAsset]
-    const tokenAddress = asset.address
-    const token = new web3.eth.Contract(ERC20_ABI, asset.address);
+    const token = new web3.eth.Contract(ERC20_ABI, confirmTx.address);
 
     if (contracts.sourceMediator) {
         const value = web3.utils.toWei(String(confirmTx.amount), "ether")
@@ -217,14 +188,14 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
                 store.set("waitingApproval", false);
             })
 
-        relayTokens(contracts, tokenAddress, value, from, confirmTx)
+        relayTokens(contracts, confirmTx.address, value, from, confirmTx)
     }
 }
 
 export const relayTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any) {
     const store = getStore();
     const sourceMediator = contracts.sourceMediator
-    const mediatorConfs = TOKENS[confirmTx.sourceAsset].confirmations
+    const mediatorConfs = confirmTx.confirmations
     const recipient = confirmTx.destAddress
     store.set("confirmationTotal", mediatorConfs)
 
@@ -243,7 +214,6 @@ export const relayTokens = async function(contracts: any, tokenAddress: string, 
             }
             return console.error(error);
         } else {
-            // return callback(hash);
             store.set("sourceTxID", hash)
         }
     })

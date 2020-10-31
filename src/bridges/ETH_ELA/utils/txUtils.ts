@@ -1,7 +1,6 @@
 import { getStore } from "../../../services/storeService";
 import { EXPLORER_URLS } from "./config";
-import { fetchTokenBalance } from "./walletUtils";
-import { TOKENS } from "../tokens";
+import { fetchTokenBalance, appendCustomTokens, getDefaultTokens } from "./walletUtils";
 
 export const windowBlocker = function(event: any) {
     // Cancel the event as stated by the standard.
@@ -22,6 +21,24 @@ export const removeWindowBlocker = function() {
     window.removeEventListener("beforeunload", windowBlocker);
 };
 
+const countDecimals = (value: any) => {
+    if (Math.floor(value) === value) return 0;
+    return value.toString().split('.')[1].length || 0;
+};
+
+export const parseValue = (num: any, dec: number) => {
+    if (!num) {
+        return window.BigInt(0);
+    }
+    const number = Number(num);
+    const numberDec = countDecimals(number);
+    const round = window.BigInt(10 ** Number(dec));
+    const value =
+        (window.BigInt(Math.floor(number * 10 ** numberDec)) * round) /
+        window.BigInt(10 ** numberDec);
+    return value;
+};
+
 export const convertWei = function(value: string, type: 'from' | 'to') {
     const store = getStore();
     const web3 = store.get("localWeb3")
@@ -38,14 +55,14 @@ export const convertWei = function(value: string, type: 'from' | 'to') {
 export const gatherFeeData = async function() {
     const store = getStore();
     const amount = store.get("convert.amount");
-    let selectedAsset = store.get("selectedAsset");
+    let token = store.get("token");
 
     if (!amount) {
         return;
     }
 
-    const fixedFee = TOKENS[selectedAsset].fee / 100
-    const feeFraction = (100 - TOKENS[selectedAsset].fee) / 100
+    const fixedFee = token.fee / 100
+    const feeFraction = (100 - token.fee) / 100
 
     const total =
         Number(amount * feeFraction) > 0
@@ -57,8 +74,8 @@ export const gatherFeeData = async function() {
 };
 
 export function getExplorerLink(network: 'source' | 'dest', type: 'transaction' | 'token' | 'address', txInputs: any, id: string): string {
-    const symbol = txInputs[`${network}Asset`]
-    const prefix = EXPLORER_URLS[TOKENS[symbol].network]
+    const chain = txInputs[`${network}Network`]
+    const prefix = EXPLORER_URLS[chain]
     switch (type) {
         case 'transaction': {
             return `${prefix}/tx/${id}`
@@ -75,8 +92,8 @@ export function getExplorerLink(network: 'source' | 'dest', type: 'transaction' 
 
 export function restoreInitialState() {
     const store = getStore();
-    const selectedAsset = store.get("selectedAsset")
-    fetchTokenBalance(selectedAsset)
+    const token = store.get("token")
+    fetchTokenBalance(token)
     store.set("confirmTx", false)
     store.set("convert.amount", "")
     store.set("waitingApproval", false)
@@ -90,7 +107,7 @@ export function restoreInitialState() {
 
 }
 
-export function switchOriginChain(selectedDirection: number) {
+export function switchOriginChain(selectedDirection: any) {
     const store = getStore();
     if (selectedDirection === 0) {
         store.set("convert.selectedDirection", Number(1));
@@ -100,10 +117,15 @@ export function switchOriginChain(selectedDirection: number) {
 
     store.set("confirmTx", false)
     store.set("convert.amount", "")
-    const selectedAsset = store.get("selectedAsset")
-    store.set("selectedAsset", TOKENS[selectedAsset].destID);
-    store.set("convert.selectedFormat", selectedAsset);
-    fetchTokenBalance(TOKENS[selectedAsset].destID)
+    const token = store.get("token")
+    const DEFAULTS: any = getDefaultTokens(store.get("localWeb3Network"))
+    appendCustomTokens(DEFAULTS)
+    if (token[Number(!selectedDirection)].address.length === 0) {
+        store.set("token", DEFAULTS[0]);
+        fetchTokenBalance(DEFAULTS[0])
+    } else {
+        fetchTokenBalance(token)
+    }
 
     // Swap bridge direction
     const bridge = store.get("selectedBridge")

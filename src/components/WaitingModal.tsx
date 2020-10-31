@@ -5,7 +5,6 @@ import theme from "../theme/theme";
 import DoubleArrow from "../assets/double-arrow.svg";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { WALLET_ICON_MAP } from "../bridges/ETH_ELA/utils/config";
-import { TOKENS } from "../bridges/ETH_ELA/tokens";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -14,8 +13,8 @@ import { Translate } from "./Translate";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(37,37,37)",
-    borderRadius: "40px",
+    background: "rgb(36,36,36)",
+    borderRadius: "30px",
     width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
@@ -45,14 +44,21 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     position: "relative",
     marginBottom: theme.spacing(2),
   },
-  walletIconContainer: {
+  approveIconContainer: {
     paddingTop: theme.spacing(1),
-    // display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    cursor: "pointer",
-    // opacity: 0.6,
-    transition: "all 0.2s ease-in-out",
+
+    "& img": {
+      height: 60,
+      width: "auto",
+      marginBottom: theme.spacing(1),
+    },
+  },
+  walletIconContainer: {
+    paddingTop: theme.spacing(1),
+    alignItems: "center",
+    justifyContent: "center",
     "& img": {
       height: 50,
       width: "auto",
@@ -117,12 +123,7 @@ interface Props {
   classes: { [key in string]: string };
   onClick: any;
   wallet: any;
-  sourceAsset: any;
-  destAsset: any;
-  sourceNetwork: any;
-  destNetwork: any;
-  amount: any;
-  total: any;
+  tx: any;
   open: any;
   type: any;
 }
@@ -137,16 +138,7 @@ const WaitingModal: React.FC<Props> = function (props) {
 
   // const [open, setOpen] = React.useState(false);
 
-  const {
-    classes,
-    wallet,
-    sourceAsset,
-    destAsset,
-    amount,
-    total,
-    open,
-    type,
-  } = props;
+  const { classes, wallet, open, tx, type } = props;
 
   // const handleOpen = () => {
   //   setOpen(true);
@@ -176,11 +168,11 @@ const WaitingModal: React.FC<Props> = function (props) {
               {type === "approve" && (
                 <div className={classes.container}>
                   <div className={classes.spacer} />
-                  <div className={classes.walletIconContainer}>
-                    <img src={TOKENS[sourceAsset].icon} alt={sourceAsset} />
+                  <div className={classes.approveIconContainer}>
+                    <img src={tx.icon} alt={tx.sourceAsset} />
                     <Typography className={classes.walletText}>
                       <Translate text="Waiting.ApproveSpend" />
-                      &nbsp;{TOKENS[sourceAsset].symbol}
+                      &nbsp;{tx.sourceSymbol}
                     </Typography>
                   </div>
                   <div className={classes.spacer} />
@@ -195,11 +187,11 @@ const WaitingModal: React.FC<Props> = function (props) {
               {type === "approveConfs" && (
                 <div className={classes.container}>
                   <div className={classes.spacer} />
-                  <div className={classes.walletIconContainer}>
-                    <img src={TOKENS[sourceAsset].icon} alt={sourceAsset} />
+                  <div className={classes.approveIconContainer}>
+                    <img src={tx.icon} alt={tx.sourceSymbol} />
                     <Typography className={classes.walletText}>
                       <Translate text="Waiting.SpendApproved1" />
-                      &nbsp;{TOKENS[sourceAsset].symbol}&nbsp;
+                      &nbsp;{tx.sourceSymbol}&nbsp;
                       <Translate text="Waiting.SpendApproved2" />
                     </Typography>
                   </div>
@@ -223,13 +215,13 @@ const WaitingModal: React.FC<Props> = function (props) {
                   </div>
                   <div className={classes.tokenMapContainer}>
                     <div className={classes.assetText}>
-                      <Typography>{Number(amount).toFixed(2)}</Typography>
-                      <Typography>{TOKENS[sourceAsset].symbol}</Typography>
+                      <Typography>{Number(tx.amount).toFixed(2)}</Typography>
+                      <Typography>{tx.sourceSymbol}</Typography>
                     </div>
                     <img
                       className={classes.assetIcon}
-                      src={TOKENS[sourceAsset].icon}
-                      alt={sourceAsset}
+                      src={tx.icon}
+                      alt={tx.sourceSymbol}
                     />
                     <img
                       className={classes.fromToIcon}
@@ -238,12 +230,12 @@ const WaitingModal: React.FC<Props> = function (props) {
                     />
                     <img
                       className={classes.assetIcon}
-                      src={TOKENS[destAsset].icon}
-                      alt={destAsset}
+                      src={tx.icon}
+                      alt={tx.destSymbol}
                     />
                     <div className={classes.assetText}>
-                      <Typography>{Number(total).toFixed(2)}</Typography>
-                      <Typography>{TOKENS[destAsset].symbol}</Typography>
+                      <Typography>{Number(tx.total).toFixed(2)}</Typography>
+                      <Typography>{tx.destSymbol}</Typography>
                     </div>
                   </div>
 

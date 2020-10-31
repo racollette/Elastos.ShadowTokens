@@ -29,9 +29,9 @@ export default createMuiTheme({
             contrastText: "#fff",
         },
         info: {
-            light: "#9ca0b0",
-            main: "#797986",
-            dark: "#404040",
+            light: "rgb(66,66,66)",
+            main: "#606060",
+            dark: "rgb(36,36,36)",
             contrastText: "rgba(255, 255, 255, 0.5)",
         },
         success: {
@@ -119,8 +119,20 @@ export default createMuiTheme({
                 boxShadow: "0px 1px 3px rgba(0, 27, 58, 0.1)",
                 border: "1px solid #606060",
                 borderRadius: 8,
-                minWidth: 190,
                 backgroundColor: "rgb(32,32,32)",
+                minWidth: 160,
+            },
+        },
+        MuiDialog: {
+            paper: {
+                // boxShadow: "0px 1px 3px rgba(0, 27, 58, 0.1)",
+                // border: "1px solid #666666",
+                borderRadius: 15,
+                backgroundColor: "rgb(36,36,36)",
+                margin: "16px",
+            },
+            paperFullWidth: {
+                width: "calc(100% - 32px)",
             },
         },
         // .MuiToggleButtonGroup-grouped:not(:first-child)

@@ -19,7 +19,7 @@
    height="512"><metadata
    id="metadata935"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs933" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -43,7 +43,8 @@
    fit-margin-top="0"
    fit-margin-left="0"
    fit-margin-right="0"
-   fit-margin-bottom="0" />
+   fit-margin-bottom="0"
+   inkscape:document-rotation="0" />
 
 
 <path

@@ -1,42 +1,34 @@
-import ERC20_ABI from "../abis/ERC20_ABI.json";
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from './config';
 import DAI_ICON from "../../../assets/dai.png";
 
-// Ethereum side
 export const DAI = {
-    symbol: 'DAI',
-    name: 'Dai',
+    0: {
+        symbol: 'DAI',
+        name: 'Dai',
+        id: 'dai',
+        transferType: 'mint',
+        network: 'Ethereum',
+        networkID: 42,
+        address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+        confirmations: ETH_CONFIRMATIONS,
+    },
+    1: {
+        symbol: 'ethDAI',
+        name: 'Dai on Elastos',
+        id: 'ethdai',
+        transferType: 'release',
+        network: 'Elastos',
+        networkID: 20,
+        address: '', // generate on elastos
+        confirmations: ELA_CONFIRMATIONS,
+    },
+    home: 0,
+    foreign: 1,
     icon: DAI_ICON,
-    sourceID: 'dai',
-    destID: 'ethdai',
-    transferType: 'mint',
-    network: 'Ethereum',
-    networkID: '42',
-    address: '0x6b175474e89094c44da98b954eedeac495271d0f',
     bridgeMode: 'multi_amb_erc_erc',
-    abi: ERC20_ABI,
-    minTx: 500000000000000000,
-    confirmations: 8,
-    fee: 0.1,
-    priceTicker: 'dai',
-    priceFeed: 'https://api.coincap.io/v2/assets/multi-collateral-dai',
-}
-
-// Elastos side
-export const ethDAI = {
-    symbol: 'ethDAI',
-    name: 'Dai on Elastos',
-    icon: DAI_ICON,
-    sourceID: 'ethdai',
-    destID: 'dai',
-    transferType: 'release',
-    network: 'Elastos',
-    networkID: '21',
-    address: '', // generate on elastos
-    bridgeMode: 'multi_amb_erc_erc',
-    abi: ERC20_ABI,
-    minTx: 500000000000000000,
-    confirmations: 1,
-    fee: 0.1,
+    decimals: 18,
+    minTx: MULTI_AMB_ERC_ERC_MIN_TX,
+    fee: MULTI_AMB_ERC_ERC_FEE,
     priceTicker: 'dai',
     priceFeed: 'https://api.coincap.io/v2/assets/multi-collateral-dai',
 }

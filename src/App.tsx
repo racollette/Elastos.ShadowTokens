@@ -84,6 +84,7 @@ class AppWrapper extends React.Component<Props> {
     const confirmTx = store.get("confirmTx");
 
     const noWeb3 = store.get("noWeb3");
+    const pleaseConnect = store.get("pleaseConnect");
     const insufficientBalance = store.get("insufficientBalance");
     const belowMinTxLimit = store.get("belowMinTxLimit");
     const exceedsMaxTxLimit = store.get("exceedsMaxTxLimit");
@@ -146,6 +147,11 @@ class AppWrapper extends React.Component<Props> {
               {noWeb3 && (
                 <div>
                   <ErrorModal store={store} errorType={"noWeb3"} />
+                </div>
+              )}
+              {pleaseConnect && (
+                <div>
+                  <ErrorModal store={store} errorType={"pleaseConnect"} />
                 </div>
               )}
               {insufficientBalance && (

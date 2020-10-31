@@ -14,8 +14,8 @@ import Warning from "../assets/alert.svg";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(37,37,37)",
-    borderRadius: "40px",
+    background: "rgb(36,36,36)",
+    borderRadius: "30px",
     width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {

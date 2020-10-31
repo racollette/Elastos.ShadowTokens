@@ -25,6 +25,15 @@
   "Transfer.Next": "下一步",
   "Transfer.Max": "最大",
 
+  "TokenSelect.Title": "Select a token",
+  "TokenSelect.Help": "Find a token by searching for its name or token or pasing its contract address below",
+  "TokenSelect.Paste": "Search name or paste address",
+  "TokenSelect.Name": "Name",
+  "TokenSelect.Balance": "Balance",
+  "TokenSelect.Found": "Found Match",
+  "TokenSelect.NoMatch": "No matches.",
+  "TokenSelect.AddCustom": "Add Custom",
+
   "Confirm.Header": "确认",
   "Confirm.From": "从",
   "Confirm.Network": "网络",
@@ -36,8 +45,8 @@
   "Confirm.Start": "Begin Transfer",
 
   "Error.WrongNetwork.Title": "错误的网络",
-  "Error.WrongNetwork.Message1": "请连接你的钱包到",
-  "Error.WrongNetwork.Message2": "与跨链桥通信",
+  "Error.WrongNetwork.Message1": "Please switch your wallet to the",
+  "Error.WrongNetwork.Message2": "network",
   "Error.NoWeb3.Title": "没有发现钱包",
   "Error.NoWeb3.Message": "安装了么？请先确认。",
   "Error.TxRejected.Message": "交易被拒绝",

@@ -1,14 +1,13 @@
 import MetaMask from "../../../assets/metamask-fox.svg";
 import Elaphant from "../../../assets/elaphant.png";
 import WalletConnect from "../../../assets/walletconnect.svg";
+import { ETH_DEFAULTS } from '../tokens'
 
 export const WALLET_ICON_MAP: { [key in string]: string } = {
     MetaMask: MetaMask,
     Elaphant: Elaphant,
     WalletConnect: WalletConnect,
 };
-
-export const VALIDATOR_TIMEOUT = 300000
 
 export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
     1: 'Ethereum',
@@ -32,7 +31,6 @@ export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
 }
 
 export const INITIAL_STATE = {
-
     // wallet & web3
     dataWeb3: null,
     localWeb3: null,
@@ -41,14 +39,17 @@ export const INITIAL_STATE = {
     walletConnecting: false,
     loadingBalances: true,
     fees: null,
+    selectedWallet: false,
     selectedWalletType: "MetaMask",
 
-    // bridge/wallet selection
+    // bridge selection
     selectedBridge: "eth",
     selectedPair: "ela",
     confirmBridge: false,
-    selectedWallet: false,
-    selectedAsset: "eth",
+
+    // token
+    token: ETH_DEFAULTS[0],
+    tokenList: ETH_DEFAULTS,
 
     // modals
     localesOpen: false,
@@ -65,6 +66,7 @@ export const INITIAL_STATE = {
 
     // warnings
     walletConnectWarning: false,
+    validatorTimeout: false,
 
     // awaiting user
     waitingApproval: false,
@@ -77,7 +79,6 @@ export const INITIAL_STATE = {
     confirming: false,
     confirmationStep: 0,
     transferSuccess: false,
-    validatorTimeout: false,
     transactionType: "",
 
     // txIDs
@@ -85,8 +86,6 @@ export const INITIAL_STATE = {
     destTxID: null as string | null,
 
     // conversions
-    "convert.transactions": [],
-    "convert.selectedFormat": "elaeth",
     "convert.selectedDirection": 0,
     "convert.amount": "",
     "convert.destination": "",

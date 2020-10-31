@@ -22,7 +22,7 @@ import {
 const styles = () => ({
   container: {
     background: "rgb(32,32,32)",
-    borderRadius: "40px",
+    borderRadius: "30px",
     width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),

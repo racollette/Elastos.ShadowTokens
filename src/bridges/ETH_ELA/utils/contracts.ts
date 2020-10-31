@@ -5,14 +5,10 @@ export const MEDIATOR_CONTRACTS: any = {
             'Kovan': {
                 release: '0xf12d52246e86bbE26702aDe133262f94235507C6',  // Foreign, Elastos testnet
                 mint: '0xdCec1ca391101Db066e6819E9D50E2E688906717',  // Home, Kovan
-                minTx: 500000000000000000,
-                maxTx: 750000000000000000000000,
             },
             'Elastos Testnet': {
                 release: '', // Foreign,  testnet
                 mint: '', // Home, Kovan
-                minTx: 500000000000000000,
-                maxTx: 750000000000000000000000,
             }
         },
         amb_native_erc: {

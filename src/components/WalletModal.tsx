@@ -9,7 +9,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { WALLET_ICON_MAP } from "../bridges/ETH_ELA/utils/config";
 import { initLocalWeb3, clearWeb3 } from "../bridges/ETH_ELA/utils/walletUtils";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import CloseIcon from "@material-ui/icons/Close";
 import { grey } from "@material-ui/core/colors";
 import { Translate } from "./Translate";
 import theme from "../theme/theme";
@@ -17,8 +17,8 @@ import theme from "../theme/theme";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(37,37,37)",
-    borderRadius: "40px",
+    background: "rgb(36,36,36)",
+    borderRadius: "30px",
     width: 450,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
@@ -189,7 +189,7 @@ class WalletModal extends React.Component<any> {
               <Typography variant="overline" className={classes.navTitle}>
                 <Translate text="Wallet.Header" />
               </Typography>
-              <HighlightOffIcon
+              <CloseIcon
                 style={{ color: grey[300] }}
                 className={classes.close}
                 onClick={() => {

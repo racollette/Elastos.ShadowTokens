@@ -32,6 +32,19 @@
   {
     "constant": false,
     "inputs": [
+      { "name": "from", "type": "address" },
+      { "name": "value", "type": "uint256" },
+      { "name": "data", "type": "bytes" }
+    ],
+    "name": "transferAndCall",
+    "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
       { "name": "sender", "type": "address" },
       { "name": "recipient", "type": "address" },
       { "name": "amount", "type": "uint256" }

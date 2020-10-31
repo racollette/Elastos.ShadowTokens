@@ -15,8 +15,8 @@ import { Translate } from "./Translate";
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
-    background: "rgb(37,37,37)",
-    borderRadius: "40px",
+    background: "rgb(36,36,36)",
+    borderRadius: "30px",
     width: 350,
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
@@ -34,7 +34,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     cursor: "pointer",
     transition: "all 0.2s ease-in-out",
     "& img": {
-      height: 75,
+      height: 60,
       width: "auto",
       marginBottom: theme.spacing(1),
     },
@@ -120,7 +120,8 @@ const ErrorModal: React.FC<Props> = function (props) {
                   <div className={classes.generalContainer}>
                     <Typography className={classes.confirmationText}>
                       <Translate text="Error.WrongNetwork.Message1" />
-                      &nbsp;{targetNetwork}&nbsp;
+                      &nbsp;{targetNetwork}
+                      &nbsp;
                       <Translate text="Error.WrongNetwork.Message2" />
                     </Typography>
                   </div>
@@ -143,6 +144,17 @@ const ErrorModal: React.FC<Props> = function (props) {
                 </div>
               )}
 
+              {errorType === "pleaseConnect" && (
+                <div>
+                  <div className={classes.errorContainer}>
+                    <img src={Alert} alt="Alert" />
+                    <Typography className={classes.confirmationText}>
+                      <Translate text="Error.PleaseConnect.Message" />
+                    </Typography>
+                  </div>
+                </div>
+              )}
+
               {errorType === "insufficientBalance" && (
                 <div>
                   <div
@@ -152,7 +164,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                     )}
                   >
                     <img src={Alert} alt="Alert" />
-                    <Typography className={classes.successText}>
+                    <Typography className={classes.confirmationText}>
                       <Translate text="Error.InsufficientBalance.Message" />
                     </Typography>
                   </div>
@@ -168,7 +180,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                     )}
                   >
                     <img src={Alert} alt="Alert" />
-                    <Typography className={classes.successText}>
+                    <Typography className={classes.confirmationText}>
                       <Translate text="Error.BelowMinTxLimit.Message" />
                       &nbsp;({minTx})
                     </Typography>
@@ -185,7 +197,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                     )}
                   >
                     <img src={Alert} alt="Alert" />
-                    <Typography className={classes.successText}>
+                    <Typography className={classes.confirmationText}>
                       <Translate text="Error.ExceedsMaxTxLimit.Message" />
                       &nbsp;({maxTx})
                     </Typography>
@@ -202,7 +214,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                     )}
                   >
                     <img src={Alert} alt="Alert" />
-                    <Typography className={classes.successText}>
+                    <Typography className={classes.confirmationText}>
                       <Translate text="Error.TxRejected.Message" />
                     </Typography>
                   </div>
@@ -218,7 +230,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                     )}
                   >
                     <img src={Alert} alt="Alert" />
-                    <Typography className={classes.successText}>
+                    <Typography className={classes.confirmationText}>
                       <Translate text="Error.Unknown.Message" />
                     </Typography>
                   </div>

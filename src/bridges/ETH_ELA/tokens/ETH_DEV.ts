@@ -1,14 +1,14 @@
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
 import ETH_ICON from "../../../assets/eth.png";
 
-export const ETH = {
+export const ETH_DEV = {
     0: {
         symbol: 'ETH',
         name: 'Ethereum',
         id: 'eth',
         transferType: 'mint',
-        network: 'Ethereum',
-        networkID: 1,
+        network: 'Kovan',
+        networkID: 42,
         address: '',
         confirmations: ETH_CONFIRMATIONS,
 
@@ -18,8 +18,8 @@ export const ETH = {
         name: 'Ethereum on Elastos',
         id: 'elaeth',
         transferType: 'release',
-        network: 'Elastos',
-        networkID: 20,
+        network: 'Elastos Testnet',
+        networkID: 21,
         address: '0xf7184E6449a522988D65F794fa53DA44Eddd78Fd',
         confirmations: ELA_CONFIRMATIONS,
 

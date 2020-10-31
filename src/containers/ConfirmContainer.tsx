@@ -16,13 +16,12 @@ import { Translate } from "../components/Translate";
 import theme from "../theme/theme";
 import { abbreviateAddress } from "../bridges/ETH_ELA/utils/walletUtils";
 import { handleBridgeMode } from "../bridges/ETH_ELA/utils/transferUtils";
-import { TOKENS } from "../bridges/ETH_ELA/tokens";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
     background: "rgb(32,32,32)",
-    borderRadius: "40px",
+    borderRadius: "30px",
     width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",
     padding: theme.spacing(2.5),
@@ -257,7 +256,8 @@ class ConfirmContainer extends React.Component<any> {
     // const isDeposit = confirmAction === "deposit";
     const confirmTx = store.get("confirmTx");
     const selectedWallet = store.get("selectedWalletType");
-    const selectedAsset = store.get("selectedAsset");
+    const token = store.get("token");
+    const selectedDirection = store.get("convert.selectedDirection");
     const amount = store.get("convert.amount");
     const serviceFee = (
       Number(store.get("convert.networkFee")) * Number(amount)
@@ -273,6 +273,7 @@ class ConfirmContainer extends React.Component<any> {
     const destNetwork = confirmTx.destNetwork;
 
     const waitingApproval = store.get("waitingApproval");
+    const type = store.get("transactionType");
     const txRejected = store.get("txRejected");
     const unknownError = store.get("unknownError");
 
@@ -289,14 +290,9 @@ class ConfirmContainer extends React.Component<any> {
     const validatorTimeout = store.get("validatorTimeout");
     const transferSuccess = store.get("transferSuccess");
 
-    const type = store.get("transactionType");
-
-    let usdValue = Number(store.get(`${selectedAsset}usd`) * amount).toFixed(2);
-    if (TOKENS[selectedAsset].transferType === "release") {
-      usdValue = Number(
-        store.get(`${TOKENS[selectedAsset].destAsset}usd`) * amount
-      ).toFixed(2);
-    }
+    let price = store.get(`${token[token.home].id}usd`);
+    let usdValue =
+      price > 0 ? `(${Numeral(price * amount).format("$0,0.00")})` : "";
 
     const chars = String(amount).replace(".", "");
 
@@ -327,12 +323,12 @@ class ConfirmContainer extends React.Component<any> {
             </Typography>
 
             <Typography variant="body1" className={classes.titleAmount}>
-              ({Numeral(usdValue).format("$0,0.00")})
+              {usdValue}
             </Typography>
 
             <Typography variant="h4" className={classNames(classes[size])}>
               {Numeral(confirmTx.amount).format("0,0.00")}{" "}
-              {TOKENS[sourceAsset].symbol}
+              {token[selectedDirection].symbol}
             </Typography>
 
             <Typography variant="body1">
@@ -365,8 +361,8 @@ class ConfirmContainer extends React.Component<any> {
                         <Translate text="Confirm.Asset" />
                       </Grid>
                       <Grid item xs={6}>
-                        <img alt={destAsset} src={TOKENS[destAsset].icon} />
-                        {TOKENS[destAsset].symbol}
+                        <img alt={destAsset} src={token.icon} />
+                        {token[Number(!selectedDirection)].symbol}
                       </Grid>
                     </Grid>
 
@@ -378,7 +374,6 @@ class ConfirmContainer extends React.Component<any> {
                         <DarkTooltip
                           placement="top"
                           title={confirmTx.destAddress}
-                          arrow
                         >
                           <div>
                             <img src={WalletIcon} alt="Wallet" />
@@ -393,8 +388,8 @@ class ConfirmContainer extends React.Component<any> {
                         <Translate text="Confirm.Fee" />
                       </Grid>
                       <Grid item xs={6} className={classes.amountCell}>
-                        <img alt={sourceAsset} src={TOKENS[sourceAsset].icon} />
-                        {serviceFee} {TOKENS[sourceAsset].symbol}
+                        <img alt={sourceAsset} src={token.icon} />
+                        {serviceFee} {token[selectedDirection].symbol}
                       </Grid>
                     </Grid>
 
@@ -404,8 +399,8 @@ class ConfirmContainer extends React.Component<any> {
                           <Translate text="Confirm.Receive" />
                         </Grid>
                         <Grid item xs={6} className={classes.amountCell}>
-                          <img alt={destAsset} src={TOKENS[destAsset].icon} />
-                          {total} {TOKENS[destAsset].symbol}
+                          <img alt={destAsset} src={token.icon} />
+                          {total} {token[Number(!selectedDirection)].symbol}
                         </Grid>
                       </Grid>
                     </div>
@@ -443,12 +438,8 @@ class ConfirmContainer extends React.Component<any> {
                         store.set("waitingApproval", false);
                       }}
                       open={waitingApproval}
-                      sourceAsset={sourceAsset}
-                      destAsset={destAsset}
-                      sourceNetwork={sourceNetwork}
-                      destNetwork={destNetwork}
-                      amount={amount}
-                      total={total}
+                      direction={selectedDirection}
+                      tx={confirmTx}
                       type={type}
                     />
                   )}

@@ -2,12 +2,14 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/styles";
 
 const DarkTooltip = withStyles((theme) => ({
-    arrow: {
-        color: theme.palette.common.black,
-    },
-    tooltip: {
-        backgroundColor: theme.palette.common.black,
-    },
+  arrow: {
+    color: "rgb(28, 28, 28)",
+  },
+  tooltip: {
+    fontSize: 12,
+    backgroundColor: "rgb(28, 28, 28)",
+    border: "0.5px solid #fff",
+  },
 }))(Tooltip);
 
 export default DarkTooltip;
