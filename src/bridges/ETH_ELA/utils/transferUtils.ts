@@ -94,8 +94,8 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 console.log('receipt')
             })
             .on('confirmation', function(confirmationNumber: number, receipt: any) {
-                updateRelayConfirmations(confirmationNumber, mediatorConfs);
-                detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
+                const confirmed = updateRelayConfirmations(confirmationNumber, mediatorConfs)
+                if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
             })
             .on('error', function(error: any) {
                 if (error.code === 4001) {
@@ -135,8 +135,8 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 store.set("confirmationStep", 1);
             })
             .on('confirmation', function(confirmationNumber: number, receipt: any) {
-                updateRelayConfirmations(confirmationNumber, mediatorConfs);
-                detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
+                const confirmed = updateRelayConfirmations(confirmationNumber, mediatorConfs)
+                if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
             })
             .on('error', function(error: any) {
                 if (error.code === 4001) {
@@ -224,8 +224,9 @@ export const relayTokens = async function(contracts: any, tokenAddress: string, 
             store.set("confirmationStep", 1);
         })
         .on('confirmation', function(confirmationNumber: number, receipt: any) {
-            updateRelayConfirmations(confirmationNumber, mediatorConfs)
-            detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "multi_amb_erc_erc")
+            const confirmed = updateRelayConfirmations(confirmationNumber, mediatorConfs)
+            if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "multi_amb_erc_erc")
+
         })
         .on('error', function(error: any) {
             if (error.code === 4001) {
@@ -238,7 +239,7 @@ export const relayTokens = async function(contracts: any, tokenAddress: string, 
         })
 }
 
-export const updateRelayConfirmations = async function(confirmationNumber: number, confirmationTotal: number) {
+export const updateRelayConfirmations = function(confirmationNumber: number, confirmationTotal: number) {
     const store = getStore();
     store.set("confirmationTotal", confirmationTotal);
 
@@ -248,6 +249,7 @@ export const updateRelayConfirmations = async function(confirmationNumber: numbe
             store.set("confirmationStep", 2);
             store.set("confirmationNumber", 0);
         }, 1000);
+        return true
     } else if (confirmationNumber < confirmationTotal) {
         confirmationNumber++;
         store.set("confirmationNumber", confirmationNumber);
@@ -286,7 +288,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             store.set("destTxID", txID);
             store.set("confirming", false);
             store.set("transferSuccess", true);
-            return;
+            return
         }
         fromBlock = currentBlock
         await wait(4000);
@@ -294,15 +296,14 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
 
     if (Date.now() > stopTime) {
         // console.log('Mediator contract TokensBridged timeout. Over 5 minutes has elapsed.')
-        // console.log('Add modal to alert user')
         store.set("confirming", false)
         store.set("validatorTimeout", true)
         return
     }
 }
 
-export const ERC_ERC_MEDIATOR_ABI: any = [
-    {
+export const ERC_ERC_MEDIATOR_ABI: any =
+    [{
         "anonymous": false,
         "inputs": [
             { "indexed": true, "name": "token", "type": "address" },
@@ -312,23 +313,6 @@ export const ERC_ERC_MEDIATOR_ABI: any = [
         ],
         "name": "TokensBridged",
         "type": "event"
-    },
-    {
-        "type": "event",
-        "name": "NewTokenRegistered",
-        "inputs": [
-            {
-                "type": "address",
-                "name": "foreignToken",
-                "indexed": true
-            },
-            {
-                "type": "address",
-                "name": "homeToken",
-                "indexed": true
-            }
-        ],
-        "anonymous": false
     }]
 
 export const NATIVE_ERC_MEDIATOR_ABI: any =

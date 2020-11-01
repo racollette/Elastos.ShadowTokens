@@ -70,24 +70,13 @@ export const initLocalWeb3 = async function(type?: any) {
             netId = await web3.eth.net.getId();
             network = SUPPORTED_NETWORK_IDS[netId]
             store.set("walletConnecting", false);
-
         } else if (type === "WalletConnect") {
-            console.log('WalletConnect not yet supported')
-            const providerOptions = {
-                walletconnect: {
-                    package: WalletConnectProvider, // required
-                    options: {
-                        infuraId: process.env.REACT_APP_INFURA_KEY // "27e484dcd9e3efcfd25a83a78777cdf1" // required
-                    }
-                }
-            };
-            const web3Modal = new Web3Modal({
-                // network: selectedNetwork === "mainnet" ? "mainnet" : "private", // optional
-                cacheProvider: false, //optional
-                providerOptions,
+            const provider: any = new WalletConnectProvider({
+                infuraId: process.env.REACT_APP_INFURA_KEY // "27e484dcd9e3efcfd25a83a78777cdf1" // required
             });
-            const web3Provider = await web3Modal.connect();
-            web3 = new Web3(web3Provider);
+            await provider.enable();
+            console.log(provider)
+            web3 = new Web3(provider);
             setListener(web3)
 
             if (typeof web3.currentProvider === "string") return;
@@ -96,8 +85,6 @@ export const initLocalWeb3 = async function(type?: any) {
             netId = await web3.eth.net.getId();
             network = SUPPORTED_NETWORK_IDS[netId]
             store.set("walletConnecting", false);
-
-
         } else if (type === "Elaphant") {
             console.log('Elaphant wallet not yet supported')
             return
@@ -125,6 +112,7 @@ export const initLocalWeb3 = async function(type?: any) {
     store.set("localWeb3Address", accounts[0]);
     store.set("localWeb3Network", network);
     store.set("selectedWallet", true);
+    store.set("convert.destinationValid", true);
     setBridgeDirection(netId)
     return;
 };

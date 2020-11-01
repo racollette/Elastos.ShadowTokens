@@ -45,7 +45,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     "& img": {
       height: 60,
       width: "auto",
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(0.5),
     },
   },
   successText: {

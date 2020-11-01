@@ -67,7 +67,7 @@ class AppWrapper extends React.Component<Props> {
   }
 
   render() {
-    window.ethereum.autoRefreshOnNetworkChange = false;
+    if (window.ethereum) window.ethereum.autoRefreshOnNetworkChange = false;
     // window.ethereum.on(isVersion8 ? 'chainChanged' : 'networkChanged', network => {
     //     choiceNetwork()
     // })
@@ -116,13 +116,13 @@ class AppWrapper extends React.Component<Props> {
                         if (bridge === "eth") {
                           store.set("selectedPair", "ela");
                           store.set("selectedAsset", "eth");
-                          store.set("convert.selectedFormat", "elaeth");
+                          // store.set("convert.selectedFormat", "elaeth");
                           store.set("convert.selectedDirection", 0);
                         }
                         if (bridge === "ela") {
                           store.set("selectedPair", "eth");
                           store.set("selectedAsset", "ela");
-                          store.set("convert.selectedFormat", "ethela");
+                          // store.set("convert.selectedFormat", "ethela");
                           store.set("convert.selectedDirection", 1);
                         }
                       }
