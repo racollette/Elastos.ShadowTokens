@@ -1,16 +1,15 @@
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, ELA_AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
 import ELA_ICON from "../../../assets/ela.png"
 
 export const ELA = {
     0: {
         symbol: 'ELA',
-        name: 'Elastos on Ethereum',
+        name: 'ELA on Ethereum',
         id: 'ethela',
         transferType: 'release',
         network: 'Ethereum',
         networkID: 1,
-        address: '0xf7184E6449a522988D65F794fa53DA44Eddd78Fd',
-
+        address: '0xe6fd75ff38Adca4B97FBCD938c86b98772431867',
         confirmations: ETH_CONFIRMATIONS,
     },
     1: {
@@ -27,9 +26,9 @@ export const ELA = {
     home: 1,
     foreign: 0,
     icon: ELA_ICON,
-    bridgeMode: 'native_amb_erc',
+    bridgeMode: 'amb_native_erc',
     decimals: 18,
-    minTx: AMB_NATIVE_ERC_MIN_TX,
+    minTx: ELA_AMB_NATIVE_ERC_MIN_TX,
     fee: AMB_NATIVE_ERC_FEE,
     priceTicker: 'ela',
     priceFeed: 'https://api.coincap.io/v2/assets/elastos',

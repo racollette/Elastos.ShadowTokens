@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { ReactComponent as MenuIcon } from "../assets/menu.svg";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import useToggle from "../hooks/useToggle";
+import { useTranslation } from "react-i18next";
+import About from "./About";
 import ExternalLink from "./ExternalLink";
-
-const CODE_LINK = "https://github.com/Uniswap/uniswap-interface";
 
 const StyledMenuIcon = styled(MenuIcon)`
   path {
@@ -73,11 +73,29 @@ const MenuItem = styled(ExternalLink)`
   }
 `;
 
+const AboutItem = styled.span`
+  flex: 1;
+  padding: 0.5rem 0.5rem;
+  color: #c3c5cb;
+  :hover {
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  > svg {
+    margin-right: 8px;
+  }
+`;
+
 export default function Menu() {
   const node = useRef<HTMLDivElement>();
+  const about = useRef<HTMLDivElement>();
+  const { t } = useTranslation();
   const [open, toggle] = useToggle(false);
+  const [aboutOpen, toggleAbout] = useToggle(false);
 
   useOnClickOutside(node, open ? toggle : undefined);
+  useOnClickOutside(about, aboutOpen ? toggleAbout : undefined);
 
   return (
     <StyledMenu ref={node as any}>
@@ -86,23 +104,24 @@ export default function Menu() {
       </StyledMenuButton>
       {open && (
         <MenuFlyout>
-          <MenuItem id="link" href="https://uniswap.org/">
+          <AboutItem onClick={toggleAbout} ref={about as any}>
             <Info size={14} />
-            About
-          </MenuItem>
-          <MenuItem id="link" href="https://uniswap.org/docs/v2">
+            {t("Nav.About")}
+            {aboutOpen && <About />}
+          </AboutItem>
+          <MenuItem id="link" href="https://docs.tokenbridge.net/">
             <BookOpen size={14} />
-            Docs
+            {t("Nav.Docs")}
           </MenuItem>
-          <MenuItem id="link" href={CODE_LINK}>
+          <MenuItem id="link" href="https://github.com/elaphantapp/">
             <Code size={14} />
-            Code
+            {t("Nav.Code")}
           </MenuItem>
-          <MenuItem id="link" href="https://t.me/elabank">
+          <MenuItem id="link" href="https://t.me/elaphant">
             <MessageCircle size={14} />
             Telegram
           </MenuItem>
-          <MenuItem id="link" href="https://twitter.com/shadowtokens">
+          <MenuItem id="link" href="https://twitter.com/ElaphantTeam">
             <Twitter size={14} />
             Twitter
           </MenuItem>

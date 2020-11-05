@@ -233,7 +233,9 @@ class TransferContainer extends React.Component<any> {
       destSymbol: token[Number(!direction)].symbol,
       destAsset: token[Number(!direction)].id,
       destNetwork: token[Number(!direction)].network,
+      bridgeMode: token.bridgeMode,
       icon: token.icon,
+      decimals: token.decimals,
       amount: Number(amount),
       total: Number(total),
       address: token[direction].address,
@@ -260,10 +262,6 @@ class TransferContainer extends React.Component<any> {
     const selectedWallet = store.get("selectedWallet");
     const selectedDirection = store.get("convert.selectedDirection");
 
-    // const selectedAsset = store.get("selectedAsset");
-    // const destAsset = store.get("convert.selectedFormat");
-    // const destAssetName = TOKENS[destAsset].name;
-
     let assetConvertType = "Mint";
     let sourceAssetAction = "Lock";
     if (token[selectedDirection].transferType === "release") {
@@ -275,7 +273,6 @@ class TransferContainer extends React.Component<any> {
     const amount = store.get("convert.amount");
     let total = Number(store.get("convert.conversionTotal")).toFixed(4);
 
-    // Conditionals
     if (amount.length < 1) {
       total = "0.00";
     }
@@ -320,11 +317,7 @@ class TransferContainer extends React.Component<any> {
             src={BackArrow}
             alt="Back"
             onClick={() => {
-              // store.set("selectedWallet", false);
               store.set("confirmBridge", false);
-              // store.set("localWeb3Address", "");
-              store.set("walletConnecting", false);
-              store.set("spaceRequesting", false);
             }}
           />
           <Typography variant="overline" className={classes.navTitle}>

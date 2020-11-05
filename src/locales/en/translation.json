@@ -1,4 +1,11 @@
 {
+  "About.Title": "ShadowTokens",
+  "About.Message": "A decentralized protocol for mapping Ethereum token standards to Elastos based on POA bridge technology.",
+  "About.Copyright": "@2020 ElaBank",
+
+  "Nav.About": "About",
+  "Nav.Docs": "Docs",
+  "Nav.Code": "Code",
   "Nav.Connect": "Connect to a wallet",
   "Nav.Bridge": "Select a bridge",
 
@@ -69,6 +76,7 @@
   "Progress.Chain": "blockchain",
   "Progress.Explorer": "View in explorer",
   "Progress.Sent": "Transfer request sent",
+  "Progress.Verified": "Waiting for transaction to be included in a block...",
   "Progress.Blocks": "Waiting for block confirmations...",
   "Progress.Oracles": "Oracles validating transaction...",
   "Progress.Busy.Title": "Oracles Busy",
@@ -78,10 +86,5 @@
 
   "Warning.Title": "Warning",
   "Warning.Message": "Please be advised that retrieving Ethereum-based assets from other blockchains requires a wallet capable of switching networks. Currently, this includes the MetaMask, etc etc wallets.",
-  "Warning.Accept": "Okay",
-
-  "Footer.Home": "Home",
-  "Footer.About": "About",
-  "Footer.FAQs": "FAQs",
-  "Footer.Docs": "Docs"
+  "Warning.Accept": "Okay"
 }

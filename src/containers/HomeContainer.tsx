@@ -181,7 +181,7 @@ interface Props extends Balances {
   // t: WithTranslation;
 }
 
-class BridgeContainer extends React.Component<Props> {
+class HomeContainer extends React.Component<Props> {
   bridgeEl: React.RefObject<any>;
   pairsEl: React.RefObject<any>;
   state = {
@@ -460,4 +460,4 @@ class BridgeContainer extends React.Component<Props> {
   }
 }
 
-export default withStore(withStyles(styles)(BridgeContainer));
+export default withStore(withStyles(styles)(HomeContainer));

@@ -27,7 +27,7 @@ export const ELA_DEV = {
     home: 1,
     foreign: 0,
     icon: ELA_ICON,
-    bridgeMode: 'native_amb_erc',
+    bridgeMode: 'amb_native_erc',
     decimals: 18,
     minTx: AMB_NATIVE_ERC_MIN_TX,
     fee: AMB_NATIVE_ERC_FEE,

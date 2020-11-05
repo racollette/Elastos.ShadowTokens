@@ -9,7 +9,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS } from './config';
 import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS } from "../tokens";
-import { switchOriginChain } from "./txUtils";
+import { switchOriginChain, formatValue } from "./txUtils";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ELA_ICON from "../../../assets/ela.png";
 import ETH_ICON from "../../../assets/eth.png";
@@ -416,17 +416,18 @@ export const fetchTokenBalance = async function(token: any) {
     if (token[direction].network !== walletNetwork) return
 
     // if native coin
-    if (!token[direction].address) {
+    if (token.bridgeMode === "amb_native_erc") {
         const coinBal = await web3.eth.getBalance(walletAddress)
-        store.set(`${token[direction].id}Balance`, Number(web3.utils.fromWei(coinBal)).toFixed(4));
+        store.set(`${token[direction].id}Balance`, formatValue(coinBal, token.decimals));
         return
     }
 
     // if token
+    if (!token[direction].address) return
     const tokenContract = new web3.eth.Contract(ERC20_ABI, token[direction].address);
     const tokenBal = await tokenContract.methods.balanceOf(walletAddress).call();
 
-    store.set(`${token[direction].id}Balance`, Number(web3.utils.fromWei(tokenBal)).toFixed(4));
+    store.set(`${token[direction].id}Balance`, formatValue(tokenBal, token.decimals));
     store.set("loadingBalances", false);
     return
 }

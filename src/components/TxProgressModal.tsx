@@ -254,14 +254,24 @@ const TxProgressModal: React.FC<Props> = function (props) {
                       <Typography className={classes.confirmationText}>
                         <Translate text="Progress.Blocks" />
                       </Typography>
-
-                      <LinearDeterminate
-                        confirmationNumber={confirmation}
-                        confirmationTotal={total}
-                      />
-                      <Typography className={classes.confirmationText}>
-                        {confirmation} of {total}
-                      </Typography>
+                      {confirmation < 1 ? (
+                        <div>
+                          <LinearProgress color="primary" />
+                          <Typography className={classes.confirmationText}>
+                            <Translate text="Progress.Verified" />
+                          </Typography>
+                        </div>
+                      ) : (
+                        <div>
+                          <LinearDeterminate
+                            confirmationNumber={confirmation}
+                            confirmationTotal={total}
+                          />
+                          <Typography className={classes.confirmationText}>
+                            {confirmation} of {total}
+                          </Typography>
+                        </div>
+                      )}
                     </div>
                   )}
 

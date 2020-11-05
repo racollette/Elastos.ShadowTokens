@@ -1,4 +1,4 @@
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, ETH_AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
 import ETH_ICON from "../../../assets/eth.png";
 
 export const ETH = {
@@ -15,21 +15,21 @@ export const ETH = {
     },
     1: {
         symbol: 'ETH',
-        name: 'Ethereum on Elastos',
+        name: 'ETH on Elastos',
         id: 'elaeth',
         transferType: 'release',
         network: 'Elastos',
         networkID: 20,
-        address: '0xf7184E6449a522988D65F794fa53DA44Eddd78Fd',
+        address: '0x802c3e839e4fdb10af583e3e759239ec7703501e',
         confirmations: ELA_CONFIRMATIONS,
 
     },
     home: 0,
     foreign: 1,
     icon: ETH_ICON,
-    bridgeMode: 'native_amb_erc',
+    bridgeMode: 'amb_native_erc',
     decimals: 18,
-    minTx: AMB_NATIVE_ERC_MIN_TX,
+    minTx: ETH_AMB_NATIVE_ERC_MIN_TX,
     fee: AMB_NATIVE_ERC_FEE,
     priceTicker: 'eth',
     priceFeed: 'https://api.coincap.io/v2/assets/ethereum',

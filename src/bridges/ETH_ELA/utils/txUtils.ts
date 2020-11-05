@@ -21,6 +21,14 @@ export const removeWindowBlocker = function() {
     window.removeEventListener("beforeunload", windowBlocker);
 };
 
+
+export const formatValue = (num: any, dec: number) => {
+    const number = window.BigInt(num);
+    const round = window.BigInt(10 ** Number(dec));
+    const value = Number((number * window.BigInt(1000)) / round) / 1000;
+    return value.toFixed(4);
+};
+
 const countDecimals = (value: any) => {
     if (Math.floor(value) === value) return 0;
     return value.toString().split('.')[1].length || 0;

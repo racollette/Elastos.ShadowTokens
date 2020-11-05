@@ -1,4 +1,11 @@
 {
+  "About.Title": "ShadowTokens",
+  "About.Message": "A decentralized protocol for mapping Ethereum token standards to Elastos based on POA bridge technology.",
+  "About.Copyright": "@2020 ElaBank",
+
+  "Nav.About": "About",
+  "Nav.Docs": "Docs",
+  "Nav.Code": "Code",
   "Nav.Connect": "Connect to a wallet",
   "Nav.Bridge": "Select a bridge",
 
@@ -68,6 +75,7 @@
   "Progress.Chain": "区块链",
   "Progress.Explorer": "在浏览器查看",
   "Progress.Sent": "传送请求已发送",
+  "Progress.Verified": "Waiting for transaction to be included in a block...",
   "Progress.Blocks": "等待区块链确认...",
   "Progress.Oracles": "见证人正在验证交易...",
   "Progress.Accept": "好的",

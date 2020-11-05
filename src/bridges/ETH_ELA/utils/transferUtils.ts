@@ -1,11 +1,12 @@
 import { getStore } from "../../../services/storeService";
 import Web3 from "web3";
-import { VALIDATOR_TIMEOUT } from '../tokens/config';
+import { VALIDATOR_TIMEOUT, PREAUTHORIZE_AMOUNT } from '../tokens/config';
 import { SUPPORTED_RPC_URLS } from './config';
 import { EventData } from 'web3-eth-contract'
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ERC677_ABI from "../abis/ERC677_ABI.json";
-import MEDIATOR_ABI from "../abis/MEDIATOR_ABI.json";
+import AMB_NATIVE_ERC_ABI from "../abis/AMB_NATIVE_ERC_ABI.json";
+import MULTI_AMB_ERC_ERC_ABI from "../abis/MULTI_AMB_ERC_ERC_ABI.json";
 import { MEDIATOR_CONTRACTS } from "./contracts";
 
 export const handleBridgeMode = function(confirmTx: any) {
@@ -23,14 +24,15 @@ export const handleBridgeMode = function(confirmTx: any) {
 export const getMediatorContracts = function(confirmTx: any) {
     const store = getStore();
     const web3 = store.get("localWeb3")
-    let bridgeMode;
-    if (confirmTx.sourceAsset === 'eth' || confirmTx.sourceAsset === 'elaeth' || confirmTx.sourceAsset === 'ela' || confirmTx.sourceAsset === 'ethela') {
-        bridgeMode = 'amb_native_erc'
+
+    let abi;
+    const bridgeMode = confirmTx.bridgeMode
+    if (bridgeMode === 'amb_native_erc') {
+        abi = AMB_NATIVE_ERC_ABI
     } else {
-        bridgeMode = 'multi_amb_erc_erc'
+        abi = MULTI_AMB_ERC_ERC_ABI
     }
 
-    console.log(confirmTx)
     let source = MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.sourceNetwork][confirmTx.type]
     let dest = MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.sourceNetwork].release
     if (confirmTx.type === "release") {
@@ -41,11 +43,12 @@ export const getMediatorContracts = function(confirmTx: any) {
     const contracts = {
         bridgeMode: bridgeMode,
         source: source,
-        sourceMediator: new web3.eth.Contract(MEDIATOR_ABI, source),
+        sourceMediator: new web3.eth.Contract(abi, source),
         dest: dest,
-        minTx: MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.sourceNetwork].minTx,
-        maxTx: MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.sourceNetwork].maxTx,
     }
+
+    console.log('Confirmed Transaction', confirmTx)
+    console.log('Mediator Contracts', contracts)
 
     return contracts
 }
@@ -64,8 +67,22 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
 
     if (confirmTx.type === 'mint') {
 
+        console.log('native mint')
+        console.log(recipient)
+        console.log(value)
+        console.log(from)
+        console.log(contracts.sourceMediator)
+
+
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)
+
+        // Check tx limits
+        const mintx = await contracts.sourceMediator.methods.minPerTx().call()
+        const maxtx = await contracts.sourceMediator.methods.maxPerTx().call()
+        console.log('Min Tx', mintx)
+        console.log('Max Tx', maxtx)
+
         await contracts.sourceMediator.methods.relayTokens(recipient).send({
             from: from,
             value: value,
@@ -159,16 +176,18 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
 
     if (contracts.sourceMediator) {
         const value = web3.utils.toWei(String(confirmTx.amount), "ether")
+        const excessValue = web3.utils.toWei(String(PREAUTHORIZE_AMOUNT), "ether")
 
-        // const excessValue = web3.utils.toWei(String(Number(confirmTx.amount)* 1000000)), "ether")
-        // const allowance = await token.methods.allowance(from, to).call()
-        // console.log('allowance', allowance)
-        // if (toBN(allowance).lt(toBN(value))) {
+        const allowance = await token.methods.allowance(from, contracts.source).call()
+        if (window.BigInt(allowance) >= window.BigInt(value)) {
+            console.log('Allowance exceeds value, skipping approval')
+            bridgeTokens(contracts, confirmTx.address, value, from, confirmTx)
+            return
+        }
 
-        // ApproveSpend
         store.set("waitingApproval", true);
         store.set("transactionType", "approve")
-        await token.methods.approve(contracts.source, value).send({ from }, (error: any, hash: any) => {
+        await token.methods.approve(contracts.source, excessValue).send({ from }, (error: any, hash: any) => {
             if (error) {
                 if (error.code === 4001) {
                     store.set("waitingApproval", false)
@@ -188,20 +207,20 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
                 store.set("waitingApproval", false);
             })
 
-        relayTokens(contracts, confirmTx.address, value, from, confirmTx)
+        bridgeTokens(contracts, confirmTx.address, value, from, confirmTx)
     }
 }
 
-export const relayTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any) {
+export const bridgeTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any) {
     const store = getStore();
-    const sourceMediator = contracts.sourceMediator
     const mediatorConfs = confirmTx.confirmations
     const recipient = confirmTx.destAddress
     store.set("confirmationTotal", mediatorConfs)
 
     store.set("transactionType", "relay")
     store.set("waitingApproval", true)
-    await sourceMediator.methods.relayTokens(tokenAddress, recipient, value).send({
+
+    await contracts.sourceMediator.methods.relayTokens(tokenAddress, recipient, value).send({
         from
     }, (error: any, hash: any) => {
         if (error) {
@@ -291,7 +310,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             return
         }
         fromBlock = currentBlock
-        await wait(4000);
+        await wait(10000);
     }
 
     if (Date.now() > stopTime) {

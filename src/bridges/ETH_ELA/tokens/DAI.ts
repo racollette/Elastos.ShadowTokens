@@ -19,7 +19,7 @@ export const DAI = {
         transferType: 'release',
         network: 'Elastos',
         networkID: 20,
-        address: '', // generate on elastos
+        address: '0xa41bffd77b68619aa3073acde91f32ee3d996a8a', // generate on elastos
         confirmations: ELA_CONFIRMATIONS,
     },
     home: 0,

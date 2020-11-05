@@ -27,7 +27,7 @@ export const ETH_DEV = {
     home: 0,
     foreign: 1,
     icon: ETH_ICON,
-    bridgeMode: 'native_amb_erc',
+    bridgeMode: 'amb_native_erc',
     decimals: 18,
     minTx: AMB_NATIVE_ERC_MIN_TX,
     fee: AMB_NATIVE_ERC_FEE,

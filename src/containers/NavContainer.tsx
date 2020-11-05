@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import LanguageSelect from "../components/LanguageSelect";
 import { Translate } from "../components/Translate";
+import Switch from "../components/Switch";
 import Menu from "../components/Menu";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
@@ -206,7 +207,6 @@ class NavContainer extends React.Component<any> {
                 alignItems="center"
                 justify="flex-end"
               >
-                {/* <Grid item xs={8}> */}
                 <WalletButton
                   disableRipple
                   onClick={() => {
@@ -234,11 +234,10 @@ class NavContainer extends React.Component<any> {
                   ) : (
                     <span className={classes.walletButtonText}>
                       <Translate text="Nav.Connect" />
-                      {/* <span className={classes.hideMobile}></span> */}
                     </span>
                   )}
                 </WalletButton>
-                {/* </Grid> */}
+
                 <Hidden smDown>
                   <BridgeButton
                     disableRipple
@@ -277,12 +276,11 @@ class NavContainer extends React.Component<any> {
                     ) : (
                       <span className={classes.bridgeButtonText}>
                         <Translate text="Nav.Bridge" />
-
-                        {/* <span className={classes.hideMobile}></span> */}
                       </span>
                     )}
                   </BridgeButton>
                 </Hidden>
+                <Switch />
                 <Hidden smDown>
                   <LanguageSelect
                     className={classes.hideMobile}
@@ -290,9 +288,7 @@ class NavContainer extends React.Component<any> {
                     isVisible={true}
                   />
                 </Hidden>
-                {/* <Grid item xs={4}> */}
                 <Menu />
-                {/* </Grid> */}
               </Grid>
             </Grid>
           </Grid>

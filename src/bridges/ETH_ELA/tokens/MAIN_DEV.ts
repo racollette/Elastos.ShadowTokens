@@ -1,7 +1,7 @@
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from './config';
 import MAIN_ICON from "../../../assets/main.png";
 
-export const MAIN = {
+export const MAIN_DEV = {
     0: {
         symbol: 'MAIN',
         name: 'Main',
