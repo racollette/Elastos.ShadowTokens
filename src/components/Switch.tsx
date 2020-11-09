@@ -7,7 +7,7 @@ import { depositELA } from "../services/sidechain";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   switchContainer: {
-    height: 38,
+    height: 36,
     minWidth: 48,
     border: "1px solid rgb(66,66,66)",
     borderRadius: 8,

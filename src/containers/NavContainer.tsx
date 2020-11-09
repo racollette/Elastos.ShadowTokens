@@ -26,7 +26,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   logo: {
-    height: 40,
+    height: 42,
     width: "auto",
     marginRight: theme.spacing(1),
     [theme.breakpoints.down("xs")]: {

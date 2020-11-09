@@ -11,7 +11,6 @@ import Menu from "@material-ui/core/Menu";
 import CradleAnimation from "../components/CradleAnimation";
 import { Translate } from "../components/Translate";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
-// import ShadowtokensTitle from "../assets/logo_title11.svg";
 
 import {
   BRIDGE_SYMBOL_MAP,
