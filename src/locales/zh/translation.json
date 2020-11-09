@@ -86,8 +86,7 @@
   "Warning.Message": "请注意，从其他区块链中检索基于Ethereum的资产需要一个能够切换网络的钱包。目前，这包括MetaMask等钱包。",
   "Warning.Accept": "好的",
 
-  "Footer.Home": "首页",
-  "Footer.About": "关于",
-  "Footer.FAQs": "FAQs",
-  "Footer.Docs": "文档"
+  "Sidechain.Disclaimer": "This is a temporary address and can only be used once!",
+
+  "Sidechain.Deposit.Renewal.Waiting": "Monitoring for deposit"
 }

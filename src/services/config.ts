@@ -1,0 +1,3 @@
+
+export const SIDECHAIN_TRANSFER_TIMEOUT = 216000000 // 60 minutes
+

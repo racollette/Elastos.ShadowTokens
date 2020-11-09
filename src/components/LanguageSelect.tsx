@@ -109,7 +109,7 @@ const RoundButton = withStyles({
   root: {
     position: "relative",
     marginLeft: 6,
-    height: 36,
+    height: 38,
     minWidth: 48,
     textTransform: "none",
     border: "1px solid rgb(66,66,66)",

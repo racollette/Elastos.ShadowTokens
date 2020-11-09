@@ -8,7 +8,7 @@ export const USDT = {
         id: 'usdt',
         transferType: 'mint',
         network: 'Ethereum',
-        networkID: 42,
+        networkID: 1,
         address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
         confirmations: ETH_CONFIRMATIONS,
     },
@@ -18,7 +18,7 @@ export const USDT = {
         id: 'ethusdt',
         transferType: 'release',
         network: 'Elastos',
-        networkID: 21,
+        networkID: 20,
         address: '', // generate on elastos
         confirmations: ELA_CONFIRMATIONS,
     },

@@ -81,10 +81,43 @@
   "Progress.Oracles": "Oracles validating transaction...",
   "Progress.Busy.Title": "Oracles Busy",
   "Progress.Busy.Message": "The transfer is taking longer than expected. Please monitor the block explorer for confirmation.",
-
   "Progress.Accept": "OKAY",
 
   "Warning.Title": "Warning",
   "Warning.Message": "Please be advised that retrieving Ethereum-based assets from other blockchains requires a wallet capable of switching networks. Currently, this includes the MetaMask, etc etc wallets.",
-  "Warning.Accept": "Okay"
+  "Warning.Accept": "Okay",
+
+  "Sidechain.Disclaimer": "This is a temporary address and can only be used once!",
+  "Sidechain.Description.Title": "DESCRIPTION",
+  "Sidechain.Description.Deposit.Message": "ELA to Sidechain from Mainchain",
+  "Sidechain.Description.Withdaw.Message": "ELA to Mainchain from Sidechain",
+  "Sidechain.Start.Title": "START",
+  "Sidechain.Start.Message": "Send ELA to the address below",
+  "Sidechain.Status.Title": "STATUS",
+  "Sidechain.Balance.Title": "BALANCE",
+  "Sidechain.Amount.Title": "ENTER AMOUNT",
+  "Sidechain.Destination.Title": "ENTER DESTINATION",
+  "Sidechain.ClickToCopy": "Copy address",
+  "Sidechain.Copied": "Copied",
+  "Sidechain.Reset.Deposit": "Make another deposit",
+  "Sidechain.Reset.Withdraw": "Make another withdrawal",
+  "Sidechain.Notify.Time": "It may take 10-15 minutes for your balance to update",
+
+  "Sidechain.Deposit": "Deposit",
+  "Sidechain.Deposit.Renewal.Waiting": "Monitoring for deposit",
+  "Sidechain.Deposit.Renewal.Timeout": "Never received your ELA. If you have already transferred, please join the Telegram group and contact the admin for processing",
+  "Sidechain.Deposit.Transferring": "Your deposit has been received and is transferring to the sidechain",
+  "Sidechain.Deposit.Transfer.Finish": "Deposit Completed",
+  "Sidechain.Deposit.Transfer.Failed": "Transaction failed, please join the Telegram group and contact the admin for processing",
+  "Sidechain.Deposit.Backing": "Refunding",
+  "Sidechain.Deposit.Back.Finish": "Refunded",
+  "Sidechain.Deposit.Back.Failed": "Refund failed, please join the Telegram group and contact the admin for processing",
+  "Sidechain.Deposit.Direct.Transferring": "Cross-chain transfer in progress",
+  "Sidechain.Deposit.Direct.Transfer.Finish": "Cross-chain transfer completed",
+  "Sidechain.Deposit.Direct.Transfer.Failed": "Cross-chain transfer failed",
+
+  "Sidechain.Withdraw": "Withdraw",
+  "Sidechain.Withdraw.Input.Address": "Mainchain Address or CryptoName",
+  "Sidechain.Withdraw.Waiting": "Monitoring for withdrawal",
+  "Sidechain.Withdraw.Complete": "Withdrawal Completed"
 }

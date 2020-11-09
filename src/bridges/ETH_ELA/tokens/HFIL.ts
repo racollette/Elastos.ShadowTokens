@@ -8,7 +8,7 @@ export const HFIL = {
         id: 'hfil',
         transferType: 'mint',
         network: 'Ethereum',
-        networkID: 42,
+        networkID: 1,
         address: '0x9afb950948c2370975fb91a441f36fdc02737cd4',
         confirmations: ETH_CONFIRMATIONS,
     },
@@ -18,7 +18,7 @@ export const HFIL = {
         id: 'ethhfil',
         transferType: 'release',
         network: 'Elastos',
-        networkID: 21,
+        networkID: 20,
         address: '', // generate on elastos
         confirmations: ELA_CONFIRMATIONS,
     },

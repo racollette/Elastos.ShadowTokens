@@ -136,7 +136,7 @@ const WalletButton = withStyles({
     border: "1px solid " + theme.palette.primary.main,
     borderRadius: 8,
     backgroundColor: "rgb(13, 129, 207, 0.2)",
-    padding: 5,
+    padding: 6,
     "&:hover": {
       backgroundColor: "rgb(13, 129, 207, 0.45)",
     },
@@ -150,7 +150,7 @@ const BridgeButton = withStyles({
     border: "1px solid " + theme.palette.secondary.main,
     borderRadius: 8,
     backgroundColor: "rgb(200, 83, 103, 0.2)",
-    padding: 5,
+    padding: 6,
     "&:hover": {
       backgroundColor: "rgb(200, 83, 103, 0.45)",
     },
@@ -179,7 +179,7 @@ class NavContainer extends React.Component<any> {
       <Grid item xs={12} className={classes.navContainer}>
         {
           <Grid container alignItems="center">
-            <Grid item xs={3} sm={5}>
+            <Grid item xs={2} sm={5}>
               <Grid
                 container
                 justify="flex-start"
@@ -200,7 +200,7 @@ class NavContainer extends React.Component<any> {
                 </Hidden>
               </Grid>
             </Grid>
-            <Grid item xs={9} sm={7}>
+            <Grid item xs={10} sm={7}>
               <Grid
                 container
                 className={classes.navButtons}

@@ -3,6 +3,7 @@ import Web3 from "web3";
 import { VALIDATOR_TIMEOUT, PREAUTHORIZE_AMOUNT } from '../tokens/config';
 import { SUPPORTED_RPC_URLS } from './config';
 import { EventData } from 'web3-eth-contract'
+import { parseValue } from "./txUtils";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ERC677_ABI from "../abis/ERC677_ABI.json";
 import AMB_NATIVE_ERC_ABI from "../abis/AMB_NATIVE_ERC_ABI.json";
@@ -59,30 +60,15 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
     const web3 = store.get("localWeb3")
     const from = confirmTx.sourceAddress
     const recipient = confirmTx.destAddress
-    const value = web3.utils.toWei(String(confirmTx.amount), "ether")
-
-    // const asset = store.get("token")
+    // const value = web3.utils.toWei(String(confirmTx.amount), "ether")
+    const value = web3.utils.toBN(String(parseValue(confirmTx.amount, confirmTx.decimals))).toString()
     const mediatorConfs = confirmTx.confirmations
     store.set("confirmationTotal", mediatorConfs)
 
     if (confirmTx.type === 'mint') {
 
-        console.log('native mint')
-        console.log(recipient)
-        console.log(value)
-        console.log(from)
-        console.log(contracts.sourceMediator)
-
-
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)
-
-        // Check tx limits
-        const mintx = await contracts.sourceMediator.methods.minPerTx().call()
-        const maxtx = await contracts.sourceMediator.methods.maxPerTx().call()
-        console.log('Min Tx', mintx)
-        console.log('Max Tx', maxtx)
-
         await contracts.sourceMediator.methods.relayTokens(recipient).send({
             from: from,
             value: value,
@@ -175,8 +161,11 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
     const token = new web3.eth.Contract(ERC20_ABI, confirmTx.address);
 
     if (contracts.sourceMediator) {
-        const value = web3.utils.toWei(String(confirmTx.amount), "ether")
-        const excessValue = web3.utils.toWei(String(PREAUTHORIZE_AMOUNT), "ether")
+        const value = web3.utils.toBN(String(parseValue(confirmTx.amount, confirmTx.decimals))).toString()
+        let excessValue = value
+        if (confirmTx.sourceNetwork === "Ethereum") {
+            excessValue = web3.utils.toBN(String(parseValue(PREAUTHORIZE_AMOUNT, confirmTx.decimals))).toString()
+        }
 
         const allowance = await token.methods.allowance(from, contracts.source).call()
         if (window.BigInt(allowance) >= window.BigInt(value)) {
@@ -219,7 +208,6 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
 
     store.set("transactionType", "relay")
     store.set("waitingApproval", true)
-
     await contracts.sourceMediator.methods.relayTokens(tokenAddress, recipient, value).send({
         from
     }, (error: any, hash: any) => {

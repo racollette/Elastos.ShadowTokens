@@ -6,7 +6,7 @@ const DarkTooltip = withStyles((theme) => ({
     color: "rgb(28, 28, 28)",
   },
   tooltip: {
-    fontSize: 12,
+    fontSize: 14,
     backgroundColor: "rgb(28, 28, 28)",
     border: "0.5px solid #fff",
   },

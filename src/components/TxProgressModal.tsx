@@ -87,7 +87,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   waitingText: {
     color: theme.palette.info.contrastText,
-    fontSize: 16,
+    fontSize: 14,
     paddingTop: theme.spacing(1),
     [theme.breakpoints.down("sm")]: {
       fontSize: 14,
@@ -251,24 +251,24 @@ const TxProgressModal: React.FC<Props> = function (props) {
 
                   {confirmationStep === 1 && (
                     <div className={classes.generalContainer}>
-                      <Typography className={classes.confirmationText}>
-                        <Translate text="Progress.Blocks" />
-                      </Typography>
                       {confirmation < 1 ? (
                         <div>
                           <LinearProgress color="primary" />
-                          <Typography className={classes.confirmationText}>
+                          <Typography className={classes.waitingText}>
                             <Translate text="Progress.Verified" />
                           </Typography>
                         </div>
                       ) : (
                         <div>
+                          <Typography className={classes.confirmationText}>
+                            {confirmation} of {total}
+                          </Typography>
                           <LinearDeterminate
                             confirmationNumber={confirmation}
                             confirmationTotal={total}
                           />
-                          <Typography className={classes.confirmationText}>
-                            {confirmation} of {total}
+                          <Typography className={classes.waitingText}>
+                            <Translate text="Progress.Blocks" />
                           </Typography>
                         </div>
                       )}

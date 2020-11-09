@@ -89,4 +89,19 @@ export const INITIAL_STATE = {
     "convert.selectedDirection": 0,
     "convert.amount": "",
     "convert.destination": "",
+
+    // sidechain deposit and withdraw
+    page: "bridge",
+    depositMainchainAddress: "",
+    exchangeID: 0,
+    depositStatus: "Sidechain.Deposit.Renewal.Waiting",
+    depositInProgress: 0,
+    monitoringTransfer: false,
+    withdrawalAmount: 0,
+    withdrawalAddress: "",
+    withdrawalInProgress: 0,
+    withdrawalStatus: "Sidechain.Withdraw.Waiting",
+    cryptoName: "",
+    cryptoNameFound: false
+
 };

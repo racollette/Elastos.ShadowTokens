@@ -18,7 +18,7 @@ const StyledMenuButton = styled.button`
   background-color: rgb(36, 36, 36);
   margin: 0;
   padding: 0;
-  height: 36px;
+  height: 38px;
   padding: 0 0.5rem;
   border-radius: 8px;
   border: 1px solid rgb(66, 66, 66) !important;

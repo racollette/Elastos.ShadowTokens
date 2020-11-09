@@ -10,6 +10,7 @@ import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_A
 import { SUPPORTED_NETWORK_IDS } from './config';
 import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS } from "../tokens";
 import { switchOriginChain, formatValue } from "./txUtils";
+import { depositELA } from "../../../services/sidechain";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ELA_ICON from "../../../assets/ela.png";
 import ETH_ICON from "../../../assets/eth.png";
@@ -113,6 +114,7 @@ export const initLocalWeb3 = async function(type?: any) {
     store.set("localWeb3Network", network);
     store.set("selectedWallet", true);
     store.set("convert.destinationValid", true);
+    depositELA()
     setBridgeDirection(netId)
     return;
 };
@@ -206,7 +208,6 @@ export const addCustomToken = (customToken: any, network: string) => {
         customTokensList.push(customToken);
     }
     customTokensList = uniqueTokens(customTokensList);
-    console.log(customTokensList)
     window.localStorage.setItem(
         'customTokens',
         JSON.stringify(customTokensList),
@@ -416,7 +417,7 @@ export const fetchTokenBalance = async function(token: any) {
     if (token[direction].network !== walletNetwork) return
 
     // if native coin
-    if (token.bridgeMode === "amb_native_erc") {
+    if (token.bridgeMode === "amb_native_erc" && token.home === direction) {
         const coinBal = await web3.eth.getBalance(walletAddress)
         store.set(`${token[direction].id}Balance`, formatValue(coinBal, token.decimals));
         return

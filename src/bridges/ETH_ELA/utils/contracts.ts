@@ -7,8 +7,8 @@ export const MEDIATOR_CONTRACTS: any = {
                 mint: '0xfBec16ac396431162789FF4b5f65F47978988D7f',  // Home, Ethereum
             },
             'Elastos': {
-                release: '', // Foreign, Ethereum
-                mint: '', // Home, Elastos
+                release: '0x6Ae6B30F6bb361136b0cC47fEe25E44B7d58605c', // Foreign, Ethereum
+                mint: '0x0054351c99288D37B96878EDC2319ca006c8B910', // Home, Elastos
             },
             'Kovan': {
                 release: '0xf12d52246e86bbE26702aDe133262f94235507C6',  // Foreign, Elastos Testnet

@@ -9,7 +9,7 @@ export const ELA = {
         transferType: 'release',
         network: 'Ethereum',
         networkID: 1,
-        address: '0xe6fd75ff38Adca4B97FBCD938c86b98772431867',
+        address: '0xe6fd75ff38adca4b97fbcd938c86b98772431867',
         confirmations: ETH_CONFIRMATIONS,
     },
     1: {

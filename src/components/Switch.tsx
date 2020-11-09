@@ -1,10 +1,33 @@
 import React from "react";
 import { getStore } from "../services/storeService";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Styles, withStyles } from "@material-ui/styles";
+import theme from "../theme/theme";
 import Switch from "@material-ui/core/Switch";
+import { depositELA } from "../services/sidechain";
 
-export default function SwitchLabels() {
+const styles: Styles<typeof theme, any> = (theme) => ({
+  switchContainer: {
+    height: 38,
+    minWidth: 48,
+    border: "1px solid rgb(66,66,66)",
+    borderRadius: 8,
+    backgroundColor: "rgb(36,36,36)",
+    marginLeft: 6,
+  },
+});
+
+const CustomSwitch = withStyles({
+  switchBase: {
+    color: theme.palette.secondary.main,
+  },
+  checked: {},
+  track: {
+    backgroundColor: theme.palette.secondary.main,
+  },
+})(Switch);
+
+function SwitchMode(props: any) {
+  const { classes } = props;
   const store = getStore();
   const [state, setState] = React.useState({
     checkedA: true,
@@ -17,22 +40,21 @@ export default function SwitchLabels() {
       store.set("page", "bridge");
     } else {
       store.set("page", "sidechain");
+      store.set("depositInProgress", 0);
+      depositELA();
     }
   };
 
   return (
-    <FormGroup row>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={state.checkedB}
-            onChange={handleChange}
-            name="checkedB"
-            color="primary"
-          />
-        }
-        label=""
+    <div className={classes.switchContainer}>
+      <CustomSwitch
+        checked={state.checkedB}
+        onChange={handleChange}
+        name="checkedB"
+        color="primary"
       />
-    </FormGroup>
+    </div>
   );
 }
+
+export default withStyles(styles)(SwitchMode);

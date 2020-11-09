@@ -349,7 +349,13 @@ class TransferContainer extends React.Component<any> {
                         <Balance
                           balance={balance}
                           direction={selectedDirection}
-                          store={store}
+                          onSetMax={() => {
+                            if (balance) {
+                              store.set("convert.amount", balance);
+                            } else {
+                              store.set("convert.amount", 0);
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>

@@ -39,15 +39,15 @@ const styles: Styles<any, any> = () => ({
 });
 
 interface Props {
+  onSetMax: () => void;
   className?: string;
   classes: { [key in string]: string };
   direction: number;
   balance: string;
-  store: any;
 }
 
 const Balance: React.FC<Props> = function (props) {
-  const { classes, direction, balance, store } = props;
+  const { classes, direction, balance } = props;
 
   return (
     <React.Fragment>
@@ -57,11 +57,7 @@ const Balance: React.FC<Props> = function (props) {
           classes.button
         )}
         onClick={() => {
-          if (balance) {
-            store.set("convert.amount", balance);
-          } else {
-            store.set("convert.amount", 0);
-          }
+          props.onSetMax();
         }}
       >
         <Translate text="Transfer.Max" />

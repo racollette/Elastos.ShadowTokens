@@ -9,7 +9,7 @@ export const WBTC = {
         destID: 'ethwbtc',
         transferType: 'mint',
         network: 'Ethereum',
-        networkID: 42,
+        networkID: 1,
         address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
         confirmations: ETH_CONFIRMATIONS,
     },
@@ -19,7 +19,7 @@ export const WBTC = {
         id: 'ethwbtc',
         transferType: 'release',
         network: 'Elastos',
-        networkID: 21,
+        networkID: 20,
         address: '', // generate on elastos
         confirmations: ELA_CONFIRMATIONS,
     },
