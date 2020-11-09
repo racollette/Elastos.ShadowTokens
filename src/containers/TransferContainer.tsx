@@ -16,6 +16,7 @@ import {
 import {
   fetchTokenBalance,
   isSelectedNetwork,
+  isContractAddress,
 } from "../bridges/ETH_ELA/utils/walletUtils";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
@@ -529,15 +530,30 @@ class TransferContainer extends React.Component<any> {
                       let address = value;
                       if (value.length > 0) {
                         store.set("convert.destination", value);
-                        // Address validator hard coded to ethereum
                       } else {
                         address = localWeb3Address;
                         store.set("convert.destination", localWeb3Address);
                       }
-                      store.set(
-                        "convert.destinationValid",
-                        AddressValidator.validate(address, "ETH", "prod")
+                      // Address validator hard coded to ethereum
+                      const isValidAddress = AddressValidator.validate(
+                        address,
+                        "ETH",
+                        "prod"
                       );
+
+                      if (isValidAddress) {
+                        isContractAddress(address).then((isContract) => {
+                          if (!isContract) {
+                            store.set("convert.destinationValid", true);
+                            store.set("convert.showDestinationError", false);
+                          } else {
+                            store.set("convert.showDestinationError", true);
+                          }
+                        });
+                      } else {
+                        store.set("convert.showDestinationError", true);
+                        store.set("convert.destinationValid", false);
+                      }
                     }}
                   />
                 </div>

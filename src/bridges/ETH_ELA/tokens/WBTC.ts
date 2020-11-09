@@ -27,7 +27,7 @@ export const WBTC = {
     foreign: 1,
     icon: WBTC_ICON,
     bridgeMode: 'multi_amb_erc_erc',
-    decimals: 18,
+    decimals: 88,
     minTx: MULTI_AMB_ERC_ERC_MIN_TX,
     fee: MULTI_AMB_ERC_ERC_FEE,
     priceTicker: 'bitcoin',

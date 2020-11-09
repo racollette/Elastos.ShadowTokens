@@ -76,7 +76,6 @@ export const initLocalWeb3 = async function(type?: any) {
                 infuraId: process.env.REACT_APP_INFURA_KEY // "27e484dcd9e3efcfd25a83a78777cdf1" // required
             });
             await provider.enable();
-            console.log(provider)
             web3 = new Web3(provider);
             setListener(web3)
 
@@ -86,9 +85,6 @@ export const initLocalWeb3 = async function(type?: any) {
             netId = await web3.eth.net.getId();
             network = SUPPORTED_NETWORK_IDS[netId]
             store.set("walletConnecting", false);
-        } else if (type === "Elaphant") {
-            console.log('Elaphant wallet not yet supported')
-            return
         } else {
             console.error("Invalid wallet type.");
             store.set("spaceError", true);
@@ -148,8 +144,8 @@ export const generateCustomTokenDetails = async function(tokenAddress: string, n
     const networkID = await web3.eth.net.getId();
     const home = getHomeNetwork(networkID)
 
-    const contractExists = await web3.eth.getCode(tokenAddress) === '0x' ? false : true;
-    if (!contractExists) return false
+    const isContract = await (isContractAddress(tokenAddress))
+    if (!isContract) return
 
     const tokenContract = new web3.eth.Contract(ERC20_ABI, tokenAddress);
     const [name, symbol, decimals] = await Promise.all([
@@ -496,29 +492,14 @@ export const abbreviateAddress = function(walletAddress: string) {
     }
 };
 
+export const isContractAddress = async function(address: string) {
+    const store = getStore();
+    const web3 = store.get("localWeb3");
+
+    const code = await web3.eth.getCode(address);
+    const isContract = code === '0x' ? false : true;
+    return isContract
+}
 
 export default {};
-
-//  getAccount: function (callback) {
-//     this.theWeb3.eth.getAccounts().then((accounts) => {
-//       this._theAccount = accounts[0];
-//       return callback(this._theAccount);
-//     });
-//   },
-
-//   getBalanceOfToken: function (callback) {
-//     this.getTokenContract()
-//       .methods.balanceOf(this._theAccount)
-//       .call()
-//       .then((balance) => {
-//         return callback(balance);
-//       });
-//   },
-
-//   getBalanceOfETH: function (callback) {
-//     this.theWeb3.eth.getBalance(this._theAccount).then((balance) => {
-//       console.log("ETH balance", balance);
-//       return callback(this.theWeb3.utils.fromWei(balance, "ether"));
-//     });
-//   },
 

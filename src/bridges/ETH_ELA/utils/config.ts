@@ -3,6 +3,9 @@ import Elaphant from "../../../assets/elaphant.png";
 import WalletConnect from "../../../assets/walletconnect.svg";
 import { ETH_DEFAULTS } from '../tokens'
 
+export const VALIDATOR_TIMEOUT = 300000 // Milliseconds
+export const PREAUTHORIZE_AMOUNT = 1000000 // Tokens
+
 export const WALLET_ICON_MAP: { [key in string]: string } = {
     MetaMask: MetaMask,
     Elaphant: Elaphant,

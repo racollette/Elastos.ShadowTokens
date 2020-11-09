@@ -1,6 +1,6 @@
 import { getStore } from "../../../services/storeService";
 import Web3 from "web3";
-import { VALIDATOR_TIMEOUT, PREAUTHORIZE_AMOUNT } from '../tokens/config';
+import { VALIDATOR_TIMEOUT, PREAUTHORIZE_AMOUNT } from './config';
 import { SUPPORTED_RPC_URLS } from './config';
 import { EventData } from 'web3-eth-contract'
 import { parseValue } from "./txUtils";
@@ -92,9 +92,6 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 store.set("waitingApproval", false);
                 store.set("confirming", true);
                 store.set("confirmationStep", 1);
-            })
-            .on('receipt', function(receipt: any) {
-                console.log('receipt')
             })
             .on('confirmation', function(confirmationNumber: number, receipt: any) {
                 const confirmed = updateRelayConfirmations(confirmationNumber, mediatorConfs)
@@ -302,7 +299,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
     }
 
     if (Date.now() > stopTime) {
-        // console.log('Mediator contract TokensBridged timeout. Over 5 minutes has elapsed.')
+        console.log('Mediator contract TokensBridged timeout. Over 5 minutes has elapsed.')
         store.set("confirming", false)
         store.set("validatorTimeout", true)
         return

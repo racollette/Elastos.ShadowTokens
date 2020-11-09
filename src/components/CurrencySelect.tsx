@@ -106,7 +106,6 @@ class CurrencySelect extends React.Component<Props> {
   }
 
   handleClose(event: any) {
-    // console.log(event, event.target, event.target.value)
     const value = event.target.value;
     if (value) {
       this.props.onCurrencyChange(value);

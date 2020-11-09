@@ -187,7 +187,7 @@ const TokenSelectorModal: React.FC<Props> = function (props) {
         setSearching(true);
         generateCustomTokenDetails(lowercaseSearch, network).then(
           (response: any) => {
-            console.log("response", response);
+            // console.log(response);
             if (response) {
               setFilteredTokenList(newFilteredTokenList.concat(response));
               setFoundCustom(true);
@@ -367,7 +367,6 @@ const TokenSelectorModal: React.FC<Props> = function (props) {
                         color="primary"
                         variant="outlined"
                         onClick={() => {
-                          console.log(token);
                           // add to custom token list, assign active token, close modal
                           handleClose();
                           props.onAssetChange(token);

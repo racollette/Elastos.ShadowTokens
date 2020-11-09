@@ -7,7 +7,8 @@ import { DAI } from './DAI'
 import { USDT } from './USDT'
 import { USDC } from './USDC'
 import { HFIL } from './HFIL'
-import { WBTC } from './WBTC'
+// import { WBTC } from './WBTC'
+import { BAT } from './BAT'
 import { ELP } from './ELP'
 
 // Dev imports
@@ -20,12 +21,12 @@ export const ETH_DEFAULTS = [
     ETH,
     // ERC20 tokens
     ELA,
-    WBTC,
     DAI,
     USDT,
     USDC,
     HFIL,
-    ELP,
+    BAT,
+    ELP
 ]
 
 export const ELA_DEFAULTS = [
@@ -33,11 +34,11 @@ export const ELA_DEFAULTS = [
     ELA,
     // ERC20 tokens
     ETH,
-    WBTC,
     DAI,
     USDT,
     USDC,
     HFIL,
+    BAT,
     ELP
 ]
 

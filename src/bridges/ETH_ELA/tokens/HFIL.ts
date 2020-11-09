@@ -19,7 +19,7 @@ export const HFIL = {
         transferType: 'release',
         network: 'Elastos',
         networkID: 20,
-        address: '', // generate on elastos
+        address: '0x8deff781d4f3491e54fb7b4b8c61400681becaa0',
         confirmations: ELA_CONFIRMATIONS,
     },
     home: 0,

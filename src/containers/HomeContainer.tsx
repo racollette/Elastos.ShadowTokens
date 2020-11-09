@@ -229,7 +229,6 @@ class HomeContainer extends React.Component<Props> {
   }
 
   handlePairsClose(event: any) {
-    // console.log(event, event.target, event.target.value)
     const value = event.target.value;
     if (value) {
       this.props.onPairChange(value);

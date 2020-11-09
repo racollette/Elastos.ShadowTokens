@@ -74,6 +74,22 @@ export default createMuiTheme({
                 },
             },
         },
+        MuiFormLabel: {
+            root: {
+                "&.Mui-error": {
+                    color: "rgb(200, 83, 103, 1)",
+                }
+            }
+
+        },
+        MuiFormHelperText: {
+            root: {
+                "&.Mui-error": {
+                    color: "rgb(200, 83, 103, 1)",
+                }
+            }
+
+        },
         MuiOutlinedInput: {
             root: {
                 fontSize: 14,
@@ -135,6 +151,7 @@ export default createMuiTheme({
                 width: "calc(100% - 32px)",
             },
         },
+
         // .MuiToggleButtonGroup-grouped:not(:first-child)
         MuiToggleButton: {
             root: {

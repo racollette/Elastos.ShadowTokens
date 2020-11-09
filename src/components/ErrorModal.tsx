@@ -242,7 +242,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                               <b>Name:</b> Elastos
                             </Typography>
                             <Typography color="inherit">
-                              <b>RPC URL:</b> https://mainrpc.eleth.io
+                              <b>RPC URL:</b> https://mainrpc.elaeth.io
                             </Typography>
                             <Typography color="inherit">
                               <b>Chain ID:</b> 20
@@ -266,7 +266,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                               <b>Name:</b> Elastos Testnet
                             </Typography>
                             <Typography color="inherit">
-                              <b>RPC URL:</b> https://rpc.eleth.io
+                              <b>RPC URL:</b> https://rpc.elaeth.io
                             </Typography>
                             <Typography color="inherit">
                               <b>Chain ID:</b> 21
