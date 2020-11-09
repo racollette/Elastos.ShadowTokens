@@ -8,6 +8,7 @@ import { USDT } from './USDT'
 import { USDC } from './USDC'
 import { HFIL } from './HFIL'
 import { WBTC } from './WBTC'
+import { ELP } from './ELP'
 
 // Dev imports
 import { ETH_DEV } from './ETH_DEV'
@@ -24,6 +25,7 @@ export const ETH_DEFAULTS = [
     USDT,
     USDC,
     HFIL,
+    ELP,
 ]
 
 export const ELA_DEFAULTS = [
@@ -36,6 +38,7 @@ export const ELA_DEFAULTS = [
     USDT,
     USDC,
     HFIL,
+    ELP
 ]
 
 ///////////////////////////////////////////

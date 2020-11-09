@@ -4,12 +4,15 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import classNames from "classnames";
 import theme from "../theme/theme";
+// import Hidden from "@material-ui/core/Hidden";
 import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Fail from "../assets/fail.svg";
 import Alert from "../assets/alert.svg";
+// import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import DarkTooltip from "./DarkTooltip";
 import { Translate } from "./Translate";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
@@ -53,8 +56,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   generalContainer: {
     paddingTop: theme.spacing(4),
-    alignItems: "center",
-    justifyContent: "center",
   },
   confirmationText: {
     // color: theme.palette.info.contrastText,
@@ -109,25 +110,6 @@ const ErrorModal: React.FC<Props> = function (props) {
         >
           <Fade in={true}>
             <div className={classes.container}>
-              {errorType === "wrongNetwork" && (
-                <div>
-                  <div className={classes.errorContainer}>
-                    <img src={Fail} alt="Error" />
-                    <Typography className={classes.successText}>
-                      <Translate text="Error.WrongNetwork.Title" />
-                    </Typography>
-                  </div>
-                  <div className={classes.generalContainer}>
-                    <Typography className={classes.confirmationText}>
-                      <Translate text="Error.WrongNetwork.Message1" />
-                      &nbsp;{targetNetwork}
-                      &nbsp;
-                      <Translate text="Error.WrongNetwork.Message2" />
-                    </Typography>
-                  </div>
-                </div>
-              )}
-
               {errorType === "noWeb3" && (
                 <div>
                   <div className={classes.errorContainer}>
@@ -234,6 +216,88 @@ const ErrorModal: React.FC<Props> = function (props) {
                       <Translate text="Error.Unknown.Message" />
                     </Typography>
                   </div>
+                </div>
+              )}
+
+              {errorType === "wrongNetwork" && (
+                <div>
+                  <div className={classes.errorContainer}>
+                    <img src={Fail} alt="Error" />
+                    <Typography className={classes.successText}>
+                      <Translate text="Error.WrongNetwork.Title" />
+                    </Typography>
+                  </div>
+                  <DarkTooltip
+                    placement="right"
+                    title={
+                      <React.Fragment>
+                        {targetNetwork === "Elastos" && (
+                          <>
+                            <Typography color="inherit">
+                              <u>
+                                <b>Network Settings</b>
+                              </u>
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Name:</b> Elastos
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>RPC URL:</b> https://mainrpc.eleth.io
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Chain ID:</b> 20
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Symbol:</b> ELA
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Explorer:</b> https://explorer.elaeth.io
+                            </Typography>
+                          </>
+                        )}
+                        {targetNetwork === "Elastos Testnet" && (
+                          <>
+                            <Typography color="inherit">
+                              <u>
+                                <b>Network Settings</b>
+                              </u>
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Name:</b> Elastos Testnet
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>RPC URL:</b> https://rpc.eleth.io
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Chain ID:</b> 21
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Symbol:</b> ELA
+                            </Typography>
+                            <Typography color="inherit">
+                              <b>Explorer:</b> https://testnet.elaeth.io
+                            </Typography>
+                          </>
+                        )}
+                      </React.Fragment>
+                    }
+                  >
+                    <Grid
+                      container
+                      justify="center"
+                      alignItems="center"
+                      className={classes.generalContainer}
+                    >
+                      <Typography className={classes.confirmationText}>
+                        <Translate text="Error.WrongNetwork.Message1" />{" "}
+                        {targetNetwork}{" "}
+                        <Translate text="Error.WrongNetwork.Message2" />
+                        {/* <Hidden smUp>
+                          <HelpOutlineIcon />
+                        </Hidden> */}
+                      </Typography>{" "}
+                    </Grid>
+                  </DarkTooltip>
                 </div>
               )}
 

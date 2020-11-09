@@ -118,5 +118,6 @@
   "Sidechain.Withdraw": "Withdraw",
   "Sidechain.Withdraw.Input.Address": "Mainchain Address or CryptoName",
   "Sidechain.Withdraw.Waiting": "Monitoring for withdrawal",
+  "Sidechain.Withdraw.Confirming": "Waiting for block confirmations",
   "Sidechain.Withdraw.Complete": "Withdrawal Completed"
 }

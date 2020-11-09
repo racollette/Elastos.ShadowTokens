@@ -15,7 +15,7 @@ export const ETH_DEV = {
     },
     1: {
         symbol: 'ETH',
-        name: 'Ethereum on Elastos',
+        name: 'ETH on Elastos',
         id: 'elaeth',
         transferType: 'release',
         network: 'Elastos Testnet',

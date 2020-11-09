@@ -30,7 +30,6 @@ const styles = () => ({
   root: {
     flexGrow: 1,
     backgroundColor: "rgb(32,32,32)",
-    // backgroundColor: "#FFF",
     color: theme.palette.primary.contrastText,
   },
   container: {
@@ -199,8 +198,8 @@ const Sidechain: React.FC<Props> = function (props) {
       <Grid className={classes.container}>
         <div className={classes.root}>
           <Tabs value={value} onChange={handleChange} centered>
-            <Tab label="Deposit ELA" color="primary" />
-            <Tab label="Withdraw ELA" />
+            <Tab label={`${t("Sidechain.Deposit")} ELA`} color="primary" />
+            <Tab label={`${t("Sidechain.Withdraw")} ELA`} />
           </Tabs>
           {/* Deposit */}
           <TabPanel value={value} index={0}>
@@ -343,7 +342,7 @@ const Sidechain: React.FC<Props> = function (props) {
                       <Grid item xs={12} className={classes.statusBox}>
                         <Grid item className={classes.spacer}>
                           <Typography className={classes.step}>
-                            {t("Sidechain.Balance.Status")}
+                            {t("Sidechain.Status.Title")}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -455,156 +454,147 @@ const Sidechain: React.FC<Props> = function (props) {
               </Grid>
               {localWeb3Address.length === 42 ? (
                 <>
-                  {depositInProgress === 0 && (
-                    <>
-                      <Grid item xs={12} className={classes.statusBox}>
-                        <Grid item>
-                          <Typography className={classes.step}>
-                            {t("Sidechain.Amount.Title")}
-                          </Typography>
-                          <Grid item>
-                            <Grid container alignItems="center">
-                              <Grid item xs={8}>
-                                <Grid container justify="flex-end">
-                                  <BigCurrencyInput
-                                    value={amount}
-                                    placeholder={"0.00"}
-                                    onChange={(event: any) => {
-                                      let value = event.value || "";
-                                      store.set("withdrawalAmount", value);
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
-                              <Grid item xs={4}>
-                                <Grid container justify="flex-end">
-                                  <Balance
-                                    balance={balance}
-                                    direction={1}
-                                    onSetMax={() => {
-                                      if (balance) {
-                                        store.set("withdrawalAmount", balance);
-                                      } else {
-                                        store.set("withdrawalAmount", 0);
-                                      }
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
+                  <Grid item xs={12} className={classes.statusBox}>
+                    <Grid item>
+                      <Typography className={classes.step}>
+                        {t("Sidechain.Amount.Title")}
+                      </Typography>
+                      <Grid item>
+                        <Grid container alignItems="center">
+                          <Grid item xs={8}>
+                            <Grid container justify="flex-end">
+                              <BigCurrencyInput
+                                value={amount}
+                                placeholder={"0.00"}
+                                onChange={(event: any) => {
+                                  let value = event.value || "";
+                                  store.set("withdrawalAmount", value);
+                                }}
+                              />
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
-                      <Grid item xs={12} className={classes.statusBox}>
-                        <Grid item>
-                          <Typography className={classes.step}>
-                            {t("Sidechain.Destination.Title")}
-                          </Typography>
-                          <Grid item>
-                            <Grid container alignItems="center">
-                              <TextField
-                                size="medium"
-                                fullWidth={true}
-                                placeholder={t(
-                                  "Sidechain.Withdraw.Input.Address"
-                                )}
-                                InputProps={{ disableUnderline: true }}
-                                InputLabelProps={{
-                                  shrink: true,
-                                }}
-                                // helperText={
-                                //   withdrawalAddress.length !== 34
-                                //     ? "Not a valid Elastos address"
-                                //     : ""
-                                // }
-                                onChange={(event) => {
-                                  store.set("cryptoNameFound", false);
-                                  const address = event.target.value.toString();
-                                  searchCryptoName(address);
-                                  if (!cryptoNameFound) {
-                                    store.set("withdrawalAddress", address);
+                          <Grid item xs={4}>
+                            <Grid container justify="flex-end">
+                              <Balance
+                                balance={balance}
+                                direction={1}
+                                onSetMax={() => {
+                                  if (balance) {
+                                    store.set("withdrawalAmount", balance);
+                                  } else {
+                                    store.set("withdrawalAmount", 0);
                                   }
                                 }}
                               />
                             </Grid>
-                            {cryptoNameFound ? (
-                              <Grid container>
-                                <Grid item xs zeroMinWidth>
-                                  <Typography
-                                    className={classes.statusText}
-                                    noWrap
-                                  >
-                                    {cryptoNameAddress}
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                            ) : null}
                           </Grid>
                         </Grid>
                       </Grid>
-                      {withdrawalInProgress === 0 && (
-                        <Button
-                          variant={"contained"}
-                          disabled={!enableButton}
-                          disableRipple
-                          color="primary"
-                          size="large"
-                          fullWidth
-                          className={classes.actionButton}
-                          onClick={() => {
-                            if (walletNetwork !== "Elastos") {
-                              store.set("wrongNetwork", true);
-                            }
-                            if (amount > balance) {
-                              store.set("insufficientBalance", true);
-                            }
-                            if (withdrawalAddress.length === 34) {
-                              withdrawELA(withdrawalAddress, amount);
-                            }
-                          }}
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} className={classes.statusBox}>
+                    <Grid item>
+                      <Typography className={classes.step}>
+                        {t("Sidechain.Destination.Title")}
+                      </Typography>
+                      <Grid item>
+                        <Grid container alignItems="center">
+                          <TextField
+                            size="medium"
+                            fullWidth={true}
+                            placeholder={t("Sidechain.Withdraw.Input.Address")}
+                            InputProps={{ disableUnderline: true }}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            // helperText={
+                            //   withdrawalAddress.length !== 34
+                            //     ? "Not a valid Elastos address"
+                            //     : ""
+                            // }
+                            onChange={(event) => {
+                              store.set("cryptoNameFound", false);
+                              const address = event.target.value.toString();
+                              searchCryptoName(address);
+                              if (!cryptoNameFound) {
+                                store.set("withdrawalAddress", address);
+                              }
+                            }}
+                          />
+                        </Grid>
+                        {cryptoNameFound ? (
+                          <Grid container>
+                            <Grid item xs zeroMinWidth>
+                              <Typography className={classes.statusText} noWrap>
+                                {cryptoNameAddress}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {withdrawalInProgress === 0 && (
+                    <Button
+                      variant={"contained"}
+                      disabled={!enableButton}
+                      disableRipple
+                      color="primary"
+                      size="large"
+                      fullWidth
+                      className={classes.actionButton}
+                      onClick={() => {
+                        if (walletNetwork !== "Elastos") {
+                          store.set("wrongNetwork", true);
+                        }
+                        if (amount > balance) {
+                          store.set("insufficientBalance", true);
+                        }
+                        if (withdrawalAddress.length === 34) {
+                          withdrawELA(withdrawalAddress, amount);
+                        }
+                      }}
+                    >
+                      {t("Sidechain.Withdraw")}
+                    </Button>
+                  )}
+                  {withdrawalInProgress >= 1 && (
+                    <Grid item xs={12} className={classes.statusBox}>
+                      <Grid item className={classes.spacer}>
+                        <Typography className={classes.step}>
+                          {t("Sidechain.Status.Title")}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Grid
+                          container
+                          justify="flex-start"
+                          className={classes.statusText}
                         >
-                          {t("Sidechain.Withdraw")}
-                        </Button>
-                      )}
-                      {withdrawalInProgress >= 1 && (
-                        <Grid item xs={12} className={classes.statusBox}>
-                          <Grid item className={classes.spacer}>
-                            <Typography className={classes.step}>
-                              {t("Sidechain.Status.Title")}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Grid
-                              container
-                              justify="flex-start"
-                              className={classes.statusText}
-                            >
-                              {t(withdrawalStatus)}
-                            </Grid>
-                          </Grid>
-                          {withdrawalInProgress === 1 && (
-                            <Grid item className={classes.progress}>
-                              <LinearProgress color="primary" />
-                            </Grid>
-                          )}
+                          {t(withdrawalStatus)}
+                        </Grid>
+                      </Grid>
+                      {withdrawalInProgress === 1 && (
+                        <Grid item className={classes.progress}>
+                          <LinearProgress color="primary" />
                         </Grid>
                       )}
-                      {withdrawalInProgress === 2 && (
-                        <Button
-                          variant={"contained"}
-                          disableRipple
-                          color="primary"
-                          size="large"
-                          fullWidth
-                          className={classes.actionButton}
-                          onClick={() => {
-                            store.set("withdrawalInProgress", 0);
-                          }}
-                        >
-                          {t("Sidechain.Reset.Withdraw")}
-                        </Button>
-                      )}
-                    </>
+                    </Grid>
+                  )}
+                  {withdrawalInProgress === 2 && (
+                    <Button
+                      variant={"contained"}
+                      disableRipple
+                      color="primary"
+                      size="large"
+                      fullWidth
+                      className={classes.actionButton}
+                      onClick={() => {
+                        store.set("withdrawalInProgress", 0);
+                      }}
+                    >
+                      {t("Sidechain.Reset.Withdraw")}
+                    </Button>
                   )}
                 </>
               ) : (

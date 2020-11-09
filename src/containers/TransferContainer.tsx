@@ -6,7 +6,7 @@ import classNames from "classnames";
 import BackArrow from "../assets/back-arrow.svg";
 import Lock from "../assets/lock.svg";
 import Release from "../assets/unlock.svg";
-import Mint from "../assets/mint1.svg";
+import Mint from "../assets/mint.svg";
 import Burn from "../assets/burn.svg";
 import {
   convertWei,

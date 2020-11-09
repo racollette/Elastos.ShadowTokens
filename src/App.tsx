@@ -5,7 +5,6 @@ import { ThemeProvider, withStyles } from "@material-ui/styles";
 import theme from "./theme/theme";
 import { INITIAL_STATE } from "./bridges/ETH_ELA/utils/config";
 import { init } from "./bridges/ETH_ELA/utils/walletUtils";
-import { checkDepositStatus } from "./services/sidechain";
 import Grid from "@material-ui/core/Grid";
 import NavContainer from "./containers/NavContainer";
 import Bridge from "./pages/Bridge";
@@ -61,14 +60,6 @@ class AppWrapper extends React.Component<Props> {
     storeListener(store);
 
     const page = store.get("page");
-    const monitoringTransfer = store.get("monitoringTransfer");
-    if (page === "sidechain") {
-      setTimeout(() => {
-        if (!monitoringTransfer) {
-          checkDepositStatus();
-        }
-      }, 30000);
-    }
 
     return (
       <ThemeProvider theme={theme}>

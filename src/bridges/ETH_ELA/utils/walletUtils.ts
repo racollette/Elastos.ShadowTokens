@@ -114,7 +114,9 @@ export const initLocalWeb3 = async function(type?: any) {
     store.set("localWeb3Network", network);
     store.set("selectedWallet", true);
     store.set("convert.destinationValid", true);
-    depositELA()
+    if (store.get("page") === "sidechain") {
+        depositELA()
+    }
     setBridgeDirection(netId)
     return;
 };

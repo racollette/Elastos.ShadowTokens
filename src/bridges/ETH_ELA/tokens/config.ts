@@ -12,7 +12,8 @@ export const ETH_AMB_NATIVE_ERC_MAX_TX = 750000000000000000000000 // Wei
 
 export const MULTI_AMB_ERC_ERC_MIN_TX = 500000000000000000 // Wei
 export const MULTI_AMB_ERC_ERC_MAX_TX = 750000000000000000000000 // Wei
-export const MULTI_AMB_ERC_ERC_FEE = 0.1 // Percentage
+export const MULTI_AMB_ERC_ERC_FEE = 0.5 // Percentage
+
 export const AMB_NATIVE_ERC_MIN_TX = 500000000000000000 // Wei
 export const AMB_NATIVE_ERC_MAX_TX = 750000000000000000000000 // Wei
-export const AMB_NATIVE_ERC_FEE = 0.1 // Percentage
+export const AMB_NATIVE_ERC_FEE = 0.5 // Percentage

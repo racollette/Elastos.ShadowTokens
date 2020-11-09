@@ -19,7 +19,7 @@ export const USDC = {
         transferType: 'release',
         network: 'Elastos',
         networkID: 20,
-        address: '', // generate on elastos
+        address: '0xa06be0f5950781ce28d965e5efc6996e88a8c141',
         confirmations: ELA_CONFIRMATIONS,
     },
     home: 0,

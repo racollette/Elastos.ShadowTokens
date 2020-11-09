@@ -4,7 +4,7 @@ import ELA_ICON from "../../../assets/ela.png"
 export const ELA_DEV = {
     0: {
         symbol: 'ELA',
-        name: 'Elastos on Ethereum',
+        name: 'ELA on Ethereum',
         id: 'ethela',
         transferType: 'release',
         network: 'Kovan',

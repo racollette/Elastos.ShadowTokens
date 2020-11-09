@@ -52,7 +52,7 @@
   "Confirm.Start": "Begin Transfer",
 
   "Error.WrongNetwork.Title": "Wrong Network",
-  "Error.WrongNetwork.Message1": "Please switch your wallet to the",
+  "Error.WrongNetwork.Message1": "Please switch to the",
   "Error.WrongNetwork.Message2": "network",
   "Error.NoWeb3.Title": "No Wallet Found",
   "Error.NoWeb3.Message": "Is it installed? Please enable it before continuing.",
@@ -119,5 +119,6 @@
   "Sidechain.Withdraw": "Withdraw",
   "Sidechain.Withdraw.Input.Address": "Mainchain Address or CryptoName",
   "Sidechain.Withdraw.Waiting": "Monitoring for withdrawal",
+  "Sidechain.Withdraw.Confirming": "Waiting for block confirmations",
   "Sidechain.Withdraw.Complete": "Withdrawal Completed"
 }
