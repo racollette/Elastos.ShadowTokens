@@ -546,9 +546,11 @@ const Sidechain: React.FC<Props> = function (props) {
                       onClick={() => {
                         if (walletNetwork !== "Elastos") {
                           store.set("wrongNetwork", true);
+                          return;
                         }
                         if (amount > balance) {
                           store.set("insufficientBalance", true);
+                          return;
                         }
                         if (withdrawalAddress.length === 34) {
                           withdrawELA(withdrawalAddress, amount);

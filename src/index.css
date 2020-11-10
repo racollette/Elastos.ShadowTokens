@@ -1,5 +1,5 @@
 @import url(//db.onlinewebfonts.com/c/88f10bf18a36407ef36bf30bc25a3618?family=Suisse+Intl);
-@font-face {
+/* @font-face {
   font-family: "Suisse Intl";
   src: url("//db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.eot");
   src: url("//db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.eot?#iefix")
@@ -12,7 +12,7 @@
       format("truetype"),
     url("//db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.svg#Suisse Intl")
       format("svg");
-}
+} */
 
 body {
   margin: 0;

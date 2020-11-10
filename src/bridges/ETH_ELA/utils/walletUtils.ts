@@ -67,14 +67,7 @@ export const initLocalWeb3 = async function(type?: any) {
             const web3Provider = await web3Modal.connect();
 
             web3 = new Web3(web3Provider);
-            setListener(web3)
 
-            if (typeof web3.currentProvider === "string") return;
-            if (!web3.currentProvider) return;
-            accounts = await web3.eth.getAccounts();
-            netId = await web3.eth.net.getId();
-            network = SUPPORTED_NETWORK_IDS[netId]
-            store.set("walletConnecting", false);
         } else if (type === "WalletConnect") {
             const provider: any = new WalletConnectProvider({
                 rpc: {
@@ -86,14 +79,6 @@ export const initLocalWeb3 = async function(type?: any) {
             });
             await provider.enable();
             web3 = new Web3(provider);
-            setListener(web3)
-
-            if (typeof web3.currentProvider === "string") return;
-            if (!web3.currentProvider) return;
-            accounts = await web3.eth.getAccounts();
-            netId = await web3.eth.net.getId();
-            network = SUPPORTED_NETWORK_IDS[netId]
-            store.set("walletConnecting", false);
         } else {
             console.error("Invalid wallet type.");
             store.set("spaceError", true);
@@ -112,6 +97,14 @@ export const initLocalWeb3 = async function(type?: any) {
         store.set("walletConnecting", false);
         return;
     }
+
+    setListener(web3)
+    if (typeof web3.currentProvider === "string") return;
+    if (!web3.currentProvider) return;
+    accounts = await web3.eth.getAccounts();
+    netId = await web3.eth.net.getId();
+    network = SUPPORTED_NETWORK_IDS[netId]
+    store.set("walletConnecting", false);
 
     // Configure current network tokens
     store.set("localWeb3", web3);
