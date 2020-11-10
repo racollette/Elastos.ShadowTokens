@@ -7,7 +7,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 // import { toBN } from 'web3-utils';
 
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from '../tokens/config';
-import { SUPPORTED_NETWORK_IDS } from './config';
+import { SUPPORTED_NETWORK_IDS, SUPPORTED_RPC_URLS } from './config';
 import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS } from "../tokens";
 import { switchOriginChain, formatValue } from "./txUtils";
 import { depositELA } from "../../../services/sidechain";
@@ -24,9 +24,18 @@ export const init = function() {
     fetchTokenBalance(initialAsset)
 }
 
+export const disconnectWeb3Provider = async function() {
+    const store = getStore();
+    const web3 = store.get("localWeb3");
+    if (!web3) return
+    const provider: any = web3.currentProvider;
+    await provider.disconnect()
+}
+
 
 export const initLocalWeb3 = async function(type?: any) {
     const store = getStore();
+    // disconnectWeb3Provider()
     store.set("walletConnecting", true);
     store.set("spaceError", false);
 
@@ -52,13 +61,8 @@ export const initLocalWeb3 = async function(type?: any) {
                 return
             }
 
-            const providerOptions = {
-            };
-
             const web3Modal = new Web3Modal({
-                // network: selectedNetwork === "mainnet" ? "mainnet" : "private", // optional
                 cacheProvider: false, //optional
-                providerOptions,
             });
             const web3Provider = await web3Modal.connect();
 
@@ -73,7 +77,12 @@ export const initLocalWeb3 = async function(type?: any) {
             store.set("walletConnecting", false);
         } else if (type === "WalletConnect") {
             const provider: any = new WalletConnectProvider({
-                infuraId: process.env.REACT_APP_INFURA_KEY // "27e484dcd9e3efcfd25a83a78777cdf1" // required
+                rpc: {
+                    1: SUPPORTED_RPC_URLS["Ethereum"],
+                    20: SUPPORTED_RPC_URLS["Elastos"],
+                    21: "https://rpc.elaeth.io",
+                    42: SUPPORTED_RPC_URLS["Kovan"],
+                }
             });
             await provider.enable();
             web3 = new Web3(provider);
