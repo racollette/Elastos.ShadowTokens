@@ -27,7 +27,7 @@ export const EXPLORER_URLS: { [key in string]: string } = {
 }
 
 export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
-    'Ethereum': `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    'Ethereum': "https://api-eth.elaphant.app/api/1/eth/wrap", //`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     'Kovan': `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     'Elastos': "https://mainrpc.elaeth.io",
     'Elastos Testnet': "https://rpc.elaeth.io",

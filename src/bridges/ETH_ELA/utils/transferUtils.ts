@@ -295,7 +295,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             return
         }
         fromBlock = currentBlock
-        await wait(10000);
+        await wait(12000);
     }
 
     if (Date.now() > stopTime) {
