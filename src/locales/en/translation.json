@@ -20,7 +20,7 @@
   "Wallet.Disconnect": "Disconnect",
 
   "Transfer.Header": "Build transaction",
-  "Transfer.Destination": "Destination Address",
+  "Transfer.Destination": "Destination Address (Optional)",
   "Transfer.Connect": "Connect Wallet",
   "Transfer.From": "From",
   "Transfer.To": "To",

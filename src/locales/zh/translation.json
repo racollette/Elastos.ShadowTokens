@@ -20,7 +20,7 @@
   "Wallet.Disconnect": "Disconnect",
 
   "Transfer.Header": "创建交易",
-  "Transfer.Destination": "目的地址",
+  "Transfer.Destination": "Destination Address (Optional)",
   "Transfer.Connect": "连接钱包",
   "Transfer.From": "从",
   "Transfer.To": "到",
