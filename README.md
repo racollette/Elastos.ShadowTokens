@@ -58,15 +58,15 @@ There are also icons labeled 'Lock', 'Release', 'Burn', and 'Mint'. These will c
 
 You should now have some ELA in your wallet on the Ethereum chain. To view this, switch your network in MetaMask to the Ethereum mainnet. The app should update to reflect your new balances on the chosen network.
 
-*Note: You can also view the opposite bridge direction by clicking the swap icon in the middle, but you will need to switch your network before beginning a transfer. It will not auto-connect your wallet to the proper network.*
-
 ![shadowtokens_github](/src/assets/docs/8.png)
 
 To view the ELA that you minted on Ethereum, click the 'ETH' dropdown menu to open the default token list and select ELA.
 
-*Note: This is also where you can add custom tokens by pasting the token contract address in the search field.*
+*Note: You can also view the opposite bridge direction by clicking the swap icon in the middle, but you will need to switch your network before beginning a transfer. It will not auto-connect your wallet to the proper network.*
 
-![shadowtokens_github](/src/assets/docs/9.png)
+![shadowtokens_github](/src/assets/docs/9.1.png)
+
+*Note: This is also where you can add custom tokens by pasting the token contract address in the search field.*
 
 To return your ELA on Ethereum back to Elastos, simply repeat the same process as above. You will now be burning the ELA token on Ethereum, and releasing your original ELA to your account. Keep in mind that gas fees will be much higher when initiating a transfer from the Ethereum network (and more confirmations are required), so plan accordingly.
 
