@@ -297,12 +297,14 @@ class TransferContainer extends React.Component<any> {
     const locale = i18n.language;
     const placeholder =
       locale === "en"
-        ? `Enter ${token[selectedDirection].network} Address`
-        : `输入 ${token[selectedDirection].network} 地址`;
+        ? `Enter ${token[Number(!selectedDirection)].network} Address`
+        : `输入 ${token[Number(!selectedDirection)].network} 地址`;
     const inputError =
       locale === "en"
-        ? `Please enter a valid ${token[selectedDirection].network} address`
-        : `请输入一个有效的 ${token[selectedDirection].network} 地址`;
+        ? `Please enter a valid ${
+            token[Number(!selectedDirection)].network
+          } address`
+        : `请输入一个有效的 ${token[Number(!selectedDirection)].network} 地址`;
 
     // const allowance = store.get("convert.adapterWbtcAllowance");
     // const hasAllowance = Number(amount) <= Number(allowance);
