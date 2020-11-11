@@ -3,7 +3,7 @@ import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
 import { SwapCalls } from "@material-ui/icons";
 import classNames from "classnames";
-import BackArrow from "../assets/back-arrow.svg";
+// import BackArrow from "../assets/back-arrow.svg";
 import Lock from "../assets/lock.svg";
 import Release from "../assets/unlock.svg";
 import Mint from "../assets/mint.svg";
@@ -311,7 +311,7 @@ class TransferContainer extends React.Component<any> {
 
     return (
       <div className={classes.container}>
-        <div className={classes.headerText}>
+        {/* <div className={classes.headerText}>
           <img
             className={classes.back}
             src={BackArrow}
@@ -323,7 +323,7 @@ class TransferContainer extends React.Component<any> {
           <Typography variant="overline" className={classes.navTitle}>
             <Translate text="Transfer.Header" />
           </Typography>
-        </div>
+        </div> */}
         {
           <div className={classes.actionsContainer}>
             <Grid className={classes.actions}>
@@ -370,7 +370,7 @@ class TransferContainer extends React.Component<any> {
                         onChange={(event: any) => {
                           let value = event.value || "";
                           store.set("convert.amount", String(value));
-                          gatherFeeData();
+                          gatherFeeData(selectedDirection);
                         }}
                       />
                     </Grid>
@@ -384,7 +384,7 @@ class TransferContainer extends React.Component<any> {
                           onAssetChange={(token: any) => {
                             store.set("token", token);
                             fetchTokenBalance(token);
-                            gatherFeeData();
+                            gatherFeeData(selectedDirection);
                           }}
                         />
                       </Grid>

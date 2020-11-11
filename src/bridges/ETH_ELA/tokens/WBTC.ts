@@ -1,4 +1,4 @@
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from './config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from './config';
 import WBTC_ICON from "../../../assets/wbtc.png";
 
 export const WBTC = {
@@ -12,6 +12,7 @@ export const WBTC = {
         networkID: 1,
         address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
         confirmations: ETH_CONFIRMATIONS,
+        fee: MULTI_AMB_ERC_ERC_FEE_HOME,
     },
     1: {
         symbol: 'ethWBTC',
@@ -22,6 +23,7 @@ export const WBTC = {
         networkID: 20,
         address: '', // generate on elastos
         confirmations: ELA_CONFIRMATIONS,
+        fee: MULTI_AMB_ERC_ERC_FEE_FOREIGN,
     },
     home: 0,
     foreign: 1,
@@ -29,7 +31,7 @@ export const WBTC = {
     bridgeMode: 'multi_amb_erc_erc',
     decimals: 88,
     minTx: MULTI_AMB_ERC_ERC_MIN_TX,
-    fee: MULTI_AMB_ERC_ERC_FEE,
+    maxTx: MULTI_AMB_ERC_ERC_MAX_TX,
     priceTicker: 'bitcoin',
     priceFeed: 'https://api.coincap.io/v2/assets/bitcoin',
 }

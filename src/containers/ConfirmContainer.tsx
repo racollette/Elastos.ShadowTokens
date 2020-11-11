@@ -6,7 +6,7 @@ import Numeral from "numeral";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import BackArrow from "../assets/back-arrow.svg";
+// import BackArrow from "../assets/back-arrow.svg";
 import WalletIcon from "../assets/wallet-icon-dark.svg";
 import DarkTooltip from "../components/DarkTooltip";
 import WaitingModal from "../components/WaitingModal";
@@ -50,26 +50,19 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     color: "#fff",
   },
   actionButtonContainer: {
-    marginTop: theme.spacing(3),
-    "& button": {
-      "&.Mui-disabled": {},
-      margin: "0px auto",
-      fontSize: 12,
-      minWidth: 175,
-      padding: theme.spacing(1),
-    },
-    [theme.breakpoints.down("xs")]: {
-      marginTop: theme.spacing(2),
-    },
+    marginTop: theme.spacing(2),
   },
   actionButton: {
+    width: "90%",
+    fontSize: 12,
+    padding: theme.spacing(1),
     borderRadius: "16px",
+    // marginLeft: theme.spacing(2),
+    // marginRight: theme.spacing(2),
   },
   amountField: {
     width: "100%",
   },
-  depositButton: {},
-  withdrawButton: {},
   actions: {
     paddingTop: theme.spacing(1),
   },
@@ -90,42 +83,24 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       width: "50%",
     },
   },
-  fees: {
-    width: "100%",
-    border: "1px solid " + theme.palette.divider,
-    fontSize: 12,
-    padding: theme.spacing(1),
-    paddingBottom: 0,
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(3),
-    display: "flex",
-    flexDirection: "column",
-    "& span": {
-      marginBottom: theme.spacing(1),
-    },
-  },
   icon: {
     width: 16,
     height: 16,
     marginRight: theme.spacing(0.75),
   },
-  toggle: {
-    "& button": {
-      minHeight: "auto",
-      border: "0px solid transparent",
-      borderBottom: "1px solid " + theme.palette.divider,
-      "&:first-child": {
-        borderRight: "1px solid " + theme.palette.divider,
-      },
-      "&.Mui-selected": {
-        borderBottom: "0px solid transparent",
-      },
-    },
-  },
   title: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
+  // titleIcon: {
+  //   height: 38,
+  //   width: "auto",
+  //   marginLeft: theme.spacing(0.5),
+  //   marginRight: theme.spacing(0.5),
+  //   [theme.breakpoints.down("xs")]: {
+  //     height: 38,
+  //   },
+  // },
   optionsContainer: {
     borderBottom: "none",
     paddingLeft: theme.spacing(3),
@@ -237,6 +212,15 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
 });
 
+const CancelButton = withStyles({
+  root: {
+    backgroundColor: "#404040",
+    "&:hover": {
+      backgroundColor: "rgb(40,40,40)",
+    },
+  },
+})(Button);
+
 class ConfirmContainer extends React.Component<any> {
   constructor(props: any) {
     super(props);
@@ -308,7 +292,7 @@ class ConfirmContainer extends React.Component<any> {
       <React.Fragment>
         <div className={classes.container}>
           <div className={classes.headerText}>
-            <img
+            {/* <img
               className={classes.back}
               src={BackArrow}
               alt="Back"
@@ -320,15 +304,22 @@ class ConfirmContainer extends React.Component<any> {
             />
             <Typography variant="overline" className={classes.navTitle}>
               <Translate text="Confirm.Header" />
-            </Typography>
+            </Typography> */}
 
             <Typography variant="body1" className={classes.titleAmount}>
               {usdValue}
             </Typography>
 
             <Typography variant="h4" className={classNames(classes[size])}>
-              {Numeral(confirmTx.amount).format("0,0.00")}{" "}
-              {token[selectedDirection].symbol}
+              <Grid container alignItems="center" justify="center">
+                {Numeral(confirmTx.amount).format("0,0.00")}{" "}
+                {/* <img
+                  alt={sourceAsset}
+                  src={token.icon}
+                  className={classes.titleIcon}
+                /> */}
+                {token[selectedDirection].symbol}
+              </Grid>
             </Typography>
 
             <Typography variant="body1">
@@ -413,101 +404,80 @@ class ConfirmContainer extends React.Component<any> {
                 justify="center"
                 className={classes.actionButtonContainer}
               >
-                <Grid item xs={12}>
-                  <Button
+                <Grid item xs={6}>
+                  <CancelButton
+                    className={classes.actionButton}
                     disabled={!canConvertTo}
                     variant={"contained"}
                     color="secondary"
                     size="large"
                     disableRipple
                     fullWidth
-                    className={classNames(classes.actionButton)}
+                    onClick={() => {
+                      store.set("confirmTx", null);
+                      store.set("confirmAction", "");
+                      store.set("convert.destination", "");
+                    }}
+                  >
+                    <Translate text="Confirm.Cancel" />
+                  </CancelButton>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    className={classes.actionButton}
+                    disabled={!canConvertTo}
+                    variant={"contained"}
+                    color="secondary"
+                    size="large"
+                    disableRipple
+                    fullWidth
                     onClick={() => {
                       handleBridgeMode(confirmTx);
-                      // store.set("transactionType", "relay");
-                      // store.set("waitingApproval", true);
                     }}
                   >
                     <Translate text="Confirm.Start" />
                   </Button>
-
-                  {waitingApproval && (
-                    <WaitingModal
-                      wallet={selectedWallet}
-                      onClick={() => {
-                        store.set("waitingApproval", false);
-                      }}
-                      open={waitingApproval}
-                      direction={selectedDirection}
-                      tx={confirmTx}
-                      type={type}
-                    />
-                  )}
-
-                  {txRejected && (
-                    <ErrorModal store={store} errorType={"txRejected"} />
-                  )}
-
-                  {unknownError && (
-                    <ErrorModal store={store} errorType={"unknownError"} />
-                  )}
-
-                  {transferInProgress && (
-                    <TxProgressModal
-                      txInput={confirmTx}
-                      wallet={selectedWallet}
-                      onClick={() => {
-                        store.set("waitingApproval", false);
-                      }}
-                      open={transferInProgress}
-                      confirmation={confirmationNumber}
-                      total={confirmationTotal}
-                      confirming={confirming}
-                      confirmationStep={confirmationStep}
-                      transferSuccess={transferSuccess}
-                      validatorTimeout={validatorTimeout}
-                      sourceTxID={sourceTxID}
-                      destTxID={destTxID}
-                    />
-                  )}
-
-                  {/* {confirmationProgress && (
-                    <TxProgressModal
-                      txInput={confirmTx}
-                      wallet={selectedWallet}
-                      onClick={() => {
-                        store.set("waitingApproval", false);
-                      }}
-                      open={confirmationProgress}
-                      confirmation={confirmationNumber}
-                      total={confirmationTotal}
-                      validatorStep={validatorStep}
-                      transferSuccess={transferSuccess}
-                      sourceTxID={sourceTxID}
-                    />
-                  )}
-                  {transferSuccess && (
-                    <TxProgressModal
-                      txInput={confirmTx}
-                      wallet={selectedWallet}
-                      onClick={() => {
-                        store.set("waitingApproval", false);
-                      }}
-                      open={confirmationProgress}
-                      confirmation={confirmationNumber}
-                      total={confirmationTotal}
-                      validatorStep={validatorStep}
-                      validatorProgress={validatorProgress}
-                      transferSuccess={transferSuccess}
-                      destTxID={destTxID}
-                    />
-                  )} */}
                 </Grid>
-                {/* {confirmationError && (
-                  <Typography variant="caption" className={classes.error}>
-                    {confirmationError}
-                  </Typography>
-                )} */}
+
+                {waitingApproval && (
+                  <WaitingModal
+                    wallet={selectedWallet}
+                    onClick={() => {
+                      store.set("waitingApproval", false);
+                    }}
+                    open={waitingApproval}
+                    direction={selectedDirection}
+                    tx={confirmTx}
+                    type={type}
+                  />
+                )}
+
+                {txRejected && (
+                  <ErrorModal store={store} errorType={"txRejected"} />
+                )}
+
+                {unknownError && (
+                  <ErrorModal store={store} errorType={"unknownError"} />
+                )}
+
+                {transferInProgress && (
+                  <TxProgressModal
+                    txInput={confirmTx}
+                    wallet={selectedWallet}
+                    onClick={() => {
+                      store.set("waitingApproval", false);
+                    }}
+                    open={transferInProgress}
+                    confirmation={confirmationNumber}
+                    total={confirmationTotal}
+                    confirming={confirming}
+                    confirmationStep={confirmationStep}
+                    transferSuccess={transferSuccess}
+                    validatorTimeout={validatorTimeout}
+                    sourceTxID={sourceTxID}
+                    destTxID={destTxID}
+                  />
+                )}
               </Grid>
             </Grid>
           </div>

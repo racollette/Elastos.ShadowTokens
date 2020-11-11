@@ -49,7 +49,8 @@
   "Confirm.Target": "Target Address",
   "Confirm.Fee": "Service Fee",
   "Confirm.Receive": "You will receive",
-  "Confirm.Start": "Begin Transfer",
+  "Confirm.Cancel": "Cancel",
+  "Confirm.Start": "Confirm",
 
   "Error.WrongNetwork.Title": "Wrong Network",
   "Error.WrongNetwork.Message1": "Please switch to the",

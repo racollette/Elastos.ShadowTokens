@@ -6,7 +6,7 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // import { toBN } from 'web3-utils';
 
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_FEE } from '../tokens/config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS, SUPPORTED_RPC_URLS } from './config';
 import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS } from "../tokens";
 import { switchOriginChain, formatValue } from "./txUtils";
@@ -169,6 +169,7 @@ export const generateCustomTokenDetails = async function(tokenAddress: string, n
             networkID: home ? pairNetwork : getPairNetwork(Number(pairNetwork), 'id'),
             address: home ? '' : tokenAddress,
             confirmations: getRequiredConfirmations(0),
+            fee: home ? MULTI_AMB_ERC_ERC_FEE_HOME : MULTI_AMB_ERC_ERC_FEE_FOREIGN,
         },
         1: {
             symbol: home ? symbol : getDestToken(symbol, 1, 'symbol', alreadyBridged),
@@ -179,6 +180,7 @@ export const generateCustomTokenDetails = async function(tokenAddress: string, n
             networkID: home ? getPairNetwork(Number(pairNetwork), 'id') : pairNetwork,
             address: home ? tokenAddress : '',
             confirmations: getRequiredConfirmations(1),
+            fee: home ? MULTI_AMB_ERC_ERC_FEE_FOREIGN : MULTI_AMB_ERC_ERC_FEE_HOME,
         },
         home: home,
         foreign: Number(!home),
@@ -186,7 +188,7 @@ export const generateCustomTokenDetails = async function(tokenAddress: string, n
         bridgeMode: 'multi_amb_erc_erc',
         decimals: Number(decimals),
         minTx: MULTI_AMB_ERC_ERC_MIN_TX,
-        fee: MULTI_AMB_ERC_ERC_FEE,
+        maxTx: MULTI_AMB_ERC_ERC_MAX_TX,
         priceTicker: '',
         priceFeed: '',
     };

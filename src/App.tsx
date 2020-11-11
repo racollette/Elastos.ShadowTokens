@@ -23,15 +23,23 @@ const styles = () => ({
     justifyContent: "space-between",
   },
   bodyWrapper: {
-    display: "flex",
-    width: "100%",
-    paddingTop: "15vh",
-    alignItems: "center",
-    flex: 1,
-    padding: theme.spacing(1.5),
-    [theme.breakpoints.down("xs")]: {
-      paddingTop: "5vh",
+    bridgeWrapper: {
+      display: "flex",
+      width: "100%",
+      paddingTop: "20vh",
+      alignItems: "center",
+      flex: 1,
+      padding: theme.spacing(1.5),
+      [theme.breakpoints.down("xs")]: {
+        paddingTop: "5vh",
+      },
     },
+  },
+  bridge: {
+    paddingTop: "20vh",
+  },
+  sidechain: {
+    paddingTop: "12.5vh",
   },
 });
 
@@ -69,7 +77,15 @@ class AppWrapper extends React.Component<Props> {
               <NavContainer />
             </Grid>
             <Grid container className={classes.bodyWrapper} justify="center">
-              {page === "sidechain" ? <Sidechain /> : <Bridge />}
+              {page === "bridge" ? (
+                <Grid className={classes.bridge}>
+                  <Bridge />
+                </Grid>
+              ) : (
+                <Grid className={classes.sidechain}>
+                  <Sidechain />
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Grid>

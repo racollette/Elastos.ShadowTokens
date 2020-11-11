@@ -71,7 +71,7 @@ const styles = () => ({
   icon: {
     marginLeft: theme.spacing(0.75),
     marginRight: theme.spacing(0.75),
-    height: 20,
+    height: 18,
     width: "auto",
   },
   actionButton: {

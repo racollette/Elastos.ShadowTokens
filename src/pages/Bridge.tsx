@@ -1,12 +1,12 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
 import { withStore } from "@spyna/react-store";
-import HomeContainer from "../containers/HomeContainer";
+// import HomeContainer from "../containers/HomeContainer";
 import TransferContainer from "../containers/TransferContainer";
 import ConfirmContainer from "../containers/ConfirmContainer";
 import WalletModal from "../components/WalletModal";
 import ErrorModal from "../components/ErrorModal";
-import { BRIDGE_SYMBOL_MAP } from "../bridges/bridges";
+// import { BRIDGE_SYMBOL_MAP } from "../bridges/bridges";
 
 const styles = () => ({});
 
@@ -24,9 +24,9 @@ class Bridge extends React.Component<Props> {
   render() {
     const { store } = this.props;
 
-    const confirmBridge = store.get("confirmBridge");
-    const selectedBridge = store.get("selectedBridge");
-    const selectedPair = store.get("selectedPair");
+    // const confirmBridge = store.get("confirmBridge");
+    // const selectedBridge = store.get("selectedBridge");
+    // const selectedPair = store.get("selectedPair");
 
     const showWalletModal = store.get("showWalletModal");
     const confirmAction = store.get("confirmAction");
@@ -42,7 +42,7 @@ class Bridge extends React.Component<Props> {
       <React.Fragment>
         {showWalletModal && <WalletModal />}
 
-        {!confirmBridge && (
+        {/* {!confirmBridge && (
           <>
             <HomeContainer
               active={
@@ -74,16 +74,16 @@ class Bridge extends React.Component<Props> {
               }}
             />
           </>
+        )} */}
+        {/* {confirmBridge && (
+          <> */}
+        {confirmTx && confirmAction ? (
+          <ConfirmContainer />
+        ) : (
+          <TransferContainer />
         )}
-        {confirmBridge && (
-          <>
-            {confirmTx && confirmAction ? (
-              <ConfirmContainer />
-            ) : (
-              <TransferContainer />
-            )}
-          </>
-        )}
+        {/* </>
+        )} */}
 
         {noWeb3 && (
           <div>

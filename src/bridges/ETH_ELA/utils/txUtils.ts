@@ -60,7 +60,7 @@ export const convertWei = function(value: string, type: 'from' | 'to') {
     }
 }
 
-export const gatherFeeData = async function() {
+export const gatherFeeData = async function(direction: number) {
     const store = getStore();
     const amount = store.get("convert.amount");
     let token = store.get("token");
@@ -69,15 +69,14 @@ export const gatherFeeData = async function() {
         return;
     }
 
-    const fixedFee = token.fee / 100
-    const feeFraction = (100 - token.fee) / 100
-
+    const fee = token[direction].fee / 100
+    const feeFraction = (100 - token[direction].fee) / 100
     const total =
         Number(amount * feeFraction) > 0
             ? Number(amount * feeFraction).toFixed(6)
             : "0.000000";
 
-    store.set("convert.networkFee", fixedFee);
+    store.set("convert.networkFee", fee);
     store.set("convert.conversionTotal", total);
 };
 
