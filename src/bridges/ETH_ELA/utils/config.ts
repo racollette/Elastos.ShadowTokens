@@ -69,6 +69,7 @@ export const INITIAL_STATE = {
 
     // warnings
     walletConnectWarning: false,
+    validatorError: false,
     validatorTimeout: false,
 
     // awaiting user

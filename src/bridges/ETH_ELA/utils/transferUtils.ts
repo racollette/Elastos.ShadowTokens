@@ -296,10 +296,16 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             fromBlock,
             toBlock: currentBlock
         }, function(error: any, event: any) {
-            // Error handling
+            if (error) {
+                console.error(error)
+                store.set("confirming", false)
+                store.set("validatorError", true)
+                return
+            }
         })
 
         const confirmationEvent = events.filter(event => event.returnValues.recipient === recipient)
+        console.log(confirmationEvent)
 
         if (confirmationEvent.length > 0) {
             const txID = confirmationEvent[0].transactionHash

@@ -17,6 +17,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Success from "../assets/success.svg";
+import Alert from "../assets/alert.svg";
 import Warning from "../assets/warning.svg";
 import Sent from "../assets/sent.svg";
 import { Translate } from "./Translate";
@@ -144,6 +145,7 @@ interface Props {
   confirmationStep: number;
   transferSuccess: boolean;
   validatorTimeout: boolean;
+  validatorError: boolean;
   sourceTxID?: any;
   destTxID?: any;
 }
@@ -159,6 +161,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
     confirmationStep,
     transferSuccess,
     validatorTimeout,
+    validatorError,
     sourceTxID,
     destTxID,
   } = props;
@@ -167,8 +170,6 @@ const TxProgressModal: React.FC<Props> = function (props) {
     <div>
       <React.Fragment>
         <Modal
-          // aria-labelledby="transition-modal-title"
-          // aria-describedby="transition-modal-description"
           className={classes.modal}
           open={open}
           // onClose={handleClose}
@@ -331,6 +332,56 @@ const TxProgressModal: React.FC<Props> = function (props) {
                     >
                       <Translate text="Progress.Accept" />
                     </WarningButton>
+                  </Grid>
+                </div>
+              )}
+
+              {validatorError && (
+                <div className={classes.container}>
+                  <div className={classes.successContainer}>
+                    <img
+                      src={Alert}
+                      alt="Network Error"
+                      className={classes.modalIcon}
+                    />
+                    <Typography className={classes.successText}>
+                      <Translate text="Progress.Error.Title" />
+                    </Typography>
+                  </div>
+                  <div className={classes.generalContainer}>
+                    <Typography className={classes.warningText}>
+                      <Translate text="Progress.Error.Message" />
+                    </Typography>
+                    <ActionLink
+                      url={getExplorerLink(
+                        "dest",
+                        "address",
+                        txInput,
+                        txInput.destAddress
+                      )}
+                    >
+                      <ExplorerButton startIcon={<OpenInNewIcon />}>
+                        <Translate text="Progress.Explorer" />
+                      </ExplorerButton>
+                    </ActionLink>
+                  </div>
+                  <Grid
+                    container
+                    justify="flex-end"
+                    className={classes.dismissContainer}
+                  >
+                    <Button
+                      variant={"outlined"}
+                      color="secondary"
+                      disableRipple
+                      fullWidth
+                      className={classNames(classes.actionButton)}
+                      onClick={() => {
+                        restoreInitialState();
+                      }}
+                    >
+                      <Translate text="Progress.Accept" />
+                    </Button>
                   </Grid>
                 </div>
               )}

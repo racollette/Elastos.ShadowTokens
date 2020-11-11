@@ -110,6 +110,7 @@ export function restoreInitialState() {
     store.set("confirming", false)
     store.set("confirmationStep", 0)
     store.set("transferSuccess", false)
+    store.set("validatorError", false)
     store.set("validatorTimeout", false)
 
 }

@@ -109,11 +109,17 @@ export default function Menu() {
             {t("Nav.About")}
             {aboutOpen && <About />}
           </AboutItem>
-          <MenuItem id="link" href="https://docs.tokenbridge.net/">
+          <MenuItem
+            id="link"
+            href="https://github.com/elaphantapp/ShadowTokens"
+          >
             <BookOpen size={14} />
             {t("Nav.Docs")}
           </MenuItem>
-          <MenuItem id="link" href="https://github.com/elaphantapp/">
+          <MenuItem
+            id="link"
+            href="https://github.com/elaphantapp/ShadowTokens"
+          >
             <Code size={14} />
             {t("Nav.Code")}
           </MenuItem>

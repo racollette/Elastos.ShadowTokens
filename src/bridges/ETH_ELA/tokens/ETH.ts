@@ -12,7 +12,6 @@ export const ETH = {
         address: '',
         confirmations: ETH_CONFIRMATIONS,
         fee: AMB_NATIVE_ERC_FEE_HOME,
-
     },
     1: {
         symbol: 'ETH',
@@ -24,7 +23,6 @@ export const ETH = {
         address: '0x802c3e839e4fdb10af583e3e759239ec7703501e',
         confirmations: ELA_CONFIRMATIONS,
         fee: AMB_NATIVE_ERC_FEE_FOREIGN,
-
     },
     home: 0,
     foreign: 1,

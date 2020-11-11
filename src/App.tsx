@@ -26,20 +26,23 @@ const styles = () => ({
     bridgeWrapper: {
       display: "flex",
       width: "100%",
-      paddingTop: "20vh",
       alignItems: "center",
       flex: 1,
-      padding: theme.spacing(1.5),
-      [theme.breakpoints.down("xs")]: {
-        paddingTop: "5vh",
-      },
     },
   },
   bridge: {
+    padding: theme.spacing(1.5),
     paddingTop: "20vh",
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: "5vh",
+    },
   },
   sidechain: {
+    padding: theme.spacing(1.5),
     paddingTop: "12.5vh",
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: "5vh",
+    },
   },
 });
 

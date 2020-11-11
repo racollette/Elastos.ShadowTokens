@@ -271,6 +271,7 @@ class ConfirmContainer extends React.Component<any> {
     const transferInProgress = store.get("transferInProgress");
     const confirming = store.get("confirming");
     const confirmationStep = store.get("confirmationStep");
+    const validatorError = store.get("validatorError");
     const validatorTimeout = store.get("validatorTimeout");
     const transferSuccess = store.get("transferSuccess");
 
@@ -473,6 +474,7 @@ class ConfirmContainer extends React.Component<any> {
                     confirming={confirming}
                     confirmationStep={confirmationStep}
                     transferSuccess={transferSuccess}
+                    validatorError={validatorError}
                     validatorTimeout={validatorTimeout}
                     sourceTxID={sourceTxID}
                     destTxID={destTxID}
