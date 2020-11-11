@@ -67,6 +67,13 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
 
     if (confirmTx.type === 'mint') {
 
+        // const dailyLimit = await contracts.sourceMediator.methods.dailyLimit().call()
+        // const minTx = await contracts.sourceMediator.methods.minPerTx().call()
+        // const maxTx = await contracts.sourceMediator.methods.maxPerTx().call()
+        // console.log(dailyLimit)
+        // console.log(minTx)
+        // console.log(maxTx)
+
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)
         await contracts.sourceMediator.methods.relayTokens(recipient).send({
@@ -202,6 +209,13 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
     const mediatorConfs = confirmTx.confirmations
     const recipient = confirmTx.destAddress
     store.set("confirmationTotal", mediatorConfs)
+
+    // const dailyLimit = await contracts.sourceMediator.methods.dailyLimit(tokenAddress).call()
+    // const minTx = await contracts.sourceMediator.methods.minPerTx(tokenAddress).call()
+    // const maxTx = await contracts.sourceMediator.methods.maxPerTx(tokenAddress).call()
+    // console.log(dailyLimit)
+    // console.log(minTx)
+    // console.log(maxTx)
 
     store.set("transactionType", "relay")
     store.set("waitingApproval", true)

@@ -1,4 +1,4 @@
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, ELA_AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
 import ELA_ICON from "../../../assets/ela.png"
 
 export const ELA_DEV = {
@@ -29,7 +29,7 @@ export const ELA_DEV = {
     icon: ELA_ICON,
     bridgeMode: 'amb_native_erc',
     decimals: 18,
-    minTx: AMB_NATIVE_ERC_MIN_TX,
+    minTx: ELA_AMB_NATIVE_ERC_MIN_TX,
     fee: AMB_NATIVE_ERC_FEE,
     priceTicker: 'ela',
     priceFeed: 'https://api.coincap.io/v2/assets/elastos',

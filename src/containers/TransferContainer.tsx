@@ -9,7 +9,6 @@ import Release from "../assets/unlock.svg";
 import Mint from "../assets/mint.svg";
 import Burn from "../assets/burn.svg";
 import {
-  convertWei,
   gatherFeeData,
   switchOriginChain,
 } from "../bridges/ETH_ELA/utils/txUtils";
@@ -591,19 +590,16 @@ class TransferContainer extends React.Component<any> {
                         fullWidth
                         className={classNames(classes.actionButton)}
                         onClick={() => {
-                          const value = convertWei(String(amount), "to");
-
-                          if (value < token.minTx) {
-                            store.set(
-                              "minTx",
-                              Number(
-                                convertWei(String(token.minTx), "from")
-                              ).toFixed(2)
-                            );
+                          if (amount < token.minTx) {
+                            store.set("minTx", token.minTx.toFixed(2));
                             store.set("belowMinTxLimit", true);
                             return;
                           }
-
+                          if (amount > token.maxTx) {
+                            store.set("maxTx", token.maxTx.toFixed(2));
+                            store.set("exceedsMaxTxLimit", true);
+                            return;
+                          }
                           if (isSelectedNetwork()) {
                             this.isBalanceEnough();
                           }

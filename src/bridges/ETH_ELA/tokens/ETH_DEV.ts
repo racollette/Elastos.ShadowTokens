@@ -1,4 +1,4 @@
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, ETH_AMB_NATIVE_ERC_MIN_TX, AMB_NATIVE_ERC_FEE } from './config';
 import ETH_ICON from "../../../assets/eth.png";
 
 export const ETH_DEV = {
@@ -29,7 +29,7 @@ export const ETH_DEV = {
     icon: ETH_ICON,
     bridgeMode: 'amb_native_erc',
     decimals: 18,
-    minTx: AMB_NATIVE_ERC_MIN_TX,
+    minTx: ETH_AMB_NATIVE_ERC_MIN_TX,
     fee: AMB_NATIVE_ERC_FEE,
     priceTicker: 'eth',
     priceFeed: 'https://api.coincap.io/v2/assets/ethereum',
