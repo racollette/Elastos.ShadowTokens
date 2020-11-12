@@ -18,6 +18,7 @@ export const init = function() {
     const store = getStore();
     const initialAsset = store.get("token")
     fetchTokenBalance(initialAsset)
+    // initLocalWeb3()
 }
 
 export const disconnectWeb3Provider = async function() {
@@ -40,29 +41,33 @@ export const initLocalWeb3 = async function(type?: any) {
         return;
     }
 
-    let web3;
+    let web3js;
     let accounts: string[] = [];
     let network: any = "";
     let netId: number;
 
+
     try {
-        // if (type === "injected" || !type) {
-        if (type === "MetaMask" || !type) {
+        // if (type === "Elaphant" || "MetaMask" || !type) {
+        //     if (typeof window.ethereum !== 'undefined'
+        //         || (typeof window.web3 !== 'undefined')) {
+        //         console.log("Web3 browser user detected. You can now use the provider")
+        //         web3js = new Web3(window.web3.currentProvider);
+        //     } else {
+        //         return
+        //     }
+        if (type === "MetaMask" || type === "Elaphant" || !type) {
             // Check if user has web3 installed
-            if (typeof window.ethereum !== 'undefined'
-                || (typeof window.web3 !== 'undefined')) {
-                // Web3 browser user detected. You can now use the provider.
-            } else {
+            if (typeof window.ethereum === 'undefined'
+                || (typeof window.web3 === 'undefined')) {
                 store.set("noWeb3", true)
                 return
             }
-
             const web3Modal = new Web3Modal({
                 cacheProvider: false, //optional
             });
             const web3Provider = await web3Modal.connect();
-
-            web3 = new Web3(web3Provider);
+            web3js = new Web3(web3Provider);
 
         } else if (type === "WalletConnect") {
             const provider: any = new WalletConnectProvider({
@@ -74,7 +79,7 @@ export const initLocalWeb3 = async function(type?: any) {
                 }
             });
             await provider.enable();
-            web3 = new Web3(provider);
+            web3js = new Web3(provider);
         } else {
             console.error("Invalid wallet type.");
             store.set("spaceError", true);
@@ -94,16 +99,16 @@ export const initLocalWeb3 = async function(type?: any) {
         return;
     }
 
-    setListener(web3)
-    if (typeof web3.currentProvider === "string") return;
-    if (!web3.currentProvider) return;
-    accounts = await web3.eth.getAccounts();
-    netId = await web3.eth.net.getId();
+    setListener(web3js)
+    if (typeof web3js.currentProvider === "string") return;
+    if (!web3js.currentProvider) return;
+    accounts = await web3js.eth.getAccounts();
+    netId = await web3js.eth.net.getId();
     network = SUPPORTED_NETWORK_IDS[netId]
     store.set("walletConnecting", false);
 
     // Configure current network tokens
-    store.set("localWeb3", web3);
+    store.set("localWeb3", web3js);
     store.set("localWeb3Address", accounts[0]);
     store.set("localWeb3Network", network);
     store.set("selectedWallet", true);

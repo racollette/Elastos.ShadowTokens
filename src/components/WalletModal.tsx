@@ -4,6 +4,7 @@ import { Styles, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Hidden from "@material-ui/core/Hidden";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -197,6 +198,7 @@ class WalletModal extends React.Component<any> {
                 }}
               />
             </div>
+
             <Grid className={classes.metamask} container justify="center">
               <Grid
                 container
@@ -210,16 +212,6 @@ class WalletModal extends React.Component<any> {
                   Metamask
                 </Typography>
               </Grid>
-              {/* <Grid
-                container
-                className={walletType === "Elaphant" ? "selected" : ""}
-                onClick={() => store.set("selectedWalletType", "Elaphant")}
-              >
-                <img src={WALLET_ICON_MAP["Elaphant"]} alt="Elaphant" />
-                <Typography className={classes.walletLabel}>
-                  Elaphant
-                </Typography>
-              </Grid> */}
               <Grid
                 container
                 className={walletType === "WalletConnect" ? "selected" : ""}
@@ -233,6 +225,18 @@ class WalletModal extends React.Component<any> {
                   WalletConnect
                 </Typography>
               </Grid>
+              <Hidden smUp>
+                <Grid
+                  container
+                  className={walletType === "Elaphant" ? "selected" : ""}
+                  onClick={() => store.set("selectedWalletType", "Elaphant")}
+                >
+                  <img src={WALLET_ICON_MAP["Elaphant"]} alt="Elaphant" />
+                  <Typography className={classes.walletLabel}>
+                    Elaphant
+                  </Typography>
+                </Grid>
+              </Hidden>
             </Grid>
             <Grid
               container
