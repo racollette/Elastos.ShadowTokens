@@ -3,7 +3,7 @@ import { withStore } from "@spyna/react-store";
 import { Styles, withStyles } from "@material-ui/styles";
 import theme from "../theme/theme";
 import classNames from "classnames";
-import { restoreInitialState } from "../bridges/ETH_ELA/utils/txUtils";
+// import { restoreInitialState } from "../bridges/ETH_ELA/utils/txUtils";
 import { BRIDGE_NAME_MAP, BRIDGE_ICON_MAP } from "../bridges/bridges";
 import Hidden from "@material-ui/core/Hidden";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
@@ -242,8 +242,8 @@ class NavContainer extends React.Component<any> {
                   <BridgeButton
                     disableRipple
                     onClick={() => {
-                      restoreInitialState();
-                      store.set("confirmBridge", false);
+                      // restoreInitialState();
+                      // store.set("confirmBridge", false);
                     }}
                     variant="contained"
                     size="small"
