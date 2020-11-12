@@ -38,7 +38,7 @@
   "TokenSelect.Name": "Name",
   "TokenSelect.Balance": "Balance",
   "TokenSelect.Found": "Found Match",
-  "TokenSelect.NoMatch": "No matches.",
+  "TokenSelect.NoMatch": "No Matches",
   "TokenSelect.AddCustom": "Add Custom",
 
   "Confirm.Header": "确认",
@@ -53,7 +53,7 @@
   "Confirm.Start": "Confirm",
 
   "Error.WrongNetwork.Title": "错误的网络",
-  "Error.WrongNetwork.Message1": "Please switch your wallet to the",
+  "Error.WrongNetwork.Message1": "Please switch to the",
   "Error.WrongNetwork.Message2": "network",
   "Error.NoWeb3.Title": "没有发现钱包",
   "Error.NoWeb3.Message": "安装了么？请先确认。",
