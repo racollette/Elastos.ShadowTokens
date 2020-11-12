@@ -306,11 +306,6 @@ class TransferContainer extends React.Component<any> {
           } address`
         : `请输入一个有效的 ${token[Number(!selectedDirection)].network} 地址`;
 
-    // const allowance = store.get("convert.adapterWbtcAllowance");
-    // const hasAllowance = Number(amount) <= Number(allowance);
-    // const allowanceRequesting = store.get(
-    //     "convert.adapterWbtcAllowanceRequesting"
-
     return (
       <div className={classes.container}>
         {/* <div className={classes.headerText}>

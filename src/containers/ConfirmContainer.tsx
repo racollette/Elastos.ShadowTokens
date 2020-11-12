@@ -29,20 +29,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       width: "90%",
     },
   },
-  transferActionTabs: {
-    margin: "0px auto",
-    marginBottom: theme.spacing(1),
-    "& div.MuiToggleButtonGroup-root": {
-      width: "100%",
-    },
-    "& button": {
-      width: "50%",
-    },
-  },
-  depositAddressContainer: {},
-  depositAddress: {
-    width: "100%",
-  },
   actionsContainer: {
     borderRadius: theme.shape.borderRadius,
     borderTopLeftRadius: 0,
@@ -57,31 +43,9 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     fontSize: 12,
     padding: theme.spacing(1),
     borderRadius: "16px",
-    // marginLeft: theme.spacing(2),
-    // marginRight: theme.spacing(2),
-  },
-  amountField: {
-    width: "100%",
   },
   actions: {
     paddingTop: theme.spacing(1),
-  },
-  transactionsContainer: {
-    padding: theme.spacing(3),
-    paddingTop: theme.spacing(0),
-    marginTop: theme.spacing(2),
-    borderTop: "1px solid #EBEBEB",
-  },
-  destChooser: {
-    width: "100%",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
-    "& div.MuiToggleButtonGroup-root": {
-      width: "100%",
-    },
-    "& button": {
-      width: "50%",
-    },
   },
   icon: {
     width: 16,
@@ -115,7 +79,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   },
   option: {
     borderBottom: "1px solid " + theme.palette.divider,
-    minHeight: 50,
+    minHeight: 42,
     fontSize: 14,
     "& img": {
       height: "auto",
@@ -133,24 +97,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   fade: {
     color: theme.palette.info.contrastText,
   },
-  totalOption: {
-    minHeight: 60,
-    fontSize: 16,
-    color: "#3F3F48",
-    "& img": {
-      height: "auto",
-      width: 24,
-      marginRight: theme.spacing(1),
-    },
-    "& div": {
-      display: "flex",
-      alignItems: "center",
-    },
-  },
-  totalContainer: {
-    borderBottom: "1px solid " + theme.palette.divider,
-  },
-
   titleAmount: {
     marginTop: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
@@ -166,49 +112,24 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       marginBottom: 0,
     },
   },
-  navTitle: {
-    color: "#fff",
-    fontSize: "12",
-    marginBottom: theme.spacing(2),
-  },
-  back: {
-    position: "absolute",
-    top: 8,
-    left: 10,
-    height: "auto",
-    width: 20,
-    cursor: "pointer",
-    "&:hover": {
-      opacity: 0.75,
-    },
-  },
+  // navTitle: {
+  //   color: "#fff",
+  //   fontSize: "12",
+  //   marginBottom: theme.spacing(2),
+  // },
+  // back: {
+  //   position: "absolute",
+  //   top: 8,
+  //   left: 10,
+  //   height: "auto",
+  //   width: 20,
+  //   cursor: "pointer",
+  //   "&:hover": {
+  //     opacity: 0.75,
+  //   },
+  // },
   amountCell: {
     wordBreak: "break-word",
-  },
-  disclosure: {
-    width: "100%",
-    maxWidth: 370,
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "center",
-    boxShadow: "0px 1px 2px rgba(0, 27, 58, 0.05)",
-    padding: theme.spacing(2),
-    color: theme.palette.primary.main,
-    border: "1px solid " + theme.palette.primary.main,
-    fontSize: 12,
-    borderRadius: 4,
-    lineHeight: "17px",
-    marginBottom: theme.spacing(3),
-    "& a": {
-      color: "inherit",
-    },
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: "100%",
-    },
-  },
-  error: {
-    marginTop: theme.spacing(2),
-    color: "#FF4545",
   },
 });
 
@@ -290,10 +211,9 @@ class ConfirmContainer extends React.Component<any> {
       size = "smallest";
     }
     return (
-      <React.Fragment>
-        <div className={classes.container}>
-          <div className={classes.headerText}>
-            {/* <img
+      <div className={classes.container}>
+        <div className={classes.headerText}>
+          {/* <img
               className={classes.back}
               src={BackArrow}
               alt="Back"
@@ -307,184 +227,177 @@ class ConfirmContainer extends React.Component<any> {
               <Translate text="Confirm.Header" />
             </Typography> */}
 
-            <Typography variant="body1" className={classes.titleAmount}>
-              {usdValue}
-            </Typography>
+          <Typography variant="body1" className={classes.titleAmount}>
+            {usdValue}
+          </Typography>
 
-            <Typography variant="h4" className={classNames(classes[size])}>
-              <Grid container alignItems="center" justify="center">
-                {Numeral(confirmTx.amount).format("0,0.00")}{" "}
-                {/* <img
+          <Typography variant="h4" className={classNames(classes[size])}>
+            <Grid container alignItems="center" justify="center">
+              {Numeral(confirmTx.amount).format("0,0.00")}{" "}
+              {/* <img
                   alt={sourceAsset}
                   src={token.icon}
                   className={classes.titleIcon}
                 /> */}
-                {token[selectedDirection].symbol}
-              </Grid>
-            </Typography>
+              {token[selectedDirection].symbol}
+            </Grid>
+          </Typography>
 
-            <Typography variant="body1">
-              <Translate text="Confirm.From" />
-              &nbsp;{sourceNetwork}&nbsp;
-              <Translate text="Confirm.Network" />
-            </Typography>
-          </div>
-          <div className={classes.actionsContainer}>
-            <Grid className={classes.actions}>
-              <Grid container justify="center">
-                <Grid item xs={12}>
-                  <Grid
-                    className={classes.optionsContainer}
-                    container
-                    direction="column"
-                  >
-                    <Grid container className={classes.option}>
-                      <Grid item xs={6} className={classes.fade}>
-                        <Translate text="Confirm.Destination" />
-                      </Grid>
-                      <Grid item xs={6}>
-                        {destNetwork}&nbsp;
-                        <Translate text="Confirm.Network" />
-                      </Grid>
+          <Typography variant="body1">
+            <Translate text="Confirm.From" />
+            &nbsp;{sourceNetwork}&nbsp;
+            <Translate text="Confirm.Network" />
+          </Typography>
+        </div>
+        <div className={classes.actionsContainer}>
+          <Grid className={classes.actions}>
+            <Grid container justify="center">
+              <Grid item xs={12}>
+                <Grid className={classes.optionsContainer} container>
+                  <Grid container className={classes.option}>
+                    <Grid item xs={6} className={classes.fade}>
+                      <Translate text="Confirm.Destination" />
                     </Grid>
-
-                    <Grid container className={classes.option}>
-                      <Grid item xs={6} className={classes.fade}>
-                        <Translate text="Confirm.Asset" />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <img alt={destAsset} src={token.icon} />
-                        {token[Number(!selectedDirection)].symbol}
-                      </Grid>
+                    <Grid item xs={6}>
+                      {destNetwork}&nbsp;
+                      <Translate text="Confirm.Network" />
                     </Grid>
+                  </Grid>
 
-                    <Grid container className={classes.option}>
-                      <Grid item xs={6} className={classes.fade}>
-                        <Translate text="Confirm.Target" />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <DarkTooltip
-                          placement="top"
-                          title={confirmTx.destAddress}
-                        >
-                          <div>
-                            <img src={WalletIcon} alt="Wallet" />
-                            {abbreviateAddress(confirmTx.destAddress)}
-                          </div>
-                        </DarkTooltip>
-                      </Grid>
+                  <Grid container className={classes.option}>
+                    <Grid item xs={6} className={classes.fade}>
+                      <Translate text="Confirm.Asset" />
                     </Grid>
-
-                    <Grid container className={classes.option}>
-                      <Grid item xs={6} className={classes.fade}>
-                        <Translate text="Confirm.Fee" />
-                      </Grid>
-                      <Grid item xs={6} className={classes.amountCell}>
-                        <img alt={sourceAsset} src={token.icon} />
-                        {serviceFee} {token[selectedDirection].symbol}
-                      </Grid>
+                    <Grid item xs={6}>
+                      <img alt={destAsset} src={token.icon} />
+                      {token[Number(!selectedDirection)].symbol}
                     </Grid>
+                  </Grid>
 
-                    <div className={classes.totalContainer}>
-                      <Grid container className={classNames(classes.option)}>
-                        <Grid item xs={6} className={classes.fade}>
-                          <Translate text="Confirm.Receive" />
-                        </Grid>
-                        <Grid item xs={6} className={classes.amountCell}>
-                          <img alt={destAsset} src={token.icon} />
-                          {total} {token[Number(!selectedDirection)].symbol}
-                        </Grid>
-                      </Grid>
-                    </div>
+                  <Grid container className={classes.option}>
+                    <Grid item xs={6} className={classes.fade}>
+                      <Translate text="Confirm.Target" />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <DarkTooltip
+                        placement="top"
+                        title={confirmTx.destAddress}
+                      >
+                        <div>
+                          <img src={WalletIcon} alt="Wallet" />
+                          {abbreviateAddress(confirmTx.destAddress)}
+                        </div>
+                      </DarkTooltip>
+                    </Grid>
+                  </Grid>
+
+                  <Grid container className={classes.option}>
+                    <Grid item xs={6} className={classes.fade}>
+                      <Translate text="Confirm.Fee" />
+                    </Grid>
+                    <Grid item xs={6} className={classes.amountCell}>
+                      <img alt={sourceAsset} src={token.icon} />
+                      {serviceFee} {token[selectedDirection].symbol}
+                    </Grid>
+                  </Grid>
+
+                  <Grid container className={classes.option}>
+                    <Grid item xs={6} className={classes.fade}>
+                      <Translate text="Confirm.Receive" />
+                    </Grid>
+                    <Grid item xs={6} className={classes.amountCell}>
+                      <img alt={destAsset} src={token.icon} />
+                      {total} {token[Number(!selectedDirection)].symbol}
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-
-              <Grid
-                container
-                justify="center"
-                className={classes.actionButtonContainer}
-              >
-                <Grid item xs={6}>
-                  <CancelButton
-                    className={classes.actionButton}
-                    disabled={!canConvertTo}
-                    variant={"contained"}
-                    color="secondary"
-                    size="large"
-                    disableRipple
-                    fullWidth
-                    onClick={() => {
-                      store.set("confirmTx", null);
-                      store.set("confirmAction", "");
-                      store.set("convert.destination", "");
-                    }}
-                  >
-                    <Translate text="Confirm.Cancel" />
-                  </CancelButton>
-                </Grid>
-                <Grid item xs={6}>
-                  <Button
-                    className={classes.actionButton}
-                    disabled={!canConvertTo}
-                    variant={"contained"}
-                    color="secondary"
-                    size="large"
-                    disableRipple
-                    fullWidth
-                    onClick={() => {
-                      handleBridgeMode(confirmTx);
-                    }}
-                  >
-                    <Translate text="Confirm.Start" />
-                  </Button>
-                </Grid>
-
-                {waitingApproval && (
-                  <WaitingModal
-                    wallet={selectedWallet}
-                    onClick={() => {
-                      store.set("waitingApproval", false);
-                    }}
-                    open={waitingApproval}
-                    direction={selectedDirection}
-                    tx={confirmTx}
-                    type={type}
-                  />
-                )}
-
-                {txRejected && (
-                  <ErrorModal store={store} errorType={"txRejected"} />
-                )}
-
-                {unknownError && (
-                  <ErrorModal store={store} errorType={"unknownError"} />
-                )}
-
-                {transferInProgress && (
-                  <TxProgressModal
-                    txInput={confirmTx}
-                    wallet={selectedWallet}
-                    onClick={() => {
-                      store.set("waitingApproval", false);
-                    }}
-                    open={transferInProgress}
-                    confirmation={confirmationNumber}
-                    total={confirmationTotal}
-                    confirming={confirming}
-                    confirmationStep={confirmationStep}
-                    transferSuccess={transferSuccess}
-                    validatorError={validatorError}
-                    validatorTimeout={validatorTimeout}
-                    sourceTxID={sourceTxID}
-                    destTxID={destTxID}
-                  />
-                )}
-              </Grid>
             </Grid>
-          </div>
+
+            <Grid
+              container
+              justify="center"
+              className={classes.actionButtonContainer}
+            >
+              <Grid item xs={6}>
+                <CancelButton
+                  className={classes.actionButton}
+                  disabled={!canConvertTo}
+                  variant={"contained"}
+                  color="secondary"
+                  size="large"
+                  disableRipple
+                  fullWidth
+                  onClick={() => {
+                    store.set("confirmTx", null);
+                    store.set("confirmAction", "");
+                    store.set("convert.destination", "");
+                  }}
+                >
+                  <Translate text="Confirm.Cancel" />
+                </CancelButton>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  className={classes.actionButton}
+                  disabled={!canConvertTo}
+                  variant={"contained"}
+                  color={selectedDirection === 0 ? "secondary" : "primary"}
+                  size="large"
+                  disableRipple
+                  fullWidth
+                  onClick={() => {
+                    handleBridgeMode(confirmTx);
+                  }}
+                >
+                  <Translate text="Confirm.Start" />
+                </Button>
+              </Grid>
+
+              {waitingApproval && (
+                <WaitingModal
+                  wallet={selectedWallet}
+                  onClick={() => {
+                    store.set("waitingApproval", false);
+                  }}
+                  open={waitingApproval}
+                  direction={selectedDirection}
+                  tx={confirmTx}
+                  type={type}
+                />
+              )}
+
+              {txRejected && (
+                <ErrorModal store={store} errorType={"txRejected"} />
+              )}
+
+              {unknownError && (
+                <ErrorModal store={store} errorType={"unknownError"} />
+              )}
+
+              {transferInProgress && (
+                <TxProgressModal
+                  txInput={confirmTx}
+                  wallet={selectedWallet}
+                  onClick={() => {
+                    store.set("waitingApproval", false);
+                  }}
+                  open={transferInProgress}
+                  confirmation={confirmationNumber}
+                  total={confirmationTotal}
+                  confirming={confirming}
+                  confirmationStep={confirmationStep}
+                  transferSuccess={transferSuccess}
+                  validatorError={validatorError}
+                  validatorTimeout={validatorTimeout}
+                  sourceTxID={sourceTxID}
+                  destTxID={destTxID}
+                />
+              )}
+            </Grid>
+          </Grid>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

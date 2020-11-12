@@ -305,7 +305,6 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
         })
 
         const confirmationEvent = events.filter(event => event.returnValues.recipient === recipient)
-        console.log(confirmationEvent)
 
         if (confirmationEvent.length > 0) {
             const txID = confirmationEvent[0].transactionHash

@@ -23,12 +23,10 @@ const styles = () => ({
     justifyContent: "space-between",
   },
   bodyWrapper: {
-    bridgeWrapper: {
-      display: "flex",
-      width: "100%",
-      alignItems: "center",
-      flex: 1,
-    },
+    display: "flex",
+    width: "100%",
+    alignItems: "center",
+    flex: 1,
   },
   bridge: {
     padding: theme.spacing(1.5),
