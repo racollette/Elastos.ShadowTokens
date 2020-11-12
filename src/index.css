@@ -1,4 +1,4 @@
-@import url("https://db.onlinewebfonts.com/c/88f10bf18a36407ef36bf30bc25a3618?family=Suisse+Intl");
+/* @import url("https://db.onlinewebfonts.com/c/88f10bf18a36407ef36bf30bc25a3618?family=Suisse+Intl"); */
 /* @font-face {
   font-family: "Suisse Intl";
   src: url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.eot");
@@ -16,7 +16,7 @@
 
 body {
   margin: 0;
-  font-family: "Suisse Intl", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
