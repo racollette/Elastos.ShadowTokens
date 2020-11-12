@@ -17,7 +17,7 @@
 
   "Wallet.Header": "选择钱包",
   "Wallet.Connect": "连接",
-  "Wallet.Disconnect": "Disconnect",
+  "Wallet.Disconnect": "断开连接",
 
   "Transfer.Header": "创建交易",
   "Transfer.Destination": "收款地址 (可选)",
@@ -25,9 +25,9 @@
   "Transfer.From": "从",
   "Transfer.To": "到",
   "Transfer.Mainnet": "Mainnet",
-  "Transfer.Lock": "Lock",
+  "Transfer.Lock": "锁定",
   "Transfer.Mint": "转移金额",
-  "Transfer.Burn": "Burn",
+  "Transfer.Burn": "销毁",
   "Transfer.Release": "释放",
   "Transfer.Next": "下一步",
   "Transfer.Max": "最大",
@@ -39,7 +39,7 @@
   "TokenSelect.Balance": "余额",
   "TokenSelect.Found": "匹配",
   "TokenSelect.NoMatch": "不匹配",
-  "TokenSelect.AddCustom": "自定义,
+  "TokenSelect.AddCustom": "自定义",
 
   "Confirm.Header": "确认",
   "Confirm.From": "从",
