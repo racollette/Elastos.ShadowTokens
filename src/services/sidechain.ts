@@ -1,7 +1,9 @@
+import Web3 from "web3";
 import { getStore } from "./storeService";
-import { SIDECHAIN_TRANSFER_TIMEOUT, MAINCHAIN_RETURN_ADDRESS, SIDECHAIN_RELAY_ADDRESS } from "./config"
-import { fetchTokenBalance } from "../bridges/ETH_ELA/utils/walletUtils"
-import { ELA } from '../bridges/ETH_ELA/tokens/ELA'
+import { SIDECHAIN_TRANSFER_TIMEOUT, MAINCHAIN_RETURN_ADDRESS, SIDECHAIN_RELAY_ADDRESS } from "./config";
+import { SUPPORTED_RPC_URLS } from '../bridges/ETH_ELA/utils/config';
+import { formatValue } from '../bridges/ETH_ELA/utils/txUtils';
+
 
 export const depositELA = async function() {
     const store = getStore();
@@ -77,7 +79,8 @@ export const checkDepositStatus = async function() {
     const monitoringTransfer = store.get("monitoringTransfer")
 
     const stopTime = Date.now() + SIDECHAIN_TRANSFER_TIMEOUT
-    const startingBalance = store.get('elaBalance')
+    const startingBalance = await fetchELABalance()
+
     while (Date.now() <= stopTime) {
         const depositMainchainAddress = store.get('depositMainchainAddress');
         if (!monitoringTransfer) return
@@ -139,13 +142,15 @@ export const checkDepositStatus = async function() {
                 store.set("depositInProgress", 1);
                 break;
         }
-        fetchTokenBalance(ELA)
-        if (store.get("depositInProgress") === 2 && store.get('elaBalance') > startingBalance) {
+        const newBalance = Number(await fetchELABalance())
+        const depositValue = newBalance - Number(startingBalance)
+        if (store.get("depositInProgress") === 2 && depositValue > 0) {
+            store.set("elaBalance", newBalance);
+            store.set("depositValue", depositValue)
             store.set("monitoringTransfer", false)
             return
         }
-
-        await wait(10000);
+        await wait(8000);
     }
 
     if (Date.now() > stopTime) {
@@ -153,4 +158,14 @@ export const checkDepositStatus = async function() {
         store.set("monitoringTransfer", false)
         return
     }
+}
+
+export const fetchELABalance = async function() {
+    const store = getStore();
+    const walletAddress = store.get("localWeb3Address");
+    const web3 = new Web3(new Web3.providers.HttpProvider(SUPPORTED_RPC_URLS["Elastos"]))
+
+    const coinBal = await web3.eth.getBalance(walletAddress)
+    const elaBalance = formatValue(coinBal, 18)
+    return elaBalance
 }

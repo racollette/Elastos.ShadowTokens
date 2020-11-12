@@ -97,6 +97,9 @@ const styles = () => ({
   progress: {
     marginTop: theme.spacing(2),
   },
+  green: {
+    color: theme.palette.success.light,
+  },
 });
 
 interface TabPanelProps {
@@ -157,6 +160,7 @@ const Sidechain: React.FC<Props> = function (props) {
 
   const monitoring = store.get("monitoringTransfer");
   const balance = store.get("elaBalance");
+  const depositValue = store.get("depositValue");
   const amount = store.get("withdrawalAmount");
   const withdrawalAddress = store.get("withdrawalAddress");
 
@@ -383,6 +387,11 @@ const Sidechain: React.FC<Props> = function (props) {
                             className={classes.statusText}
                           >
                             {balance} ELA
+                            {depositValue > 0 && (
+                              <div className={classes.green}>
+                                &nbsp; (+{depositValue.toFixed(2)})
+                              </div>
+                            )}
                           </Grid>
                         )}
                       </Grid>

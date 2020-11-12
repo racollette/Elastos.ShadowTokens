@@ -4,7 +4,6 @@ import { getStore } from "../../../services/storeService";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-// import { toBN } from 'web3-utils';
 
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS, SUPPORTED_RPC_URLS } from './config';
@@ -14,9 +13,6 @@ import { depositELA } from "../../../services/sidechain";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ELA_ICON from "../../../assets/ela.png";
 import ETH_ICON from "../../../assets/eth.png";
-
-// used for montoring balances
-// let walletDataInterval: any = null;
 
 export const init = function() {
     const store = getStore();
