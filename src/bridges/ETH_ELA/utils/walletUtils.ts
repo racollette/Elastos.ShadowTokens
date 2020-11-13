@@ -18,7 +18,7 @@ export const init = function() {
     const store = getStore();
     const initialAsset = store.get("token")
     fetchTokenBalance(initialAsset)
-    // initLocalWeb3()
+    initLocalWeb3()
 }
 
 export const disconnectWeb3Provider = async function() {
@@ -73,11 +73,11 @@ export const initLocalWeb3 = async function(type?: any) {
             await provider.enable();
             web3js = new Web3(provider);
         } else if (type === "Elaphant") {
-            if (typeof window.ethereum !== 'undefined'
-                || (typeof window.web3 !== 'undefined')) {
+            if (window.web3 || window.ethereum) {
                 console.log("Web3 browser user detected. You can now use the provider")
                 web3js = new Web3(window.web3.currentProvider);
             } else {
+                store.set("noWeb3", true)
                 return
             }
         } else {
