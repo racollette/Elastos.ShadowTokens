@@ -48,15 +48,7 @@ export const initLocalWeb3 = async function(type?: any) {
 
 
     try {
-        // if (type === "Elaphant" || "MetaMask" || !type) {
-        //     if (typeof window.ethereum !== 'undefined'
-        //         || (typeof window.web3 !== 'undefined')) {
-        //         console.log("Web3 browser user detected. You can now use the provider")
-        //         web3js = new Web3(window.web3.currentProvider);
-        //     } else {
-        //         return
-        //     }
-        if (type === "MetaMask" || type === "Elaphant" || !type) {
+        if (type === "MetaMask" || !type) {
             // Check if user has web3 installed
             if (typeof window.ethereum === 'undefined'
                 || (typeof window.web3 === 'undefined')) {
@@ -80,6 +72,14 @@ export const initLocalWeb3 = async function(type?: any) {
             });
             await provider.enable();
             web3js = new Web3(provider);
+        } else if (type === "Elaphant") {
+            if (typeof window.ethereum !== 'undefined'
+                || (typeof window.web3 !== 'undefined')) {
+                console.log("Web3 browser user detected. You can now use the provider")
+                web3js = new Web3(window.web3.currentProvider);
+            } else {
+                return
+            }
         } else {
             console.error("Invalid wallet type.");
             store.set("spaceError", true);
