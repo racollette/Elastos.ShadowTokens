@@ -207,7 +207,7 @@ const TokenSelectorModal: React.FC<Props> = function (props) {
   //   setFilteredTokenList(tokenList);
   // }, [tokenList, setFilteredTokenList]);
 
-  const connected = store.get("localWeb3Address").length > 0;
+  const connected = store.get("localWeb3Address") ? true : false;
 
   const help = t("TokenSelect.Help");
   const paste = t("TokenSelect.Paste");

@@ -105,14 +105,10 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
             })
             .on('error', function(error: any) {
-                if (error.code === 4001) {
-                    store.set("confirming", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("confirming", false)
-                    store.set("unknownError", true)
-                }
+                store.set("confirming", false)
+                store.set("unknownError", true)
             })
+
 
     } else if (confirmTx.type === 'release') {
 
@@ -146,13 +142,8 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
             })
             .on('error', function(error: any) {
-                if (error.code === 4001) {
-                    store.set("confirming", false)
-                    store.set("txRejected", true)
-                } else {
-                    store.set("confirming", false)
-                    store.set("unknownError", true)
-                }
+                store.set("confirming", false)
+                store.set("unknownError", true)
             })
     }
 
@@ -201,7 +192,9 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
             })
 
         bridgeTokens(contracts, confirmTx.address, value, from, confirmTx)
+
     }
+    
 }
 
 export const bridgeTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any) {
@@ -247,14 +240,10 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
 
         })
         .on('error', function(error: any) {
-            if (error.code === 4001) {
-                store.set("confirming", false)
-                store.set("txRejected", true)
-            } else {
-                store.set("confirming", false)
-                store.set("unknownError", true)
-            }
+            store.set("confirming", false)
+            store.set("unknownError", true)
         })
+
 }
 
 export const updateRelayConfirmations = function(confirmationNumber: number, confirmationTotal: number) {

@@ -29,7 +29,6 @@ class Bridge extends React.Component<Props> {
     // const selectedPair = store.get("selectedPair");
 
     const showWalletModal = store.get("showWalletModal");
-    const confirmAction = store.get("confirmAction");
     const confirmTx = store.get("confirmTx");
 
     const noWeb3 = store.get("noWeb3");
@@ -77,7 +76,7 @@ class Bridge extends React.Component<Props> {
         )} */}
         {/* {confirmBridge && (
           <> */}
-        {confirmTx && confirmAction ? (
+        {confirmTx ? (
           <ConfirmContainer />
         ) : (
           <TransferContainer />

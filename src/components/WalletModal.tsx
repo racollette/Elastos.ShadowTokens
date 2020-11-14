@@ -4,7 +4,7 @@ import { Styles, withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Hidden from "@material-ui/core/Hidden";
+// import Hidden from "@material-ui/core/Hidden";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -225,7 +225,7 @@ class WalletModal extends React.Component<any> {
                   WalletConnect
                 </Typography>
               </Grid>
-              <Hidden smUp>
+              {/* <Hidden smUp>
                 <Grid
                   container
                   className={walletType === "Elaphant" ? "selected" : ""}
@@ -236,7 +236,7 @@ class WalletModal extends React.Component<any> {
                     Elaphant
                   </Typography>
                 </Grid>
-              </Hidden>
+              </Hidden> */}
             </Grid>
             <Grid
               container
@@ -245,7 +245,6 @@ class WalletModal extends React.Component<any> {
               alignItems="center"
               className={classes.actionButtonContainer}
             >
-              {/* <Grid item xs={12}> */}
               <Button
                 onClick={() => {
                   if (!walletConnected) {
@@ -255,7 +254,6 @@ class WalletModal extends React.Component<any> {
                     clearWeb3();
                   }
                 }}
-                // disabled={walletConnecting || requesting}
                 className={classes.actionButton}
                 size="large"
                 color="secondary"
@@ -263,24 +261,7 @@ class WalletModal extends React.Component<any> {
                 variant="contained"
                 fullWidth
               >
-                {/* {requesting && (
-                  <div className={classes.spinner}>
-                    <CircularProgress
-                      variant="determinate"
-                      value={100}
-                      className={classes.spinnerTop}
-                      size={18}
-                      thickness={4}
-                    />
-                    <CircularProgress
-                      variant="indeterminate"
-                      disableShrink
-                      className={classes.spinnerBottom}
-                      size={18}
-                      thickness={4}
-                    />
-                  </div>
-                )} */}
+              
                 {!walletConnected ? (
                   <div>
                     <Translate text="Wallet.Connect" />
@@ -289,6 +270,7 @@ class WalletModal extends React.Component<any> {
                 ) : (
                   <div>
                     <Translate text="Wallet.Disconnect" />
+                     &nbsp;{walletType}
                   </div>
                 )}
               </Button>

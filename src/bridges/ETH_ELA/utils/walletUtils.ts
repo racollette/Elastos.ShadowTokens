@@ -18,7 +18,7 @@ export const init = function() {
     const store = getStore();
     const initialAsset = store.get("token")
     fetchTokenBalance(initialAsset)
-    initLocalWeb3()
+    // initLocalWeb3("Elaphant")
 }
 
 export const disconnectWeb3Provider = async function() {
@@ -29,23 +29,40 @@ export const disconnectWeb3Provider = async function() {
     await provider.disconnect()
 }
 
+// const providerOptions = {
+//   walletconnect: {
+//     package: WalletConnectProvider,
+//     options:  {
+//         rpc: {
+//             1: SUPPORTED_RPC_URLS["Ethereum"],
+//             20: SUPPORTED_RPC_URLS["Elastos"],
+//             21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
+//             42: SUPPORTED_RPC_URLS["Kovan"],
+//             }
+//             }
+//   },
+// };
+
+ const web3Modal = new Web3Modal({
+    cacheProvider: true,
+    // providerOptions,
+});
+
 
 export const initLocalWeb3 = async function(type?: any) {
     const store = getStore();
-    // disconnectWeb3Provider()
     store.set("walletConnecting", true);
-    store.set("spaceError", false);
+    store.set("confirmTx", "")
 
     // already connected
     if (store.get("localWeb3Address")) {
         return;
     }
 
-    let web3js;
+    let web3;
     let accounts: string[] = [];
     let network: any = "";
     let netId: number;
-
 
     try {
         if (type === "MetaMask" || !type) {
@@ -55,35 +72,33 @@ export const initLocalWeb3 = async function(type?: any) {
                 store.set("noWeb3", true)
                 return
             }
-            const web3Modal = new Web3Modal({
-                cacheProvider: false, //optional
-            });
+           
             const web3Provider = await web3Modal.connect();
-            web3js = new Web3(web3Provider);
+            web3 = new Web3(web3Provider);
+        
 
         } else if (type === "WalletConnect") {
+
             const provider: any = new WalletConnectProvider({
                 rpc: {
                     1: SUPPORTED_RPC_URLS["Ethereum"],
                     20: SUPPORTED_RPC_URLS["Elastos"],
-                    21: "https://rpc.elaeth.io",
+                    21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
                     42: SUPPORTED_RPC_URLS["Kovan"],
                 }
             });
             await provider.enable();
-            web3js = new Web3(provider);
+            web3 = new Web3(provider);
         } else if (type === "Elaphant") {
             if (window.web3 || window.ethereum) {
                 console.log("Web3 browser user detected. You can now use the provider")
-                web3js = new Web3(window.web3.currentProvider);
+                web3 = new Web3(window.web3.currentProvider);
             } else {
                 store.set("noWeb3", true)
                 return
             }
         } else {
             console.error("Invalid wallet type.");
-            store.set("spaceError", true);
-            store.set("spaceRequesting", false);
             store.set("walletConnecting", false);
             return;
         }
@@ -93,22 +108,20 @@ export const initLocalWeb3 = async function(type?: any) {
             scope.setTag("error-hint", "web3 init");
             Sentry.captureException(e);
         });
-        store.set("spaceError", true);
-        store.set("spaceRequesting", false);
         store.set("walletConnecting", false);
         return;
     }
 
-    setListener(web3js)
-    if (typeof web3js.currentProvider === "string") return;
-    if (!web3js.currentProvider) return;
-    accounts = await web3js.eth.getAccounts();
-    netId = await web3js.eth.net.getId();
+    setListener(web3)
+    if (typeof web3.currentProvider === "string") return;
+    if (!web3.currentProvider) return;
+    accounts = await web3.eth.getAccounts();
+    netId = await web3.eth.net.getId();
     network = SUPPORTED_NETWORK_IDS[netId]
     store.set("walletConnecting", false);
 
     // Configure current network tokens
-    store.set("localWeb3", web3js);
+    store.set("localWeb3", web3);
     store.set("localWeb3Address", accounts[0]);
     store.set("localWeb3Network", network);
     store.set("selectedWallet", true);
@@ -472,12 +485,12 @@ export const setListener = async function(web3: any) {
         // listen for changes
         listeningProvider.on("accountsChanged", async () => {
             clearWeb3()
-            initLocalWeb3()
+            initLocalWeb3(store.get("selectedWalletType"))
         });
         listeningProvider.on("chainChanged", async () => {
             clearWeb3()
             store.set("wrongNetwork", false)
-            initLocalWeb3()
+            initLocalWeb3(store.get("selectedWalletType"))
         });
         listeningProvider.on("disconnected", async () => {
             window.location.reload();
