@@ -81,7 +81,7 @@ export const initLocalWeb3 = async function(type?: any) {
 
             const provider: any = new WalletConnectProvider({
                 rpc: {
-                    1: SUPPORTED_RPC_URLS["Ethereum"],
+                    1: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`, // SUPPORTED_RPC_URLS["Ethereum"],
                     20: SUPPORTED_RPC_URLS["Elastos"],
                     21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
                     42: SUPPORTED_RPC_URLS["Kovan"],
