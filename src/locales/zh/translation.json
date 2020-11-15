@@ -80,7 +80,7 @@
   "Progress.Verified": "正在等待交易被打包",
   "Progress.Blocks": "等待区块链确认",
   "Progress.Oracles": "见证人正在验证交易",
-  "Progress.Busy.Title": "验证服务忙",
+  "Progress.Busy.Title": "网络拥塞",
   "Progress.Busy.Message": "转移所需时间比预期更长。 请在区块浏览器查看以确认.",
   "Progress.Error.Title": "网络错误",
   "Progress.Error.Message": "查询状态时发生错误。 您的资金仍会到达，请检查区块浏览器进行确认.",

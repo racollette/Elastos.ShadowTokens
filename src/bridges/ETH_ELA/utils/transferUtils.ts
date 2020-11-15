@@ -105,8 +105,10 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
             })
             .on('error', function(error: any) {
-                store.set("confirming", false)
-                store.set("unknownError", true)
+                if (error.code !== 4001) {
+                    store.set("confirming", false)
+                    store.set("unknownError", true)
+                }
             })
 
 
@@ -142,8 +144,10 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
                 if (confirmed) detectExchangeFinished(confirmTx.destAddress, value, contracts.dest, confirmTx.destNetwork, "amb_native_erc")
             })
             .on('error', function(error: any) {
-                store.set("confirming", false)
-                store.set("unknownError", true)
+                if (error.code !== 4001) {
+                    store.set("confirming", false)
+                    store.set("unknownError", true)
+                }
             })
     }
 
@@ -194,7 +198,7 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
         bridgeTokens(contracts, confirmTx.address, value, from, confirmTx)
 
     }
-    
+
 }
 
 export const bridgeTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any) {
@@ -240,8 +244,10 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
 
         })
         .on('error', function(error: any) {
-            store.set("confirming", false)
-            store.set("unknownError", true)
+            if (error.code !== 4001) {
+                store.set("confirming", false)
+                store.set("unknownError", true)
+            }
         })
 
 }
@@ -303,7 +309,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             return
         }
         fromBlock = currentBlock
-        await wait(12000);
+        await wait(10000);
     }
 
     if (Date.now() > stopTime) {

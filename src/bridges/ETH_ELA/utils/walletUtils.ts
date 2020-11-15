@@ -43,7 +43,7 @@ export const disconnectWeb3Provider = async function() {
 //   },
 // };
 
- const web3Modal = new Web3Modal({
+const web3Modal = new Web3Modal({
     cacheProvider: true,
     // providerOptions,
 });
@@ -72,16 +72,16 @@ export const initLocalWeb3 = async function(type?: any) {
                 store.set("noWeb3", true)
                 return
             }
-           
+
             const web3Provider = await web3Modal.connect();
             web3 = new Web3(web3Provider);
-        
+
 
         } else if (type === "WalletConnect") {
 
             const provider: any = new WalletConnectProvider({
                 rpc: {
-                    1: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`, // SUPPORTED_RPC_URLS["Ethereum"],
+                    1: SUPPORTED_RPC_URLS["Ethereum"],
                     20: SUPPORTED_RPC_URLS["Elastos"],
                     21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
                     42: SUPPORTED_RPC_URLS["Kovan"],

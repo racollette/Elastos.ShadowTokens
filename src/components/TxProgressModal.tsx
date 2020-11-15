@@ -89,7 +89,7 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   waitingText: {
     color: theme.palette.info.contrastText,
     fontSize: 14,
-    paddingTop: theme.spacing(0.5),
+    paddingTop: theme.spacing(0.75),
     [theme.breakpoints.down("sm")]: {
       fontSize: 14,
     },

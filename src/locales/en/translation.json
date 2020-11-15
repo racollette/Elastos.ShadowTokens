@@ -80,7 +80,7 @@
   "Progress.Verified": "Waiting for transaction to be included in a block",
   "Progress.Blocks": "Waiting for block confirmations",
   "Progress.Oracles": "Oracles validating transaction",
-  "Progress.Busy.Title": "Oracles Busy",
+  "Progress.Busy.Title": "Network Congestion",
   "Progress.Busy.Message": "The transfer is taking longer than expected. Please monitor the block explorer for confirmation.",
   "Progress.Error.Title": "Network Error",
   "Progress.Error.Message": "An error occurred while monitoring the transfer. Your funds will still arrive, please check the block explorer for confirmation.",
