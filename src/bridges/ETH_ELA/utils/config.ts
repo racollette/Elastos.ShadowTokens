@@ -74,12 +74,14 @@ export const INITIAL_STATE = {
 
     // awaiting user
     waitingApproval: false,
+    showWaitingApproval: false,
 
     // confirmations
     confirmTx: null,
     confirmationNumber: 0,
     confirmationTotal: null,
     transferInProgress: false,
+    showTransferProgress: false,
     confirming: false,
     confirmationStep: 0,
     transferSuccess: false,

@@ -3,21 +3,27 @@ import Web3 from "web3";
 import { VALIDATOR_TIMEOUT, PREAUTHORIZE_AMOUNT } from './config';
 import { SUPPORTED_RPC_URLS } from './config';
 import { EventData } from 'web3-eth-contract'
-import { parseValue } from "./txUtils";
+import { parseValue, fetchGasPrice } from "./txUtils";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ERC677_ABI from "../abis/ERC677_ABI.json";
 import AMB_NATIVE_ERC_ABI from "../abis/AMB_NATIVE_ERC_ABI.json";
 import MULTI_AMB_ERC_ERC_ABI from "../abis/MULTI_AMB_ERC_ERC_ABI.json";
 import { MEDIATOR_CONTRACTS } from "./contracts";
 
-export const handleBridgeMode = function(confirmTx: any) {
+export const handleBridgeMode = async function(confirmTx: any) {
+    const gasPrice = await fetchGasPrice(confirmTx.sourceNetwork)
+    console.log(gasPrice)
+    // if (confirmTx.sourceNetwork === "Ethereum") {
+    //     gasPrice = Math.round(Number(gasPrice) * Number(GAS_PRICE_MODIFIER / 100)).toString()
+    // }
+    // console.log(gasPrice)
     const contracts = getMediatorContracts(confirmTx)
     switch (contracts.bridgeMode) {
         case "amb_native_erc":
-            nativeTransfer(confirmTx, contracts)
+            nativeTransfer(confirmTx, contracts, gasPrice)
             break
         case "multi_amb_erc_erc":
-            tokenTransfer(confirmTx, contracts)
+            tokenTransfer(confirmTx, contracts, gasPrice)
             break
     }
 }
@@ -55,7 +61,7 @@ export const getMediatorContracts = function(confirmTx: any) {
 }
 
 
-export const nativeTransfer = async function(confirmTx: any, contracts: any) {
+export const nativeTransfer = async function(confirmTx: any, contracts: any, gasPrice: string) {
     const store = getStore();
     const web3 = store.get("localWeb3")
     const from = confirmTx.sourceAddress
@@ -76,16 +82,18 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
 
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)
+        store.set("showWaitingApproval", true)
         await contracts.sourceMediator.methods.relayTokens(recipient).send({
             from: from,
             value: value,
+            gasPrice: gasPrice
         }, (error: any, hash: any) => {
             if (error) {
+                store.set("showWaitingApproval", false)
+                store.set("waitingApproval", false)
                 if (error.code === 4001) {
-                    store.set("waitingApproval", false)
                     store.set("txRejected", true)
                 } else {
-                    store.set("waitingApproval", false)
                     store.set("unknownError", true)
                 }
                 return console.error(error);
@@ -96,6 +104,8 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
         })
             .on("transactionHash", (tx: any) => {
                 store.set("transferInProgress", true);
+                store.set("showTransferProgress", true);
+                store.set("showWaitingApproval", false)
                 store.set("waitingApproval", false);
                 store.set("confirming", true);
                 store.set("confirmationStep", 1);
@@ -106,9 +116,11 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
             })
             .on('error', function(error: any) {
                 if (error.code !== 4001) {
+                    store.set("transferInProgress", false);
                     store.set("confirming", false)
                     store.set("unknownError", true)
                 }
+                console.error(error);
             })
 
 
@@ -117,14 +129,15 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
         const token = new web3.eth.Contract(ERC677_ABI, confirmTx.address);
 
         store.set("waitingApproval", true);
+        store.set("showWaitingApproval", true);
         store.set("transactionType", "relay")
-        await token.methods.transferAndCall(contracts.source, value, recipient).send({ from }, (error: any, hash: any) => {
+        await token.methods.transferAndCall(contracts.source, value, recipient).send({ from: from, gasPrice: gasPrice }, (error: any, hash: any) => {
             if (error) {
+                store.set("showWaitingApproval", false)
+                store.set("waitingApproval", false)
                 if (error.code === 4001) {
-                    store.set("waitingApproval", false)
                     store.set("txRejected", true)
                 } else {
-                    store.set("waitingApproval", false)
                     store.set("unknownError", true)
                 }
                 return console.error(error);
@@ -135,6 +148,8 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
         })
             .on("transactionHash", (tx: any) => {
                 store.set("transferInProgress", true);
+                store.set("showTransferProgress", true);
+                store.set("showWaitingApproval", false)
                 store.set("waitingApproval", false);
                 store.set("confirming", true);
                 store.set("confirmationStep", 1);
@@ -145,15 +160,17 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any) {
             })
             .on('error', function(error: any) {
                 if (error.code !== 4001) {
+                    store.set("transferInProgress", false);
                     store.set("confirming", false)
                     store.set("unknownError", true)
                 }
+                console.error(error);
             })
     }
 
 }
 
-export const tokenTransfer = async function(confirmTx: any, contracts: any) {
+export const tokenTransfer = async function(confirmTx: any, contracts: any, gasPrice: string) {
     const store = getStore();
     const web3 = store.get("localWeb3")
     const from = store.get("localWeb3Address")
@@ -169,19 +186,20 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
         const allowance = await token.methods.allowance(from, contracts.source).call()
         if (window.BigInt(allowance) >= window.BigInt(value)) {
             console.log('Allowance exceeds value, skipping approval')
-            bridgeTokens(contracts, confirmTx.address, value, from, confirmTx)
+            bridgeTokens(contracts, confirmTx.address, value, from, confirmTx, gasPrice)
             return
         }
 
         store.set("waitingApproval", true);
+        store.set("showWaitingApproval", true);
         store.set("transactionType", "approve")
-        await token.methods.approve(contracts.source, excessValue).send({ from }, (error: any, hash: any) => {
+        await token.methods.approve(contracts.source, excessValue).send({ from: from, gasPrice: gasPrice }, (error: any, hash: any) => {
             if (error) {
+                store.set("waitingApproval", false)
+                store.set("showWaitingApproval", false)
                 if (error.code === 4001) {
-                    store.set("waitingApproval", false)
                     store.set("txRejected", true)
                 } else {
-                    store.set("waitingApproval", false)
                     store.set("unknownError", true)
                 }
                 return console.error(error);
@@ -192,16 +210,25 @@ export const tokenTransfer = async function(confirmTx: any, contracts: any) {
             }
         })
             .on('receipt', function(receipt: any) {
+                store.set("showWaitingApproval", false)
                 store.set("waitingApproval", false);
             })
+            .on('error', function(error: any) {
+                if (error.code !== 4001) {
+                    store.set("showWaitingApproval", false)
+                    store.set("waitingApproval", false)
+                    store.set("unknownError", true)
+                }
+                console.error(error);
+            })
 
-        bridgeTokens(contracts, confirmTx.address, value, from, confirmTx)
+        bridgeTokens(contracts, confirmTx.address, value, from, confirmTx, gasPrice)
 
     }
 
 }
 
-export const bridgeTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any) {
+export const bridgeTokens = async function(contracts: any, tokenAddress: string, value: number, from: string, confirmTx: any, gasPrice: string) {
     const store = getStore();
     const mediatorConfs = confirmTx.confirmations
     const recipient = confirmTx.destAddress
@@ -216,15 +243,17 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
 
     store.set("transactionType", "relay")
     store.set("waitingApproval", true)
+    store.set("showWaitingApproval", true)
     await contracts.sourceMediator.methods.relayTokens(tokenAddress, recipient, value).send({
-        from
+        from: from,
+        gasPrice: gasPrice
     }, (error: any, hash: any) => {
         if (error) {
+            store.set("showWaitingApproval", false)
+            store.set("waitingApproval", false)
             if (error.code === 4001) {
-                store.set("waitingApproval", false)
                 store.set("txRejected", true)
             } else {
-                store.set("waitingApproval", false)
                 store.set("unknownError", true)
             }
             return console.error(error);
@@ -234,6 +263,8 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
     })
         .on("transactionHash", (tx: any) => {
             store.set("transferInProgress", true);
+            store.set("showTransferProgress", true);
+            store.set("showWaitingApproval", false);
             store.set("waitingApproval", false);
             store.set("confirming", true);
             store.set("confirmationStep", 1);
@@ -245,9 +276,11 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
         })
         .on('error', function(error: any) {
             if (error.code !== 4001) {
+                store.set("transferInProgress", false);
                 store.set("confirming", false)
                 store.set("unknownError", true)
             }
+            console.error(error);
         })
 
 }
@@ -294,6 +327,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             if (error) {
                 console.error(error)
                 store.set("confirming", false)
+                store.set("transferInProgress", false)
                 store.set("validatorError", true)
                 return
             }
@@ -305,6 +339,8 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
             const txID = confirmationEvent[0].transactionHash
             store.set("destTxID", txID);
             store.set("confirming", false);
+            store.set("showTransferProgress", true)
+            store.set("transferInProgress", false)
             store.set("transferSuccess", true);
             return
         }
@@ -315,6 +351,7 @@ export const detectExchangeFinished = async function(recipient: any, value: any,
     if (Date.now() > stopTime) {
         console.log('Mediator contract TokensBridged timeout. Over 5 minutes has elapsed.')
         store.set("confirming", false)
+        store.set("transferInProgress", false)
         store.set("validatorTimeout", true)
         return
     }

@@ -89,9 +89,14 @@ interface Props {
 
 const ErrorModal: React.FC<Props> = function (props) {
   const { classes, targetNetwork, errorType, store } = props;
-  const open = store.get(errorType);
   const minTx = store.get("minTx");
   const maxTx = store.get("maxTx");
+
+  const open = store.get(errorType);
+
+  const handleClose = () => {
+    store.set(errorType, false);
+  };
 
   return (
     <div>
@@ -108,7 +113,7 @@ const ErrorModal: React.FC<Props> = function (props) {
             timeout: 500,
           }}
         >
-          <Fade in={true}>
+          <Fade in={!!open}>
             <div className={classes.container}>
               {errorType === "noWeb3" && (
                 <div>
@@ -132,6 +137,17 @@ const ErrorModal: React.FC<Props> = function (props) {
                     <img src={Alert} alt="Alert" />
                     <Typography className={classes.confirmationText}>
                       <Translate text="Error.PleaseConnect.Message" />
+                    </Typography>
+                  </div>
+                </div>
+              )}
+
+              {errorType === "alreadyInProgress" && (
+                <div>
+                  <div className={classes.errorContainer}>
+                    <img src={Alert} alt="Alert" />
+                    <Typography className={classes.confirmationText}>
+                      <Translate text="Error.AlreadyInProgress.Message" />
                     </Typography>
                   </div>
                 </div>
@@ -313,7 +329,7 @@ const ErrorModal: React.FC<Props> = function (props) {
                   fullWidth
                   className={classNames(classes.actionButton)}
                   onClick={() => {
-                    store.set(errorType, false);
+                    handleClose();
                   }}
                 >
                   <Translate text="Error.Accept" />

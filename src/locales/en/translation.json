@@ -8,6 +8,10 @@
   "Nav.Code": "Code",
   "Nav.Connect": "Connect to a wallet",
   "Nav.Bridge": "Select a bridge",
+  "Nav.Approve": "Approve",
+  "Nav.Submitting": "Submitting",
+  "Nav.Confirming": "Confirming",
+  "Nav.Bridging": "Bridging",
 
   "Home.Title": "Conservation of assets",
   "Home.Intro": "Bridge your coins and tokens to other blockchains. No custody. Fully decentralized and validated by oracles.",
@@ -58,6 +62,7 @@
   "Error.NoWeb3.Title": "No Wallet Found",
   "Error.NoWeb3.Message": "Is it installed? Please enable it before continuing.",
   "Error.PleaseConnect.Message": "Please connect wallet",
+  "Error.AlreadyInProgress.Message": "Please wait for the current transfer to complete before starting another",
   "Error.InsufficientBalance.Message": "Insufficient balance",
   "Error.BelowMinTxLimit.Message": "Below minimum transfer amount",
   "Error.ExceedsMaxTxLimit.Message": "Exceeds maximum transfer limit",

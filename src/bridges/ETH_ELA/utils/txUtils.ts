@@ -80,6 +80,40 @@ export const gatherFeeData = async function(direction: number) {
     store.set("convert.conversionTotal", total);
 };
 
+export const fetchGasPrice = async function(network: string) {
+    const store = getStore();
+    const web3 = store.get("localWeb3")
+    let url;
+    let speed;
+
+    switch (network) {
+        case 'Ethereum': {
+            url = "/ethgasprice.json"
+            speed = "fast"
+            break
+        }
+        case 'Elastos': {
+            url = "/elagasprice.json"
+            speed = "slow"
+            break
+        }
+        default: {
+            const gasPrice = await web3.eth.getGasPrice()
+            return gasPrice
+        }
+    }
+
+    try {
+        const gasPrice = await fetch(url);
+        const response = await gasPrice.json()
+        const gasWei = web3.utils.toWei(response[speed].toString(), "Gwei")
+        return gasWei
+    } catch (e) {
+        console.error(e);
+    }
+
+}
+
 export function getExplorerLink(network: 'source' | 'dest', type: 'transaction' | 'token' | 'address', txInputs: any, id: string): string {
     const chain = txInputs[`${network}Network`]
     const prefix = EXPLORER_URLS[chain]

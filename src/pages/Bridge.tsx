@@ -29,13 +29,16 @@ class Bridge extends React.Component<Props> {
     // const selectedPair = store.get("selectedPair");
 
     const showWalletModal = store.get("showWalletModal");
-    const confirmTx = store.get("confirmTx");
+    const confirm = store.get("confirm");
 
     const noWeb3 = store.get("noWeb3");
     const pleaseConnect = store.get("pleaseConnect");
+    const alreadyInProgress = store.get("alreadyInProgress");
     const insufficientBalance = store.get("insufficientBalance");
     const belowMinTxLimit = store.get("belowMinTxLimit");
     const exceedsMaxTxLimit = store.get("exceedsMaxTxLimit");
+    const txRejected = store.get("txRejected");
+    const unknownError = store.get("unknownError");
 
     return (
       <React.Fragment>
@@ -76,11 +79,7 @@ class Bridge extends React.Component<Props> {
         )} */}
         {/* {confirmBridge && (
           <> */}
-        {confirmTx ? (
-          <ConfirmContainer />
-        ) : (
-          <TransferContainer />
-        )}
+        {confirm ? <ConfirmContainer /> : <TransferContainer />}
         {/* </>
         )} */}
 
@@ -92,6 +91,11 @@ class Bridge extends React.Component<Props> {
         {pleaseConnect && (
           <div>
             <ErrorModal store={store} errorType={"pleaseConnect"} />
+          </div>
+        )}
+        {alreadyInProgress && (
+          <div>
+            <ErrorModal store={store} errorType={"alreadyInProgress"} />
           </div>
         )}
         {insufficientBalance && (
@@ -108,6 +112,11 @@ class Bridge extends React.Component<Props> {
           <div>
             <ErrorModal store={store} errorType={"exceedsMaxTxLimit"} />
           </div>
+        )}
+        {txRejected && <ErrorModal store={store} errorType={"txRejected"} />}
+
+        {unknownError && (
+          <ErrorModal store={store} errorType={"unknownError"} />
         )}
       </React.Fragment>
     );

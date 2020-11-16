@@ -8,6 +8,10 @@
   "Nav.Code": "Code",
   "Nav.Connect": "连接钱包",
   "Nav.Bridge": "选择跨链桥",
+  "Nav.Approve": "批准",
+  "Nav.Submitting": "提交中",
+  "Nav.Confirming": "确认中",
+  "Nav.Bridging": "桥接",
 
   "Home.Title": "资产保全",
   "Home.Intro": "将您在一条链上的加密资产映射到另一条链，完全去中心的验证人保护您的财产安全。",
@@ -58,6 +62,7 @@
   "Error.NoWeb3.Title": "没有发现钱包",
   "Error.NoWeb3.Message": "安装了么？请先确认。",
   "Error.PleaseConnect.Message": "请连接钱包",
+  "Error.AlreadyInProgress.Message": "请等待当前传输完成后再开始",
   "Error.TxRejected.Message": "交易被拒绝",
   "Error.InsufficientBalance.Message": "余额不足",
   "Error.BelowMinTxLimit.Message": "低于最低转账金额",

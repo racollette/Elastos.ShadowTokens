@@ -27,6 +27,8 @@ import TokenSelectorModal from "../components/TokenSelectorModal";
 import BigCurrencyInput from "../components/BigCurrencyInput";
 import Balance from "../components/Balance";
 import ErrorModal from "../components/ErrorModal";
+import WaitingModal from "../components/WaitingModal";
+import TxProgressModal from "../components/TxProgressModal";
 import AddressValidator from "wallet-address-validator";
 import Numeral from "numeral";
 import theme from "../theme/theme";
@@ -245,7 +247,7 @@ class TransferContainer extends React.Component<any> {
     };
 
     store.set("confirmTx", tx);
-    store.set("confirmAction", token[direction].transferType);
+    store.set("confirm", true);
   }
 
   render() {
@@ -305,6 +307,26 @@ class TransferContainer extends React.Component<any> {
             token[Number(!selectedDirection)].network
           } address`
         : `请输入一个有效的 ${token[Number(!selectedDirection)].network} 地址`;
+
+    const confirmTx = store.get("confirmTx");
+    const selectedWalletType = store.get("selectedWalletType");
+    const type = store.get("transactionType");
+
+    const sourceTxID = store.get("sourceTxID");
+    const destTxID = store.get("destTxID");
+
+    const confirmationNumber = store.get("confirmationNumber");
+    const confirmationTotal = store.get("confirmationTotal");
+
+    // Tx progress watcher
+    const showWaitingApproval = store.get("showWaitingApproval");
+    const transferInProgress = store.get("transferInProgress");
+    const showTransferProgress = store.get("showTransferProgress");
+    const confirming = store.get("confirming");
+    const confirmationStep = store.get("confirmationStep");
+    const validatorError = store.get("validatorError");
+    const validatorTimeout = store.get("validatorTimeout");
+    const transferSuccess = store.get("transferSuccess");
 
     return (
       <div className={classes.container}>
@@ -587,6 +609,10 @@ class TransferContainer extends React.Component<any> {
                         fullWidth
                         className={classNames(classes.actionButton)}
                         onClick={() => {
+                          if (transferInProgress) {
+                            store.set("alreadyInProgress", true);
+                            return;
+                          }
                           if (amount < token.minTx) {
                             store.set("minTx", token.minTx.toFixed(2));
                             store.set("belowMinTxLimit", true);
@@ -613,6 +639,32 @@ class TransferContainer extends React.Component<any> {
                             errorType={"wrongNetwork"}
                           />
                         </div>
+                      )}
+
+                      {showWaitingApproval && (
+                        <WaitingModal
+                          wallet={selectedWalletType}
+                          store={store}
+                          direction={selectedDirection}
+                          tx={confirmTx}
+                          type={type}
+                        />
+                      )}
+
+                      {showTransferProgress && (
+                        <TxProgressModal
+                          txInput={confirmTx}
+                          wallet={selectedWallet}
+                          confirmation={confirmationNumber}
+                          total={confirmationTotal}
+                          confirming={confirming}
+                          confirmationStep={confirmationStep}
+                          transferSuccess={transferSuccess}
+                          validatorError={validatorError}
+                          validatorTimeout={validatorTimeout}
+                          sourceTxID={sourceTxID}
+                          destTxID={destTxID}
+                        />
                       )}
                     </div>
                   )}

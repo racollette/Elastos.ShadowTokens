@@ -4,11 +4,12 @@ import { Styles, withStyles } from "@material-ui/styles";
 import theme from "../theme/theme";
 import classNames from "classnames";
 // import { restoreInitialState } from "../bridges/ETH_ELA/utils/txUtils";
-import { BRIDGE_NAME_MAP, BRIDGE_ICON_MAP } from "../bridges/bridges";
+// import { BRIDGE_NAME_MAP, BRIDGE_ICON_MAP } from "../bridges/bridges";
 import Hidden from "@material-ui/core/Hidden";
-import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
+// import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import ShadowtokensTitle from "../assets/logo_title.svg";
 import ShadowtokensLogo from "../assets/logo.svg";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import LanguageSelect from "../components/LanguageSelect";
@@ -71,6 +72,12 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       display: "none",
     },
   },
+  padMobile: {
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: theme.spacing(0.5),
+      paddingBottom: theme.spacing(0.5),
+    },
+  },
   icon: {
     height: 22,
     width: "auto",
@@ -121,11 +128,20 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     marginRight: 4,
     marginLeft: 4,
   },
-  bridgeButtonText: {
+  pendingButtonText: {
     fontSize: 14,
+    fontWeight: 550,
     color: "#fff",
-    marginRight: 4,
-    marginLeft: 4,
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(0.5),
+  },
+  pendingContainer: {
+    height: 36,
+    border: "1px solid rgb(66,66,66)",
+    borderRadius: 8,
+    backgroundColor: "rgb(36,36,36)",
+    marginLeft: 6,
+    alignItems: "center",
   },
 });
 
@@ -143,7 +159,7 @@ const WalletButton = withStyles({
   },
 })(Button);
 
-const BridgeButton = withStyles({
+const PendingButton = withStyles({
   root: {
     marginLeft: 8,
     textTransform: "none",
@@ -171,9 +187,17 @@ class NavContainer extends React.Component<any> {
   render() {
     const { classes, store } = this.props;
 
+    const page = store.get("page");
     const walletAddress = store.get("localWeb3Address");
-    const selectedBridge = store.get("selectedBridge");
-    const selectedPair = store.get("selectedPair");
+    // const selectedBridge = store.get("selectedBridge");
+    // const selectedPair = store.get("selectedPair");
+
+    const approving = store.get("waitingApproval");
+    const transferring = store.get("transferInProgress");
+    const pending = approving || transferring ? true : false;
+
+    const confirmationStep = store.get("confirmationStep");
+    const confirmationNumber = store.get("confirmationNumber");
 
     return (
       <Grid item xs={12} className={classes.navContainer}>
@@ -207,38 +231,84 @@ class NavContainer extends React.Component<any> {
                 alignItems="center"
                 justify="flex-end"
               >
-                <WalletButton
-                  disableRipple
-                  onClick={() => {
-                    // if (!walletAddress) {
-                    store.set("showWalletModal", true);
-                    //   initLocalWeb3(walletType);
-                    // }
-                  }}
-                  variant="contained"
-                  size="small"
-                  className={classNames(
-                    classes.accountButton,
-                    walletAddress && classes.walletActive
-                  )}
-                >
-                  {walletAddress ? (
-                    <div>
-                      <div className={classes.circle}></div>
-                      <span className={classes.walletButtonText}>
-                        {walletAddress.slice(0, 7) +
-                          "..." +
-                          walletAddress.slice(walletAddress.length - 5)}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className={classes.walletButtonText}>
-                      <Translate text="Nav.Connect" />
-                    </span>
-                  )}
-                </WalletButton>
+                {page === "bridge" && walletAddress && pending && (
+                  <div className={classes.padMobile}>
+                    <Grid container alignItems="center">
+                      <PendingButton
+                        variant="contained"
+                        size="small"
+                        disableRipple
+                        onClick={() => {
+                          if (approving) {
+                            store.set("showWaitingApproval", true);
+                            return;
+                          }
+                          if (transferring) {
+                            store.set("showTransferProgress", true);
+                            return;
+                          }
+                        }}
+                      >
+                        {approving && (
+                          <span className={classes.pendingButtonText}>
+                            <Translate text="Nav.Approve" />
+                          </span>
+                        )}
+                        {transferring && (
+                          <div>
+                            {confirmationStep === 1 && (
+                              <span className={classes.pendingButtonText}>
+                                {confirmationNumber < 1 ? (
+                                  <Translate text="Nav.Submitting" />
+                                ) : (
+                                  <Translate text="Nav.Confirming" />
+                                )}
+                              </span>
+                            )}
+                            {confirmationStep === 2 && (
+                              <span className={classes.pendingButtonText}>
+                                <Translate text="Nav.Bridging" />
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        <CircularProgress color="secondary" size={18} />
+                      </PendingButton>
+                    </Grid>
+                  </div>
+                )}
 
-                <Hidden smDown>
+                <div className={classes.padMobile}>
+                  <WalletButton
+                    disableRipple
+                    onClick={() => {
+                      store.set("showWalletModal", true);
+                    }}
+                    variant="contained"
+                    size="small"
+                    className={classNames(
+                      classes.accountButton,
+                      walletAddress && classes.walletActive
+                    )}
+                  >
+                    {walletAddress ? (
+                      <div>
+                        <div className={classes.circle}></div>
+                        <span className={classes.walletButtonText}>
+                          {walletAddress.slice(0, 7) +
+                            "..." +
+                            walletAddress.slice(walletAddress.length - 5)}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className={classes.walletButtonText}>
+                        <Translate text="Nav.Connect" />
+                      </span>
+                    )}
+                  </WalletButton>
+                </div>
+
+                {/* <Hidden smDown>
                   <BridgeButton
                     disableRipple
                     onClick={() => {
@@ -279,8 +349,10 @@ class NavContainer extends React.Component<any> {
                       </span>
                     )}
                   </BridgeButton>
-                </Hidden>
-                <Switch />
+                </Hidden> */}
+                <div className={classes.padMobile}>
+                  <Switch className={classes.padMobile} />
+                </div>
                 <Hidden smDown>
                   <LanguageSelect
                     className={classes.hideMobile}
@@ -288,7 +360,9 @@ class NavContainer extends React.Component<any> {
                     isVisible={true}
                   />
                 </Hidden>
-                <Menu />
+                <div className={classes.padMobile}>
+                  <Menu />
+                </div>
               </Grid>
             </Grid>
           </Grid>

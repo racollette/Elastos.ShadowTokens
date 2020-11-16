@@ -229,7 +229,7 @@ class WalletModal extends React.Component<any> {
                 <Grid
                   container
                   className={walletType === "Elaphant" ? "selected" : ""}
-                  onClick={() => store.set("selectedWalletType", "Elaphant")}
+                  // onClick={() => store.set("selectedWalletType", "Elaphant")}
                 >
                   <img src={WALLET_ICON_MAP["Elaphant"]} alt="Elaphant" />
                   <Typography className={classes.walletLabel}>
@@ -261,7 +261,6 @@ class WalletModal extends React.Component<any> {
                 variant="contained"
                 fullWidth
               >
-              
                 {!walletConnected ? (
                   <div>
                     <Translate text="Wallet.Connect" />
@@ -270,7 +269,7 @@ class WalletModal extends React.Component<any> {
                 ) : (
                   <div>
                     <Translate text="Wallet.Disconnect" />
-                     &nbsp;{walletType}
+                    &nbsp;{walletType}
                   </div>
                 )}
               </Button>

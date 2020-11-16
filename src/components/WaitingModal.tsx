@@ -121,42 +121,27 @@ const styles: Styles<typeof theme, any> = (theme) => ({
 interface Props {
   className?: string;
   classes: { [key in string]: string };
-  onClick: any;
   wallet: any;
   tx: any;
-  open: any;
+  store: any;
   type: any;
 }
 
 const WaitingModal: React.FC<Props> = function (props) {
-  // class WaitingModal extends React.PureComponent<any> {
+  const { classes, wallet, tx, type, store } = props;
 
-  // constructor(props: any) {
-  //   super(props);
-  //   this.state = props.store.getState();
-  // }
-
-  // const [open, setOpen] = React.useState(false);
-
-  const { classes, wallet, open, tx, type } = props;
-
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const open = store.get("showWaitingApproval");
+  const handleClose = () => {
+    store.set("showWaitingApproval", false);
+  };
 
   return (
     <div>
       <React.Fragment>
         <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
           className={classes.modal}
           open={open}
-          // onClose={handleClose}
+          onClose={handleClose}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{

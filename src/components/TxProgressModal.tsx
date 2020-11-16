@@ -1,5 +1,6 @@
 import React from "react";
 import { Styles, withStyles } from "@material-ui/styles";
+import { getStore } from "../services/storeService";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import classNames from "classnames";
@@ -136,8 +137,6 @@ const WarningButton = withStyles({
 interface Props {
   className?: string;
   classes: { [key in string]: string };
-  onClick: any;
-  open: any;
   confirmation: any;
   total: any;
   txInput: any;
@@ -151,9 +150,9 @@ interface Props {
 }
 
 const TxProgressModal: React.FC<Props> = function (props) {
+  const store = getStore();
   const {
     classes,
-    open,
     confirmation,
     total,
     txInput,
@@ -166,13 +165,19 @@ const TxProgressModal: React.FC<Props> = function (props) {
     destTxID,
   } = props;
 
+  const open = store.get("showTransferProgress");
+
+  const handleClose = () => {
+    store.set("showTransferProgress", false);
+  };
+
   return (
     <div>
       <React.Fragment>
         <Modal
           className={classes.modal}
           open={open}
-          // onClose={handleClose}
+          onClose={handleClose}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
@@ -221,6 +226,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
                       className={classNames(classes.actionButton)}
                       onClick={() => {
                         restoreInitialState();
+                        handleClose();
                       }}
                     >
                       <Translate text="Progress.Accept" />
@@ -328,6 +334,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
                       className={classNames(classes.actionButton)}
                       onClick={() => {
                         restoreInitialState();
+                        handleClose();
                       }}
                     >
                       <Translate text="Progress.Accept" />
@@ -378,6 +385,7 @@ const TxProgressModal: React.FC<Props> = function (props) {
                       className={classNames(classes.actionButton)}
                       onClick={() => {
                         restoreInitialState();
+                        handleClose();
                       }}
                     >
                       <Translate text="Progress.Accept" />

@@ -6,12 +6,8 @@ import Numeral from "numeral";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-// import BackArrow from "../assets/back-arrow.svg";
 import WalletIcon from "../assets/wallet-icon-dark.svg";
 import DarkTooltip from "../components/DarkTooltip";
-import WaitingModal from "../components/WaitingModal";
-import TxProgressModal from "../components/TxProgressModal";
-import ErrorModal from "../components/ErrorModal";
 import { Translate } from "../components/Translate";
 import theme from "../theme/theme";
 import { abbreviateAddress } from "../bridges/ETH_ELA/utils/walletUtils";
@@ -157,44 +153,20 @@ class ConfirmContainer extends React.Component<any> {
   render() {
     const { classes, store } = this.props;
 
-    // const confirmAction = store.get("confirmAction");
-    // const isDeposit = confirmAction === "deposit";
     const confirmTx = store.get("confirmTx");
-    const selectedWallet = store.get("selectedWalletType");
     const token = store.get("token");
     const selectedDirection = store.get("convert.selectedDirection");
     const amount = store.get("convert.amount");
     const serviceFee = (
       Number(store.get("convert.networkFee")) * Number(amount)
     ).toFixed(4);
-    // const networkFee = store.get("convert.networkFee");
     const total = Number(store.get("convert.conversionTotal")).toFixed(4);
     const canConvertTo = amount > 0.00010001;
 
-    // const confirmationError = store.get("confirmationError");
     const sourceAsset = confirmTx.sourceAsset;
     const sourceNetwork = confirmTx.sourceNetwork;
     const destAsset = confirmTx.destAsset;
     const destNetwork = confirmTx.destNetwork;
-
-    const waitingApproval = store.get("waitingApproval");
-    const type = store.get("transactionType");
-    const txRejected = store.get("txRejected");
-    const unknownError = store.get("unknownError");
-
-    const sourceTxID = store.get("sourceTxID");
-    const destTxID = store.get("destTxID");
-
-    const confirmationNumber = store.get("confirmationNumber");
-    const confirmationTotal = store.get("confirmationTotal");
-
-    // Tx progress watcher
-    const transferInProgress = store.get("transferInProgress");
-    const confirming = store.get("confirming");
-    const confirmationStep = store.get("confirmationStep");
-    const validatorError = store.get("validatorError");
-    const validatorTimeout = store.get("validatorTimeout");
-    const transferSuccess = store.get("transferSuccess");
 
     let price = store.get(`${token[token.home].id}usd`);
     let usdValue =
@@ -322,16 +294,13 @@ class ConfirmContainer extends React.Component<any> {
               <Grid item xs={6}>
                 <CancelButton
                   className={classes.actionButton}
-                  disabled={!canConvertTo}
                   variant={"contained"}
                   color="secondary"
                   size="large"
                   disableRipple
                   fullWidth
                   onClick={() => {
-                    store.set("confirmTx", null);
-                    store.set("confirmAction", "");
-                    store.set("convert.destination", "");
+                    store.set("confirm", false);
                   }}
                 >
                   <Translate text="Confirm.Cancel" />
@@ -348,52 +317,12 @@ class ConfirmContainer extends React.Component<any> {
                   fullWidth
                   onClick={() => {
                     handleBridgeMode(confirmTx);
+                    store.set("confirm", false);
                   }}
                 >
                   <Translate text="Confirm.Start" />
                 </Button>
               </Grid>
-
-              {waitingApproval && (
-                <WaitingModal
-                  wallet={selectedWallet}
-                  onClick={() => {
-                    store.set("waitingApproval", false);
-                  }}
-                  open={waitingApproval}
-                  direction={selectedDirection}
-                  tx={confirmTx}
-                  type={type}
-                />
-              )}
-
-              {txRejected && (
-                <ErrorModal store={store} errorType={"txRejected"} />
-              )}
-
-              {unknownError && (
-                <ErrorModal store={store} errorType={"unknownError"} />
-              )}
-
-              {transferInProgress && (
-                <TxProgressModal
-                  txInput={confirmTx}
-                  wallet={selectedWallet}
-                  onClick={() => {
-                    store.set("waitingApproval", false);
-                  }}
-                  open={transferInProgress}
-                  confirmation={confirmationNumber}
-                  total={confirmationTotal}
-                  confirming={confirming}
-                  confirmationStep={confirmationStep}
-                  transferSuccess={transferSuccess}
-                  validatorError={validatorError}
-                  validatorTimeout={validatorTimeout}
-                  sourceTxID={sourceTxID}
-                  destTxID={destTxID}
-                />
-              )}
             </Grid>
           </Grid>
         </div>
