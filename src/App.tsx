@@ -32,14 +32,14 @@ const styles = () => ({
     padding: theme.spacing(1.5),
     paddingTop: "20vh",
     [theme.breakpoints.down("xs")]: {
-      paddingTop: "5vh",
+      paddingTop: "7.5vh",
     },
   },
   sidechain: {
     padding: theme.spacing(1.5),
     paddingTop: "12.5vh",
     [theme.breakpoints.down("xs")]: {
-      paddingTop: "5vh",
+      paddingTop: "7.5vh",
     },
   },
 });
@@ -61,9 +61,6 @@ class AppWrapper extends React.Component<Props> {
 
   render() {
     if (window.ethereum) window.ethereum.autoRefreshOnNetworkChange = false;
-    // window.ethereum.on(isVersion8 ? 'chainChanged' : 'networkChanged', network => {
-    //     choiceNetwork()
-    // })
     const classes = this.props.classes;
     const store = this.props.store;
     storeListener(store);

@@ -27,11 +27,11 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     },
   },
   logo: {
-    height: 42,
+    height: 44,
     width: "auto",
     marginRight: theme.spacing(1),
     [theme.breakpoints.down("xs")]: {
-      height: 54,
+      height: 60,
     },
   },
   branding: {
@@ -53,12 +53,6 @@ const styles: Styles<typeof theme, any> = (theme) => ({
       marginRight: theme.spacing(1),
       marginLeft: theme.spacing(1),
     },
-    [theme.breakpoints.down("xs")]: {
-      // width: "75%",
-      // marginTop: theme.spacing(1.5),
-    },
-    // marginLeft: theme.spacing(1),
-    // marginRight: theme.spacing(1),
   },
   title: {
     fontSize: 16,
