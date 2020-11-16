@@ -12,11 +12,6 @@ import { MEDIATOR_CONTRACTS } from "./contracts";
 
 export const handleBridgeMode = async function(confirmTx: any) {
     const gasPrice = await fetchGasPrice(confirmTx.sourceNetwork)
-    console.log(gasPrice)
-    // if (confirmTx.sourceNetwork === "Ethereum") {
-    //     gasPrice = Math.round(Number(gasPrice) * Number(GAS_PRICE_MODIFIER / 100)).toString()
-    // }
-    // console.log(gasPrice)
     const contracts = getMediatorContracts(confirmTx)
     switch (contracts.bridgeMode) {
         case "amb_native_erc":
