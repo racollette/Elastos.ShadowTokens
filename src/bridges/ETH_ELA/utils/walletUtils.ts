@@ -84,7 +84,7 @@ export const initLocalWeb3 = async function(type?: any) {
                     1: SUPPORTED_RPC_URLS["Ethereum"],
                     20: SUPPORTED_RPC_URLS["Elastos"],
                     21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
-                    42: SUPPORTED_RPC_URLS["Kovan"],
+                    3: SUPPORTED_RPC_URLS["Ropsten"],
                 }
             });
             await provider.enable();
@@ -283,7 +283,7 @@ export const getDefaultTokens = (network: string) => {
             return ETH_DEFAULTS
         case 'Elastos':
             return ELA_DEFAULTS
-        case 'Kovan':
+        case 'Ropsten':
             return ETH_DEV_DEFAULTS
         case 'Elastos Testnet':
             return ELA_DEV_DEFAULTS
@@ -355,7 +355,7 @@ const getHomeNetwork = (networkID: number) => {
             return 1
         case 1:
             return 0
-        case 42:
+        case 3:
             return 0
     }
 }
@@ -366,12 +366,12 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
             if (type === 'id') return 1
             return 'Ethereum'
         case 21:
-            if (type === 'id') return 42
-            return 'Kovan'
+            if (type === 'id') return 3
+            return 'Ropsten'
         case 1:
             if (type === 'id') return 20
             return 'Elastos'
-        case 42:
+        case 3:
             if (type === 'id') return 21
             return 'Elastos Testnet'
     }
@@ -392,8 +392,8 @@ export const setBridgeDirection = async function(netId: number) {
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
-        case 42:
-            store.set("localWeb3Network", "Kovan")
+        case 3:
+            store.set("localWeb3Network", "Ropsten")
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break

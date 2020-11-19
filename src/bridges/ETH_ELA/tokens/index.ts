@@ -14,7 +14,7 @@ import { ELP } from './ELP'
 // Dev imports
 import { ETH_DEV } from './ETH_DEV'
 import { ELA_DEV } from './ELA_DEV'
-import { MAIN_DEV } from './MAIN_DEV'
+// import { MAIN_DEV } from './MAIN_DEV'
 
 export const ETH_DEFAULTS = [
     // Native coins
@@ -49,11 +49,9 @@ export const ELA_DEFAULTS = [
 export const ETH_DEV_DEFAULTS = [
     ETH_DEV,
     ELA_DEV,
-    MAIN_DEV,
 ]
 
 export const ELA_DEV_DEFAULTS = [
     ELA_DEV,
-    ETH_DEV,
-    MAIN_DEV,
+    ETH_DEV
 ]
