@@ -17,7 +17,7 @@ export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
     3: 'Ropsten',
     20: 'Elastos',
     21: 'Elastos Testnet',
-
+    256: 'HuobiChain Testnet',
 }
 
 export const EXPLORER_URLS: { [key in string]: string } = {
@@ -25,6 +25,7 @@ export const EXPLORER_URLS: { [key in string]: string } = {
     "Ropsten": "https://ropsten.etherscan.io",
     "Elastos": "https://explorer.elaeth.io",
     "Elastos Testnet": "https://testnet.elaeth.io",
+    "HuobiChain Testnet": "https://scan-testnet.huobichain.com/home/index",
 }
 
 export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
@@ -32,6 +33,7 @@ export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
     'Ropsten': `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     'Elastos': "https://escrpc.elaphant.app",
     'Elastos Testnet': "https://rpc.elaeth.io",
+    "HuobiChain Testnet": "https://http-testnet.huobichain.com",
 }
 
 export const INITIAL_STATE = {
@@ -47,8 +49,8 @@ export const INITIAL_STATE = {
     selectedWalletType: "MetaMask",
 
     // bridge selection
-    selectedBridge: "eth",
-    selectedPair: "ela",
+    selectedBridge: "ETH_ELA",
+    // selectedPair: "ela",
     confirmBridge: false,
 
     // token
@@ -56,6 +58,7 @@ export const INITIAL_STATE = {
     tokenList: ETH_DEFAULTS,
 
     // modals
+    bridgesOpen: false,
     localesOpen: false,
     showWalletModal: false,
 

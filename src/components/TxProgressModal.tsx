@@ -13,7 +13,7 @@ import ActionLink from "../components/ActionLink";
 import {
   getExplorerLink,
   restoreInitialState,
-} from "../bridges/ETH_ELA/utils/txUtils";
+} from "../bridges/EVM/utils/txUtils";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";

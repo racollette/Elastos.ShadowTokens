@@ -1,15 +1,15 @@
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, ELA_AMB_NATIVE_ERC_MIN_TX, ELA_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_HOME, AMB_NATIVE_ERC_FEE_FOREIGN } from './config';
-import ELA_ICON from "../../../assets/ela.png"
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, ELA_AMB_NATIVE_ERC_MIN_TX, ELA_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_HOME, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import ELA_ICON from "../../../../assets/ela.png"
 
-export const ELA = {
+export const ELA_DEV_HT = {
     0: {
         symbol: 'ELA',
-        name: 'ELA on Ethereum',
-        id: 'ethela',
+        name: 'ELA on HuobiChain',
+        id: 'htela',
         transferType: 'release',
-        network: 'Ethereum',
-        networkID: 1,
-        address: '0xe6fd75ff38adca4b97fbcd938c86b98772431867',
+        network: 'HuobiChain Testnet',
+        networkID: 256,
+        address: '0x874F0618315fafd23f500b3a80a8a72148936f8E',
         confirmations: ETH_CONFIRMATIONS,
         fee: AMB_NATIVE_ERC_FEE_FOREIGN,
     },
@@ -18,8 +18,8 @@ export const ELA = {
         name: 'Elastos',
         id: 'ela',
         transferType: 'mint',
-        network: 'Elastos',
-        networkID: 20,
+        network: 'Elastos Testnet',
+        networkID: 21,
         address: '',
         confirmations: ELA_CONFIRMATIONS,
         fee: AMB_NATIVE_ERC_FEE_HOME,

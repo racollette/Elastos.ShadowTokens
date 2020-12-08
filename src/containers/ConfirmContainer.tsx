@@ -10,8 +10,8 @@ import WalletIcon from "../assets/wallet-icon-dark.svg";
 import DarkTooltip from "../components/DarkTooltip";
 import { Translate } from "../components/Translate";
 import theme from "../theme/theme";
-import { abbreviateAddress } from "../bridges/ETH_ELA/utils/walletUtils";
-import { handleBridgeMode } from "../bridges/ETH_ELA/utils/transferUtils";
+import { abbreviateAddress } from "../bridges/EVM/utils/walletUtils";
+import { handleBridgeMode } from "../bridges/EVM/utils/transferUtils";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   container: {

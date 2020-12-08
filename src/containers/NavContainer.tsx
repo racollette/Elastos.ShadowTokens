@@ -13,6 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import LanguageSelect from "../components/LanguageSelect";
+import BridgeSelect from "../components/BridgeSelect";
 import { Translate } from "../components/Translate";
 import Switch from "../components/Switch";
 import Menu from "../components/Menu";
@@ -302,48 +303,53 @@ class NavContainer extends React.Component<any> {
                   </WalletButton>
                 </div>
 
-                {/* <Hidden smDown>
-                  <BridgeButton
-                    disableRipple
-                    onClick={() => {
-                      // restoreInitialState();
-                      // store.set("confirmBridge", false);
-                    }}
-                    variant="contained"
-                    size="small"
-                    className={classNames(
-                      classes.accountButton,
-                      selectedBridge && classes.bridgeActive
-                    )}
-                  >
-                    {selectedBridge ? (
-                      <Grid
-                        container
-                        alignItems="center"
-                        justify="center"
-                        className={classes.bridgeButtonText}
-                      >
-                        <img
-                          src={BRIDGE_ICON_MAP[selectedBridge]}
-                          alt={BRIDGE_NAME_MAP[selectedBridge]}
-                          className={classes.icon}
-                        />
-                        {BRIDGE_NAME_MAP[selectedBridge]}
-                        <SwapHorizIcon />
-                        <img
-                          src={BRIDGE_ICON_MAP[selectedPair]}
-                          alt={BRIDGE_NAME_MAP[selectedPair]}
-                          className={classes.icon}
-                        />
-                        {BRIDGE_NAME_MAP[selectedPair]}
-                      </Grid>
-                    ) : (
-                      <span className={classes.bridgeButtonText}>
-                        <Translate text="Nav.Bridge" />
-                      </span>
-                    )}
-                  </BridgeButton>
-                </Hidden> */}
+                {/* <Hidden smDown> */}
+                {/* <BridgeButton
+                  disableRipple
+                  onClick={() => {
+                    // restoreInitialState();
+                    // store.set("confirmBridge", false);
+                  }}
+                  variant="contained"
+                  size="small"
+                  className={classNames(
+                    classes.accountButton,
+                    selectedBridge && classes.bridgeActive
+                  )}
+                >
+                  {selectedBridge ? (
+                    <Grid
+                      container
+                      alignItems="center"
+                      justify="center"
+                      className={classes.bridgeButtonText}
+                    >
+                      <img
+                        src={BRIDGE_ICON_MAP[selectedBridge]}
+                        alt={BRIDGE_NAME_MAP[selectedBridge]}
+                        className={classes.icon}
+                      />
+                      {BRIDGE_NAME_MAP[selectedBridge]}
+                      <SwapHorizIcon />
+                      <img
+                        src={BRIDGE_ICON_MAP[selectedPair]}
+                        alt={BRIDGE_NAME_MAP[selectedPair]}
+                        className={classes.icon}
+                      />
+                      {BRIDGE_NAME_MAP[selectedPair]}
+                    </Grid>
+                  ) : (
+                    <span className={classes.bridgeButtonText}>
+                      <Translate text="Nav.Bridge" />
+                    </span>
+                  )}
+                </BridgeButton> */}
+                <BridgeSelect
+                  className={classes.hideMobile}
+                  store={store}
+                  isVisible={true}
+                />
+                {/* </Hidden> */}
                 <div className={classes.padMobile}>
                   <Switch className={classes.padMobile} />
                 </div>

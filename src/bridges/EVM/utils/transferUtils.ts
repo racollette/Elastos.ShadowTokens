@@ -26,6 +26,7 @@ export const handleBridgeMode = async function(confirmTx: any) {
 export const getMediatorContracts = function(confirmTx: any) {
     const store = getStore();
     const web3 = store.get("localWeb3")
+    const bridge = store.get("selectedBridge")
 
     let abi;
     const bridgeMode = confirmTx.bridgeMode
@@ -35,11 +36,11 @@ export const getMediatorContracts = function(confirmTx: any) {
         abi = MULTI_AMB_ERC_ERC_ABI
     }
 
-    let source = MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.sourceNetwork][confirmTx.type]
-    let dest = MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.sourceNetwork].release
+    let source = MEDIATOR_CONTRACTS.bridge[bridge].bridgeMode[bridgeMode][confirmTx.sourceNetwork][confirmTx.type]
+    let dest = MEDIATOR_CONTRACTS.bridge[bridge].bridgeMode[bridgeMode][confirmTx.sourceNetwork].release
     if (confirmTx.type === "release") {
-        source = MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.destNetwork][confirmTx.type]
-        dest = MEDIATOR_CONTRACTS.bridgeMode[bridgeMode][confirmTx.destNetwork].mint
+        source = MEDIATOR_CONTRACTS.bridge[bridge].bridgeMode[bridgeMode][confirmTx.destNetwork][confirmTx.type]
+        dest = MEDIATOR_CONTRACTS.bridge[bridge].bridgeMode[bridgeMode][confirmTx.destNetwork].mint
     }
 
     const contracts = {

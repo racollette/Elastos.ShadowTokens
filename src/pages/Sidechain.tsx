@@ -169,8 +169,8 @@ const Sidechain: React.FC<Props> = function (props) {
 
   let enableButton = false;
   if (
-    amount > 0.01 &&
-    amount <= balance &&
+    Number(amount) > 0.01 &&
+    Number(amount) <= Number(balance) &&
     withdrawalAddress.trim().length === 34
   ) {
     enableButton = true;

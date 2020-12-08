@@ -149,18 +149,24 @@ export function restoreInitialState() {
 
 }
 
-export function switchOriginChain(selectedDirection: any) {
+export function switchOriginChain(selectedDirection: any, network?: any) {
     const store = getStore();
     if (selectedDirection === 0) {
         store.set("convert.selectedDirection", Number(1));
-    } else {
+    } else if (selectedDirection === 1) {
         store.set("convert.selectedDirection", Number(0));
     }
 
     store.set("confirmTx", false)
     store.set("convert.amount", "")
     const token = store.get("token")
-    const DEFAULTS: any = getDefaultTokens(store.get("localWeb3Network"))
+    let DEFAULTS: any = getDefaultTokens(store.get("localWeb3Network"))
+    console.log(network)
+    if (network) {
+        const DEFAULTS = getDefaultTokens(network)
+        store.set("token", DEFAULTS[0]);
+    }
+    console.log(DEFAULTS)
     appendCustomTokens(DEFAULTS)
     if (token[Number(!selectedDirection)].address.length === 0) {
         store.set("token", DEFAULTS[0]);
@@ -168,10 +174,4 @@ export function switchOriginChain(selectedDirection: any) {
     } else {
         fetchTokenBalance(token)
     }
-
-    // Swap bridge direction
-    const bridge = store.get("selectedBridge")
-    const pair = store.get("selectedPair")
-    store.set("selectedBridge", pair)
-    store.set("selectedPair", bridge)
 }

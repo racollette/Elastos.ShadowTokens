@@ -8,15 +8,12 @@ import Lock from "../assets/lock.svg";
 import Release from "../assets/unlock.svg";
 import Mint from "../assets/mint.svg";
 import Burn from "../assets/burn.svg";
-import {
-  gatherFeeData,
-  switchOriginChain,
-} from "../bridges/ETH_ELA/utils/txUtils";
+import { gatherFeeData, switchOriginChain } from "../bridges/EVM/utils/txUtils";
 import {
   fetchTokenBalance,
   isSelectedNetwork,
   isContractAddress,
-} from "../bridges/ETH_ELA/utils/walletUtils";
+} from "../bridges/EVM/utils/walletUtils";
 import i18n from "i18next";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -420,7 +417,10 @@ class TransferContainer extends React.Component<any> {
                     xs={6}
                     className={classes.swapContainer}
                     onClick={() => {
-                      switchOriginChain(selectedDirection);
+                      switchOriginChain(
+                        selectedDirection,
+                        token[Number(!selectedDirection)].network
+                      );
                     }}
                   >
                     <Typography className={classes.sourceLabel}>
