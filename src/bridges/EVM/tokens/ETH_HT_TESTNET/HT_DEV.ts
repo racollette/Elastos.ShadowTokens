@@ -1,19 +1,8 @@
-import { HT_CONFIRMATIONS, ETH_CONFIRMATIONS, HT_AMB_NATIVE_ERC_MIN_TX, HT_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_HOME, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import { HT_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_AMB_NATIVE_ERC_MIN_TX, HT_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_HOME, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
 import HT_ICON from "../../../../assets/ht.png";
 
-export const HT_DEV_ETH = {
+export const HT_DEV_ELA = {
     0: {
-        symbol: 'HT',
-        name: 'HT on Ethereum',
-        id: 'ethht',
-        transferType: 'release',
-        network: 'Ropsten',
-        networkID: 3,
-        address: '0x3e465A513900f88775A264F6d67341c920654245',
-        confirmations: ETH_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_FOREIGN,
-    },
-    1: {
         symbol: 'HT',
         name: 'Huobi Token',
         id: 'ht',
@@ -24,8 +13,19 @@ export const HT_DEV_ETH = {
         confirmations: HT_CONFIRMATIONS,
         fee: AMB_NATIVE_ERC_FEE_HOME,
     },
-    home: 1,
-    foreign: 0,
+    1: {
+        symbol: 'HT',
+        name: 'HT on Elastos',
+        id: 'elaht',
+        transferType: 'release',
+        network: 'Elastos Testnet',
+        networkID: 21,
+        address: '0x899ffe3e4d342c12e41e9547e3f6499a3477896a',
+        confirmations: ELA_CONFIRMATIONS,
+        fee: AMB_NATIVE_ERC_FEE_FOREIGN,
+    },
+    home: 0,
+    foreign: 1,
     icon: HT_ICON,
     bridgeMode: 'amb_native_erc',
     decimals: 18,

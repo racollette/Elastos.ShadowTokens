@@ -28,7 +28,6 @@ export const MEDIATOR_CONTRACTS: any = {
         'ETH_ELA_TESTNET': {
             bridgeMode: {
                 multi_amb_erc_erc: {
-
                     'Ropsten': {
                         release: '0x6EA7481f1096E822574a54188578d1708F64C828',  // Foreign, Elastos Testnet
                         mint: '0x455d0Ce69b67805Dda4d0300f7102148Dd529e3A',  // Home, Ropsten
