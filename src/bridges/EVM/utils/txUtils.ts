@@ -162,9 +162,7 @@ export function switchOriginChain(selectedDirection: any, network?: any) {
     let token = store.get("token")
     let DEFAULTS: any = getDefaultTokens(store.get("localWeb3Network"))
     if (network) {
-        console.log(network)
         DEFAULTS = getDefaultTokens(network)
-        console.log(DEFAULTS)
         token = DEFAULTS[0]
         store.set("token", token);
     } else if (token[Number(!selectedDirection)].address.length === 0) {

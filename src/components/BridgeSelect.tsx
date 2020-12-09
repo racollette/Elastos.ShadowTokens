@@ -68,8 +68,6 @@ const BridgeSelect = ({ isVisible, store }: any) => {
                     key={bridge}
                     onClick={() => {
                       store.set("selectedBridge", bridge);
-                      // console.log(bridge);
-                      // console.log(codeToBridge(bridge)[0]);
                       switchOriginChain(
                         selectedDirection,
                         codeToBridge(bridge)[0]
