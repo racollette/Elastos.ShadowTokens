@@ -1,4 +1,3 @@
-
 export const MEDIATOR_CONTRACTS: any = {
     bridge: {
         'ETH_ELA': {
@@ -72,6 +71,33 @@ export const MEDIATOR_CONTRACTS: any = {
                         release: '0x91206Bc48D12e7b9cCef4Ce317B5B04D93ceCB65', // Foreign, HuobiChain Testnet
                         mint: '0x88E1118997D1eC3a6917CA24974484d1933444fd', // Home, Elastos Testnet
                     }
+                }
+            }
+        },
+        'ETH_HSC_TESTNET': {
+            bridgeMode: {
+                multi_amb_erc_erc: {
+
+                    'Ropsten': {
+                        release: '0x0cc527A3Db91ce7aDa19441e130665DD6D6d0632',  // Foreign, HuobiChain Testnet
+                        mint: '0xb83399B89D6624f472b568Fac7575Da674574C39',  // Home, Ropsten
+                    },
+                    'HuobiChain Testnet': {
+                        release: '0x961Cc972B29422AB37C2D45760Bf5DCbF98e0119', // Foreign, Ropsten
+                        mint: '0x36dB7c661F6988f3631f7e832f821303123A7BE9', // Home, HuobiChain Testnet
+                    }
+
+                },
+                amb_native_erc: {
+                    'Ropsten': {
+                        release: '0xCe1d726DfCAD38133813f2CC2047C38f301acB0d', // Foreign, HuobiChain Testnet 
+                        mint: '0x74efe86928abe5bCD191f2e6C85b01861ea1C17d', // Home, Ropsten
+                    },
+                    'HuobiChain Testnet': {
+                        release: '0xa901d5a7E2ABC42Fcc744957C877d8db166744c0', // Foreign, Ropsten
+                        mint: '0x81B5A2a1F986cd27251C624378CA75243e5fFF0B', // Home, HuobiChain Testnet
+                    }
+
                 }
             }
         }
