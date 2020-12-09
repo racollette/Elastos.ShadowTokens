@@ -7,7 +7,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS, SUPPORTED_RPC_URLS } from './config';
-import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS, HT_ELA_DEV_DEFAULTS, ELA_HT_DEV_DEFAULTS } from "../tokens";
+import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS, HT_ELA_DEV_DEFAULTS, ELA_HT_DEV_DEFAULTS, ETH_HT_DEV_DEFAULTS, HT_ETH_DEV_DEFAULTS } from "../tokens";
 import { switchOriginChain, formatValue } from "./txUtils";
 import { depositELA } from "../../../services/sidechain";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
@@ -291,7 +291,13 @@ export const getDefaultTokens = (network: string) => {
         case 'Elastos':
             return ELA_DEFAULTS
         case 'Ropsten':
-            return ETH_DEV_DEFAULTS
+            if (bridge === "ETH_ELA_TESTNET") {
+                return ETH_DEV_DEFAULTS
+            } else if (bridge === "ETH_HT_TESTNET") {
+                return ETH_HT_DEV_DEFAULTS
+            } else {
+                return ETH_DEV_DEFAULTS
+            }
         case 'Elastos Testnet':
             if (bridge === "ETH_ELA_TESTNET") {
                 return ELA_DEV_DEFAULTS
@@ -301,26 +307,16 @@ export const getDefaultTokens = (network: string) => {
                 return ELA_DEV_DEFAULTS
             }
         case 'HuobiChain Testnet':
-            return HT_ELA_DEV_DEFAULTS
+            if (bridge === "HT_ELA_TESTNET") {
+                return HT_ELA_DEV_DEFAULTS
+            } else if (bridge === "ETH_HT_TESTNET") {
+                return HT_ETH_DEV_DEFAULTS
+            } else {
+                return HT_ELA_DEV_DEFAULTS
+            }
         default:
             return ETH_DEFAULTS
     }
-    // } else if (bridge === "HT_ELA" || bridge === "HT_ELA_TESTNET") {
-    // switch (network) {
-    //     case 'Elastos':
-    //         return ELA_HT_DEV_DEFAULTS
-    //     case 'HuobiChain':
-    //         return HT_ELA_DEV_DEFAULTS
-    //     case 'Elastos Testnet':
-    //         return ELA_HT_DEV_DEFAULTS
-    //     case 'HuobiChain Testnet':
-    //         return HT_ELA_DEV_DEFAULTS
-    //     default:
-    //         return HT_ELA_DEV_DEFAULTS
-    // }
-    // } else {
-    //     return ETH_DEFAULTS
-    // }
 }
 
 const detectBridgedToken = (name: string, symbol: string) => {
@@ -340,6 +336,8 @@ const getDestIcon = (home: number) => {
         return home ? ELA_ICON : ETH_ICON
     } else if (bridge === "HT_ELA" || bridge === "HT_ELA_TESTNET") {
         return home ? ELA_ICON : HT_ICON
+    } else if (bridge === "HT_ELA" || bridge === "HT_ELA_TESTNET") {
+        return home ? HT_ICON : ETH_ICON
     }
     return
 }
@@ -390,6 +388,27 @@ const getDestToken = (data: string, home: number, type: 'name' | 'symbol' | 'id'
                 }
                 return 'ht'.concat(data.toLowerCase())
         }
+    } else if (bridge === "ETH_HT" || bridge === "ETH_HT_TESTNET") {
+        switch (type) {
+            case 'name':
+                if (alreadyBridged) return data.split(" ")[0]
+                if (home === 1) {
+                    return `${data} on HuobiChain`
+                }
+                return `${data} on Ethereum`
+            case 'symbol':
+                if (alreadyBridged) return data.slice(3)
+                if (home === 0) {
+                    return 'ht'.concat(data)
+                }
+                return 'eth'.concat(data)
+            case 'id':
+                if (alreadyBridged) return data.slice(3).toLowerCase()
+                if (home === 0) {
+                    return 'ht'.concat(data.toLowerCase())
+                }
+                return 'eth'.concat(data.toLowerCase())
+        }
     }
 
 }
@@ -427,21 +446,50 @@ const getRequiredConfirmations = (home: number) => {
             default:
                 return HT_CONFIRMATIONS
         }
+    } else if (bridge === "ETH_HT" || bridge === "ETH_HT_TESTNET") {
+        switch (home) {
+            case 0:
+                return ETH_CONFIRMATIONS
+            case 1:
+                return HT_CONFIRMATIONS
+            default:
+                return ETH_CONFIRMATIONS
+        }
     }
 }
 
 const getHomeNetwork = (networkID: number) => {
-    switch (networkID) {
-        case 20:
-            return 1
-        case 21:
-            return 1
-        case 1:
-            return 0
-        case 3:
-            return 0
-        case 256:
-            return 0
+    const store = getStore();
+    const bridge = store.get("selectedBridge")
+    if (bridge === "ETH_ELA" || bridge === "ETH_ELA_TESTNET") {
+        switch (networkID) {
+            case 20:
+                return 1
+            case 21:
+                return 1
+            case 1:
+                return 0
+            case 3:
+                return 0
+        }
+    } else if (bridge === "HT_ELA" || bridge === "HT_ELA_TESTNET") {
+        switch (networkID) {
+            case 20:
+                return 1
+            case 21:
+                return 1
+            case 256:
+                return 0
+        }
+    } else if (bridge === "ETH_HT" || bridge === "ETH_HT_TESTNET") {
+        switch (networkID) {
+            case 1:
+                return 0
+            case 3:
+                return 0
+            case 256:
+                return 0
+        }
     }
 }
 
@@ -473,6 +521,15 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
                 if (type === 'id') return 21
                 return 'Elastos Testnet'
         }
+    } else if (bridge === "ETH_HT" || bridge === "ETH_HT_TESTNET") {
+        switch (networkID) {
+            case 3:
+                if (type === 'id') return 256
+                return 'HuobiChain Testnet'
+            case 256:
+                if (type === 'id') return 3
+                return 'Ropsten'
+        }
     }
 }
 
@@ -495,7 +552,7 @@ export const setBridgeDirection = async function(netId: number) {
             break
         case 3:
             store.set("localWeb3Network", "Ropsten")
-            store.set("selectedBridge", "ETH_ELA_TESTNET")
+            if (bridge !== "ETH_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { store.set("selectedBridge", "ETH_ELA_TESTNET") }
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
@@ -507,15 +564,13 @@ export const setBridgeDirection = async function(netId: number) {
             break
         case 21:
             store.set("localWeb3Network", "Elastos Testnet")
-            if (bridge !== "HT_ELA_TESTNET") {
-                store.set("selectedBridge", "ETH_ELA_TESTNET")
-            }
+            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_ELA_TESTNET") { store.set("selectedBridge", "ETH_ELA_TESTNET") }
             if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 256:
             store.set("localWeb3Network", "HuobiChain Testnet")
-            store.set("selectedBridge", "HT_ELA_TESTNET")
+            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { store.set("selectedBridge", "HT_ELA_TESTNET") }
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break

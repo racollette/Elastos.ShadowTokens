@@ -74,10 +74,9 @@ export const MEDIATOR_CONTRACTS: any = {
                 }
             }
         },
-        'ETH_HSC_TESTNET': {
+        'ETH_HT_TESTNET': {
             bridgeMode: {
                 multi_amb_erc_erc: {
-
                     'Ropsten': {
                         release: '0x0cc527A3Db91ce7aDa19441e130665DD6D6d0632',  // Foreign, HuobiChain Testnet
                         mint: '0xb83399B89D6624f472b568Fac7575Da674574C39',  // Home, Ropsten
@@ -86,7 +85,6 @@ export const MEDIATOR_CONTRACTS: any = {
                         release: '0x961Cc972B29422AB37C2D45760Bf5DCbF98e0119', // Foreign, Ropsten
                         mint: '0x36dB7c661F6988f3631f7e832f821303123A7BE9', // Home, HuobiChain Testnet
                     }
-
                 },
                 amb_native_erc: {
                     'Ropsten': {
@@ -102,6 +100,4 @@ export const MEDIATOR_CONTRACTS: any = {
             }
         }
     }
-
-
 }

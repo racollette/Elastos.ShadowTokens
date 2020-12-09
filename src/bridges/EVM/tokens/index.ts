@@ -19,6 +19,11 @@ import { ELA_DEV } from './ETH_ELA_TESTNET/ELA_DEV'
 import { HT_DEV_ELA } from './HT_ELA_TESTNET/HT_DEV'
 import { ELA_DEV_HT } from './HT_ELA_TESTNET/ELA_DEV'
 
+// Ethereum to HuobiChain
+// Dev imports
+import { ETH_DEV_HT } from './ETH_HT_TESTNET/ETH_DEV'
+import { HT_DEV_ETH } from './ETH_HT_TESTNET/HT_DEV'
+
 /////////////////////////////////////////////
 //////////// Ethereum and Elastos ///////////
 /////////////////////////////////////////////
@@ -81,4 +86,24 @@ export const HT_ELA_DEV_DEFAULTS = [
 export const ELA_HT_DEV_DEFAULTS = [
     ELA_DEV_HT,
     HT_DEV_ELA,
+]
+
+////////////////////////////////////////////////
+//////////// Ethereum and HuobiChain ///////////
+////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////
+//////// Ropsten and HuobiChain Testnet ////////
+////////////////////////////////////////////////
+
+
+export const ETH_HT_DEV_DEFAULTS = [
+    ETH_DEV_HT,
+    HT_DEV_ETH,
+]
+
+export const HT_ETH_DEV_DEFAULTS = [
+    HT_DEV_ETH,
+    ETH_DEV_HT,
 ]

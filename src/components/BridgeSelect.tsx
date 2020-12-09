@@ -11,12 +11,18 @@ import ETH from "../assets/eth.png";
 import ELA from "../assets/ela.png";
 import HT from "../assets/ht.png";
 
-const SUPPORTED_BRIDGES = ["ETH_ELA", "ETH_ELA_TESTNET", "HT_ELA_TESTNET"];
+const SUPPORTED_BRIDGES = [
+  "ETH_ELA",
+  "ETH_ELA_TESTNET",
+  "ETH_HT_TESTNET",
+  "HT_ELA_TESTNET",
+];
 
 const BRIDGE_ICONS: any = {
   ETH_ELA: [ETH, ELA],
   ETH_ELA_TESTNET: [ETH, ELA],
   HT_ELA_TESTNET: [HT, ELA],
+  ETH_HT_TESTNET: [ETH, HT],
 };
 
 const codeToBridge = (code: any) => {
@@ -25,6 +31,8 @@ const codeToBridge = (code: any) => {
       return ["Ethereum", "Elastos"];
     case "ETH_ELA_TESTNET":
       return ["Ropsten", "Elastos Testnet"];
+    case "ETH_HT_TESTNET":
+      return ["Ropsten", "HuobiChain Testnet"];
     case "HT_ELA_TESTNET":
       return ["HuobiChain Testnet", "Elastos Testnet"];
     default:
@@ -60,6 +68,8 @@ const BridgeSelect = ({ isVisible, store }: any) => {
                     key={bridge}
                     onClick={() => {
                       store.set("selectedBridge", bridge);
+                      // console.log(bridge);
+                      // console.log(codeToBridge(bridge)[0]);
                       switchOriginChain(
                         selectedDirection,
                         codeToBridge(bridge)[0]

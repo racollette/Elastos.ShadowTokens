@@ -159,19 +159,18 @@ export function switchOriginChain(selectedDirection: any, network?: any) {
 
     store.set("confirmTx", false)
     store.set("convert.amount", "")
-    const token = store.get("token")
+    let token = store.get("token")
     let DEFAULTS: any = getDefaultTokens(store.get("localWeb3Network"))
-    console.log(network)
     if (network) {
-        const DEFAULTS = getDefaultTokens(network)
-        store.set("token", DEFAULTS[0]);
+        console.log(network)
+        DEFAULTS = getDefaultTokens(network)
+        console.log(DEFAULTS)
+        token = DEFAULTS[0]
+        store.set("token", token);
+    } else if (token[Number(!selectedDirection)].address.length === 0) {
+        token = DEFAULTS[0]
+        store.set("token", token);
     }
-    console.log(DEFAULTS)
     appendCustomTokens(DEFAULTS)
-    if (token[Number(!selectedDirection)].address.length === 0) {
-        store.set("token", DEFAULTS[0]);
-        fetchTokenBalance(DEFAULTS[0])
-    } else {
-        fetchTokenBalance(token)
-    }
+    fetchTokenBalance(token)
 }
