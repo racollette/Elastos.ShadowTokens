@@ -50,6 +50,30 @@ export const MEDIATOR_CONTRACTS: any = {
                 }
             }
         },
+        'HT_ELA': {
+            bridgeMode: {
+                multi_amb_erc_erc: {
+                    'HuobiChain': {
+                        release: '0x323b5913dadd3e61e5242Fe44781cb7Dd4BE7EB8',  // Foreign, Elastos
+                        mint: '0x6683268d72eeA063d8ee17639cC9B7C317d1734a',  // Home, HuobiChain
+                    },
+                    'Elastos': {
+                        release: '0x59F65A3913F1FFcE7aB684bd8c24ba3790bD376B', // Foreign, HuobiChain
+                        mint: '0x3394577F74B86b9FD4D6e1D8a66c668bC6188379', // Home, Elastos
+                    }
+                },
+                amb_native_erc: {
+                    'HuobiChain': {
+                        release: '0x5e071258254c85B900Be01F6D7B3f8F34ab219e7',  // Foreign, Elastos
+                        mint: '0x4490ee96671855BD0a52Eb5074EC5569496c0162',  // Home, HuobiChain
+                    },
+                    'Elastos': {
+                        release: '0x5acCF25F5722A6ed0606C02AA5d8cFe27F346e1B', // Foreign, HuobiChain
+                        mint: '0x74efe86928abe5bCD191f2e6C85b01861ea1C17d', // Home, Elastos
+                    }
+                }
+            }
+        },
         'HT_ELA_TESTNET': {
             bridgeMode: {
                 multi_amb_erc_erc: {

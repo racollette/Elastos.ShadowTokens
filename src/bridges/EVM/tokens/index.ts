@@ -15,6 +15,8 @@ import { ETH_DEV } from './ETH_ELA_TESTNET/ETH_DEV'
 import { ELA_DEV } from './ETH_ELA_TESTNET/ELA_DEV'
 
 // HuobiChain to Elastos Bridge
+import { HT_ELA } from './HT_ELA/HT'
+import { ELA_HT } from './HT_ELA/ELA'
 // Dev imports
 import { HT_DEV_ELA } from './HT_ELA_TESTNET/HT_DEV'
 import { ELA_DEV_HT } from './HT_ELA_TESTNET/ELA_DEV'
@@ -73,6 +75,15 @@ export const ELA_DEV_DEFAULTS = [
 //////////// HuobiChain and Elastos ////////////
 ////////////////////////////////////////////////
 
+export const HT_ELA_DEFAULTS = [
+    HT_ELA,
+    ELA_HT,
+]
+
+export const ELA_HT_DEFAULTS = [
+    ELA_HT,
+    HT_ELA,
+]
 
 ////////////////////////////////////////////////
 //// HuobiChain Testnet and Elastos Testnet ////

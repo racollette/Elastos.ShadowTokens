@@ -13,6 +13,7 @@ import HT from "../assets/ht.png";
 
 const SUPPORTED_BRIDGES = [
   "ETH_ELA",
+  "HT_ELA",
   "ETH_ELA_TESTNET",
   "ETH_HT_TESTNET",
   "HT_ELA_TESTNET",
@@ -20,6 +21,7 @@ const SUPPORTED_BRIDGES = [
 
 const BRIDGE_ICONS: any = {
   ETH_ELA: [ETH, ELA],
+  HT_ELA: [HT, ELA],
   ETH_ELA_TESTNET: [ETH, ELA],
   HT_ELA_TESTNET: [HT, ELA],
   ETH_HT_TESTNET: [ETH, HT],
@@ -29,6 +31,8 @@ const codeToBridge = (code: any) => {
   switch (code) {
     case "ETH_ELA":
       return ["Ethereum", "Elastos"];
+    case "HT_ELA":
+      return ["HuobiChain", "Elastos"];
     case "ETH_ELA_TESTNET":
       return ["Ropsten", "Elastos Testnet"];
     case "ETH_HT_TESTNET":
