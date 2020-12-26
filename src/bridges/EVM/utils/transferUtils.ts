@@ -237,6 +237,10 @@ export const bridgeTokens = async function(contracts: any, tokenAddress: string,
     // console.log(minTx)
     // console.log(maxTx)
 
+    console.log(contracts)
+    console.log(confirmTx)
+    console.log(tokenAddress)
+
     store.set("transactionType", "relay")
     store.set("waitingApproval", true)
     store.set("showWaitingApproval", true)

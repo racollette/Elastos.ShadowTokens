@@ -54,12 +54,12 @@ export const MEDIATOR_CONTRACTS: any = {
             bridgeMode: {
                 multi_amb_erc_erc: {
                     'HuobiChain': {
-                        release: '0x323b5913dadd3e61e5242Fe44781cb7Dd4BE7EB8',  // Foreign, Elastos
-                        mint: '0x6683268d72eeA063d8ee17639cC9B7C317d1734a',  // Home, HuobiChain
+                        release: '0x6683268d72eeA063d8ee17639cC9B7C317d1734a',  // Foreign, Elastos
+                        mint: '0x323b5913dadd3e61e5242Fe44781cb7Dd4BE7EB8',  // Home, HuobiChain
                     },
                     'Elastos': {
-                        release: '0x59F65A3913F1FFcE7aB684bd8c24ba3790bD376B', // Foreign, HuobiChain
-                        mint: '0x3394577F74B86b9FD4D6e1D8a66c668bC6188379', // Home, Elastos
+                        release: '0x3394577F74B86b9FD4D6e1D8a66c668bC6188379', // Foreign, HuobiChain
+                        mint: '0x59F65A3913F1FFcE7aB684bd8c24ba3790bD376B', // Home, Elastos
                     }
                 },
                 amb_native_erc: {
