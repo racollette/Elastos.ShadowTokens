@@ -10,7 +10,7 @@ export const ELA_HT = {
         network: 'HuobiChain',
         networkID: 128,
         address: '0xa1ecFc2beC06E4b43dDd423b94Fef84d0dBc8F5c',
-        confirmations: ETH_CONFIRMATIONS,
+        confirmations: HT_CONFIRMATIONS,
         fee: AMB_NATIVE_ERC_FEE_FOREIGN,
     },
     1: {
@@ -22,7 +22,7 @@ export const ELA_HT = {
         networkID: 20,
         address: '',
         confirmations: ELA_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_HOME,
+        fee: 0.1,
     },
     home: 1,
     foreign: 0,

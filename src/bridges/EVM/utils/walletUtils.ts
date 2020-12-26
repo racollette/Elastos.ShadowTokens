@@ -495,6 +495,8 @@ const getHomeNetwork = (networkID: number) => {
                 return 1
             case 21:
                 return 1
+            case 128:
+                return 0
             case 256:
                 return 0
         }
@@ -504,8 +506,10 @@ const getHomeNetwork = (networkID: number) => {
                 return 0
             case 3:
                 return 0
+            case 128:
+                return 1
             case 256:
-                return 0
+                return 1
         }
     }
 }

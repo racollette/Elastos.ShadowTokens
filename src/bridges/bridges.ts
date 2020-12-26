@@ -1,4 +1,4 @@
-import ELA from "../assets/ela.png"
+import ELA from "../assets/ela.png";
 import ETH from "../assets/eth.png";
 import HT from "../assets/ht.png";
 

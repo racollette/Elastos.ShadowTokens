@@ -169,6 +169,7 @@ export function switchOriginChain(selectedDirection: any, network?: any) {
         token = DEFAULTS[0]
         store.set("token", token);
     }
+
     appendCustomTokens(DEFAULTS)
     fetchTokenBalance(token)
 }
