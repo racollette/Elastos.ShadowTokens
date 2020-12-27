@@ -3,7 +3,7 @@ import HT_ICON from "../../../../assets/ht.png";
 
 export const HT_ETH = {
     0: {
-        symbol: 'HT',
+        symbol: 'WHT',
         name: 'HT on Ethereum',
         id: 'ethht',
         transferType: 'release',
