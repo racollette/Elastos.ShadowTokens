@@ -7,7 +7,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS, SUPPORTED_RPC_URLS } from './config';
-import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS, HT_ELA_DEFAULTS, ELA_HT_DEFAULTS, HT_ELA_DEV_DEFAULTS, ELA_HT_DEV_DEFAULTS, ETH_HT_DEV_DEFAULTS, HT_ETH_DEV_DEFAULTS } from "../tokens";
+import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS, HT_ELA_DEFAULTS, ELA_HT_DEFAULTS, HT_ELA_DEV_DEFAULTS, ELA_HT_DEV_DEFAULTS, ETH_HT_DEFAULTS, ETH_HT_DEV_DEFAULTS, HT_ETH_DEFAULTS, HT_ETH_DEV_DEFAULTS } from "../tokens";
 import { switchOriginChain, formatValue } from "./txUtils";
 import { depositELA } from "../../../services/sidechain";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
@@ -285,12 +285,16 @@ export const getDefaultTokens = (network: string) => {
     const store = getStore();
     const bridge = store.get("selectedBridge")
     // Check bridge, then network
-    // if (bridge === "ETH_ELA" || bridge === "ETH_ELA_TESTNET") {
     switch (network) {
         case 'Ethereum':
-            return ETH_DEFAULTS
+            if (bridge === "ETH_ELA") {
+                return ETH_DEFAULTS
+            } else if (bridge === "ETH_HT") {
+                return ETH_HT_DEFAULTS
+            } else {
+                return ETH_DEFAULTS
+            }
         case 'Elastos':
-            // return ELA_DEFAULTS
             if (bridge === "ETH_ELA") {
                 return ELA_DEFAULTS
             } else if (bridge === "HT_ELA") {
@@ -315,14 +319,13 @@ export const getDefaultTokens = (network: string) => {
                 return ELA_DEV_DEFAULTS
             }
         case 'HuobiChain':
-            return HT_ELA_DEFAULTS
-            // if (bridge === "ETH_ELA") {
-            //     return ELA_DEFAULTS
-            // } else if (bridge === "HT_ELA") {
-            //     return ELA_HT_DEFAULTS
-            // } else {
-            //     return ELA_DEFAULTS
-            // }
+            if (bridge === "HT_ELA") {
+                return HT_ELA_DEFAULTS
+            } else if (bridge === "ETH_HT") {
+                return HT_ETH_DEFAULTS
+            } else {
+                return HT_ELA_DEFAULTS
+            }
         case 'HuobiChain Testnet':
             if (bridge === "HT_ELA_TESTNET") {
                     return HT_ELA_DEV_DEFAULTS
@@ -550,6 +553,12 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
         }
     } else if (bridge === "ETH_HT" || bridge === "ETH_HT_TESTNET") {
         switch (networkID) {
+            case 1:
+                if (type === 'id') return 128
+                return 'HuobiChain'
+            case 128:
+                if (type === 'id') return 1
+                return 'Ethereum'
             case 3:
                 if (type === 'id') return 256
                 return 'HuobiChain Testnet'
@@ -573,7 +582,7 @@ export const setBridgeDirection = async function(netId: number) {
     switch (netId) {
         case 1:
             store.set("localWeb3Network", "Ethereum")
-            store.set("selectedBridge", "ETH_ELA")
+            if (bridge !== "ETH_ELA" && bridge !== "ETH_HT") { store.set("selectedBridge", "ETH_ELA") }
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
@@ -585,7 +594,7 @@ export const setBridgeDirection = async function(netId: number) {
             break
         case 20:
             store.set("localWeb3Network", "Elastos")
-            store.set("selectedBridge", "ETH_ELA")
+            if (bridge !== "ETH_ELA" && bridge !== "HT_ELA") { store.set("selectedBridge", "ETH_ELA") }
             if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break

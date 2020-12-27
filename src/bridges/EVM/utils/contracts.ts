@@ -122,6 +122,31 @@ export const MEDIATOR_CONTRACTS: any = {
 
                 }
             }
+        },
+        'ETH_HT': {
+            bridgeMode: {
+                multi_amb_erc_erc: {
+                    'Ethereum': {
+                        release: '0xC307D55a6855203d64FbDe6E50fe28797d90cCe9',  // Foreign, HuobiChain
+                        mint: '0xafFf0f760BC03D262725A373727De2976470F1ec',  // Home, Ethereum
+                    },
+                    'HuobiChain': {
+                        release: '0x8609de58295eDd21bE216C8FD13e270cB27adf05', // Foreign, Ethereum
+                        mint: '0x373bfDafa7877C3713b600394E8cec4A8b740632', // Home, HuobiChain
+                    }
+                },
+                amb_native_erc: {
+                    'Ethereum': {
+                        release: '0xdC841126328634220e01B98aeF2Ba1729f05C2f2', // Foreign, HuobiChain 
+                        mint: '0xEb2aFC9BafD32319CC0c7Db0e117DE24A402054D', // Home, Ethereum
+                    },
+                    'HuobiChain': {
+                        release: '0x22f3Acd2F30F7Ae79565c0fF91cDd3386893bD92', // Foreign, Ethereum
+                        mint: '0x8609de58295eDd21bE216C8FD13e270cB27adf05', // Home, HuobiChain
+                    }
+
+                }
+            }
         }
     }
 }
