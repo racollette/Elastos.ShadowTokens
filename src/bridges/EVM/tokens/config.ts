@@ -1,4 +1,3 @@
-
 export const ELA_CONFIRMATIONS = 1 // Blocks
 export const ELA_AMB_NATIVE_ERC_MIN_TX = 1              // 1000000000000000000
 export const ELA_AMB_NATIVE_ERC_MAX_TX = 1500000        // 1500000000000000000000000
