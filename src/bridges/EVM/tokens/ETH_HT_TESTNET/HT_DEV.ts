@@ -18,7 +18,7 @@ export const HT_DEV_ETH = {
         name: 'Huobi Token',
         id: 'ht',
         transferType: 'mint',
-        network: 'HuobiChain Testnet',
+        network: 'Heco (Huobi) Testnet',
         networkID: 256,
         address: '',
         confirmations: HT_CONFIRMATIONS,

@@ -1,4 +1,4 @@
-import { ETH_CONFIRMATIONS, HT_CONFIRMATIONS, ETH_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_HOME, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import { ETH_CONFIRMATIONS, HT_CONFIRMATIONS, ETH_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
 import ETH_ICON from "../../../../assets/eth.png"
 
 export const ETH_HT = {
@@ -15,10 +15,10 @@ export const ETH_HT = {
     },
     1: {
         symbol: 'ETH',
-        name: 'ETH on HuobiChain',
+        name: 'ETH on Heco (Huobi)',
         id: 'hteth',
         transferType: 'release',
-        network: 'HuobiChain',
+        network: 'Heco (Huobi)',
         networkID: 128,
         address: '0x5e071258254c85B900Be01F6D7B3f8F34ab219e7',
         confirmations: HT_CONFIRMATIONS,

@@ -4,10 +4,10 @@ import ELA_ICON from "../../../../assets/ela.png"
 export const ELA_DEV_HT = {
     0: {
         symbol: 'ELA',
-        name: 'ELA on HuobiChain',
+        name: 'ELA on Heco (Huobi)',
         id: 'htela',
         transferType: 'release',
-        network: 'HuobiChain Testnet',
+        network: 'Heco (Huobi) Testnet',
         networkID: 256,
         address: '0x874F0618315fafd23f500b3a80a8a72148936f8E',
         confirmations: ETH_CONFIRMATIONS,

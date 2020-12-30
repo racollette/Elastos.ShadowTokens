@@ -86,8 +86,8 @@ export const initLocalWeb3 = async function(type?: any) {
                     20: SUPPORTED_RPC_URLS["Elastos"],
                     21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
                     3: SUPPORTED_RPC_URLS["Ropsten"],
-                    128: SUPPORTED_RPC_URLS["HuobiChain"],
-                    256: SUPPORTED_RPC_URLS["HuobiChain Testnet"],
+                    128: SUPPORTED_RPC_URLS["Heco (Huobi)"],
+                    256: SUPPORTED_RPC_URLS["Heco (Huobi) Testnet"],
                 }
             });
             await provider.enable();
@@ -318,7 +318,7 @@ export const getDefaultTokens = (network: string) => {
             } else {
                 return ELA_DEV_DEFAULTS
             }
-        case 'HuobiChain':
+        case 'Heco (Huobi)':
             if (bridge === "HT_ELA") {
                 return HT_ELA_DEFAULTS
             } else if (bridge === "ETH_HT") {
@@ -326,7 +326,7 @@ export const getDefaultTokens = (network: string) => {
             } else {
                 return HT_ELA_DEFAULTS
             }
-        case 'HuobiChain Testnet':
+        case 'Heco (Huobi) Testnet':
             if (bridge === "HT_ELA_TESTNET") {
                     return HT_ELA_DEV_DEFAULTS
             } else if (bridge === "ETH_HT_TESTNET") {
@@ -343,7 +343,7 @@ const detectBridgedToken = (name: string, symbol: string) => {
     const prefix = symbol.substring(0, 3) === 'eth' || symbol.substring(0, 3) === 'ela' || symbol.substring(0, 2) === 'ht'
     const ela = name.includes('on Elastos')
     const eth = name.includes('on Ethereum')
-    const ht = name.includes('on HuobiChain')
+    const ht = name.includes('on Heco (Huobi)')
 
     if (prefix || ela || eth || ht) return true
     return false
@@ -394,7 +394,7 @@ const getDestToken = (data: string, home: number, type: 'name' | 'symbol' | 'id'
                 if (home === 1) {
                     return `${data} on Elastos`
                 }
-                return `${data} on HuobiChain`
+                return `${data} on Heco (Huobi)`
             case 'symbol':
                 if (alreadyBridged) return data.slice(3)
                 if (home === 0) {
@@ -413,7 +413,7 @@ const getDestToken = (data: string, home: number, type: 'name' | 'symbol' | 'id'
             case 'name':
                 if (alreadyBridged) return data.split(" ")[0]
                 if (home === 1) {
-                    return `${data} on HuobiChain`
+                    return `${data} on Heco (Huobi)`
                 }
                 return `${data} on Ethereum`
             case 'symbol':
@@ -540,10 +540,10 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
         switch (networkID) {
             case 20:
                 if (type === 'id') return 128
-                return 'HuobiChain'
+                return 'Heco (Huobi)'
             case 21:
                 if (type === 'id') return 256
-                return 'HuobiChain Testnet'
+                return 'Heco (Huobi) Testnet'
             case 128:
                 if (type === 'id') return 20
                 return 'Elastos'
@@ -555,13 +555,13 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
         switch (networkID) {
             case 1:
                 if (type === 'id') return 128
-                return 'HuobiChain'
+                return 'Heco (Huobi)'
             case 128:
                 if (type === 'id') return 1
                 return 'Ethereum'
             case 3:
                 if (type === 'id') return 256
-                return 'HuobiChain Testnet'
+                return 'Heco (Huobi) Testnet'
             case 256:
                 if (type === 'id') return 3
                 return 'Ropsten'
@@ -582,38 +582,64 @@ export const setBridgeDirection = async function(netId: number) {
     switch (netId) {
         case 1:
             store.set("localWeb3Network", "Ethereum")
-            if (bridge !== "ETH_ELA" && bridge !== "ETH_HT") { store.set("selectedBridge", "ETH_ELA") }
+            if (bridge !== "ETH_ELA" && bridge !== "ETH_HT") { 
+                store.set("selectedBridge", "ETH_ELA")   
+                switchOriginChain(selectedDirection)
+                return 
+             }
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 3:
             store.set("localWeb3Network", "Ropsten")
-            if (bridge !== "ETH_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { store.set("selectedBridge", "ETH_ELA_TESTNET") }
+            if (bridge !== "ETH_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { 
+                store.set("selectedBridge", "ETH_ELA_TESTNET")    
+                switchOriginChain(selectedDirection)
+                return
+            }
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 20:
             store.set("localWeb3Network", "Elastos")
-            if (bridge !== "ETH_ELA" && bridge !== "HT_ELA") { store.set("selectedBridge", "ETH_ELA") }
+            if (bridge !== "ETH_ELA" && bridge !== "HT_ELA") { 
+                store.set("selectedBridge", "ETH_ELA")   
+                switchOriginChain(selectedDirection)
+                return 
+            }
             if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 21:
             store.set("localWeb3Network", "Elastos Testnet")
-            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_ELA_TESTNET") { store.set("selectedBridge", "ETH_ELA_TESTNET") }
+            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_ELA_TESTNET") { 
+                store.set("selectedBridge", "ETH_ELA_TESTNET")   
+                switchOriginChain(selectedDirection)
+                return 
+            }
             if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 128:
-            store.set("localWeb3Network", "HuobiChain")
-            if (bridge !== "HT_ELA" && bridge !== "ETH_HT") { store.set("selectedBridge", "HT_ELA") }
-            if (selectedDirection === 0) { fetchTokenBalance(token); return }
+            store.set("localWeb3Network", "Heco (Huobi)")
+            if (bridge !== "HT_ELA" && bridge !== "ETH_HT") { 
+                store.set("selectedBridge", "HT_ELA")
+                switchOriginChain(selectedDirection)
+                return
+            }
+            if (bridge === "HT_ELA" && selectedDirection === 0) { fetchTokenBalance(token); return }
+            if (bridge === "ETH_HT" && selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 256:
-            store.set("localWeb3Network", "HuobiChain Testnet")
-            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { store.set("selectedBridge", "HT_ELA_TESTNET") }
-            if (selectedDirection === 0) { fetchTokenBalance(token); return }
+            store.set("localWeb3Network", "Heco (Huobi) Testnet")
+            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { 
+                store.set("selectedBridge", "HT_ELA_TESTNET")    
+                switchOriginChain(selectedDirection)
+                return
+            }
+            if (bridge === "HT_ELA_TESTNET" && selectedDirection === 0) { fetchTokenBalance(token); return }
+            if (bridge === "ETH_HT_TESTNET" && selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
     }

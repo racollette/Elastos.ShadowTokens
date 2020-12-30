@@ -1,4 +1,4 @@
-import { HT_CONFIRMATIONS, ETH_CONFIRMATIONS, HT_AMB_NATIVE_ERC_MIN_TX, HT_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_HOME, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import { HT_CONFIRMATIONS, ETH_CONFIRMATIONS, HT_AMB_NATIVE_ERC_MIN_TX, HT_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
 import HT_ICON from "../../../../assets/ht.png";
 
 export const HT_ETH = {
@@ -18,7 +18,7 @@ export const HT_ETH = {
         name: 'Huobi Token',
         id: 'ht',
         transferType: 'mint',
-        network: 'HuobiChain',
+        network: 'Heco (Huobi)',
         networkID: 128,
         address: '',
         confirmations: HT_CONFIRMATIONS,

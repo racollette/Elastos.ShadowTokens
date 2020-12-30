@@ -34,15 +34,15 @@ const codeToBridge = (code: any) => {
     case "ETH_ELA":
       return ["Ethereum", "Elastos"];
     case "HT_ELA":
-      return ["HuobiChain", "Elastos"];
+      return ["Heco (Huobi)", "Elastos"];
     case "ETH_HT":
-      return ["Ethereum", "HuobiChain"];
+      return ["Ethereum", "Heco (Huobi)"];
     case "ETH_ELA_TESTNET":
       return ["Ropsten", "Elastos Testnet"];
     case "ETH_HT_TESTNET":
-      return ["Ropsten", "HuobiChain Testnet"];
+      return ["Ropsten", "Heco (Huobi) Testnet"];
     case "HT_ELA_TESTNET":
-      return ["HuobiChain Testnet", "Elastos Testnet"];
+      return ["Heco (Huobi) Testnet", "Elastos Testnet"];
     default:
       return ["Ethereum", "Elastos"];
   }

@@ -7,7 +7,7 @@ export const HT_DEV_ELA = {
         name: 'Huobi Token',
         id: 'ht',
         transferType: 'mint',
-        network: 'HuobiChain Testnet',
+        network: 'Heco (Huobi) Testnet',
         networkID: 256,
         address: '',
         confirmations: HT_CONFIRMATIONS,

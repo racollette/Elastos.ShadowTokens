@@ -17,8 +17,8 @@ export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
     3: 'Ropsten',
     20: 'Elastos',
     21: 'Elastos Testnet',
-    128: 'HuobiChain',
-    256: 'HuobiChain Testnet',
+    128: 'Heco (Huobi)',
+    256: 'Heco (Huobi) Testnet',
 }
 
 export const EXPLORER_URLS: { [key in string]: string } = {
@@ -26,8 +26,8 @@ export const EXPLORER_URLS: { [key in string]: string } = {
     "Ropsten": "https://ropsten.etherscan.io",
     "Elastos": "https://explorer.elaeth.io",
     "Elastos Testnet": "https://testnet.elaeth.io",
-    "HuobiChain": "https://scan.hecochain.com",
-    "HuobiChain Testnet": "https://scan-testnet.huobichain.com/home/index",
+    "Heco (Huobi)": "https://scan.hecochain.com",
+    "Heco (Huobi) Testnet": "https://scan-testnet.hecochain.com"
 }
 
 export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
@@ -35,8 +35,8 @@ export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
     'Ropsten': `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     'Elastos': "https://escrpc.elaphant.app", // https://api.elastos.io/eth
     'Elastos Testnet': "https://rpc.elaeth.io",
-    "HuobiChain": "https://http-mainnet.hecochain.com",
-    "HuobiChain Testnet": "https://http-testnet.huobichain.com",
+    "Heco (Huobi)": "https://http-mainnet.hecochain.com",
+    "Heco (Huobi) Testnet": "https://http-testnet.hecochain.com",
 }
 
 export const INITIAL_STATE = {

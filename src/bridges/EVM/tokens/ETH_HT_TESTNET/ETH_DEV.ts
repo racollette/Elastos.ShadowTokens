@@ -15,10 +15,10 @@ export const ETH_DEV_HT = {
     },
     1: {
         symbol: 'ETH',
-        name: 'ETH on HuobiChain',
+        name: 'ETH on Heco (Huobi)',
         id: 'hteth',
         transferType: 'release',
-        network: 'HuobiChain Testnet',
+        network: 'Heco (Huobi) Testnet',
         networkID: 256,
         address: '0xE6394bA16Dde7815Ac85503591771f0bf0373c17',
         confirmations: HT_CONFIRMATIONS,
