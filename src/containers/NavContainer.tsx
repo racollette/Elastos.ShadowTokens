@@ -353,13 +353,13 @@ class NavContainer extends React.Component<any> {
                 <div className={classes.padMobile}>
                   <Switch className={classes.padMobile} />
                 </div>
-                <Hidden smDown>
+                {/* <Hidden smDown> */}
                   <LanguageSelect
                     className={classes.hideMobile}
                     store={store}
                     isVisible={true}
                   />
-                </Hidden>
+                {/* </Hidden> */}
                 <div className={classes.padMobile}>
                   <Menu />
                 </div>
