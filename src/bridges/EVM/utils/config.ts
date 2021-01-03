@@ -33,7 +33,7 @@ export const EXPLORER_URLS: { [key in string]: string } = {
 export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
     'Ethereum': `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`, // "https://api-eth.elaphant.app/api/1/eth/wrap",
     'Ropsten': `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
-    'Elastos': "https://escrpc.elaphant.app", // https://api.elastos.io/eth
+    'Elastos': "https://api.elastos.io/eth", // "https://escrpc.elaphant.app", //  // https://mainrpc.elaeth.io
     'Elastos Testnet': "https://rpc.elaeth.io",
     "Heco (Huobi)": "https://http-mainnet.hecochain.com",
     "Heco (Huobi) Testnet": "https://http-testnet.hecochain.com",

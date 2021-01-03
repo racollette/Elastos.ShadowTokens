@@ -252,7 +252,7 @@ export const uniqueTokens = (list: any) => {
 
 export const appendCustomTokens = (defaultTokens: any) => {
     const store = getStore();
-    const network = store.get("localWeb3Network");
+    const networkID = store.get("netId")
     const direction = store.get("convert.selectedDirection");
     let localTokenList = JSON.parse(
         window.localStorage.getItem("customTokens") as any
@@ -264,7 +264,8 @@ export const appendCustomTokens = (defaultTokens: any) => {
         return
     }
     const customTokenList = localTokenList.filter(
-        (token: any) => token[direction].network === network && token[direction].address.length > 0
+        (token: any) => token[direction].networkID === networkID && token[direction].address.length > 0 
+        && token[Number(!direction)].networkID === getPairNetwork(networkID, 'id')
     );
     const tokenList = defaultTokens.concat(customTokenList);
     updateAllTokenBalances(tokenList)

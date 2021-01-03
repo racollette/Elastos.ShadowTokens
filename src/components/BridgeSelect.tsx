@@ -11,10 +11,13 @@ import ETH from "../assets/eth.png";
 import ELA from "../assets/ela.png";
 import HT from "../assets/ht.png";
 
-const SUPPORTED_BRIDGES = [
+const SUPPORTED_MAINNETS = [
   "ETH_ELA",
   "HT_ELA",
   "ETH_HT",
+];
+
+const SUPPORTED_TESTNETS = [
   "ETH_ELA_TESTNET",
   "HT_ELA_TESTNET",
   "ETH_HT_TESTNET",
@@ -52,6 +55,9 @@ const BridgeSelect = ({ isVisible, store }: any) => {
   const open = store.get("bridgesOpen");
   const selectedBridge = store.get("selectedBridge");
   const selectedDirection = store.get("selectedDirection");
+  const [bridgeList, setBridgeList] = React.useState(SUPPORTED_MAINNETS);
+  const [bridgeText, setBridgeText] = React.useState('View Testnet Bridges');
+
   if (!isVisible) return null;
   return (
     <div>
@@ -70,7 +76,7 @@ const BridgeSelect = ({ isVisible, store }: any) => {
         {open && (
           <Wrapper>
             <Bridges>
-              {SUPPORTED_BRIDGES.map((bridge) => {
+              {bridgeList.map((bridge) => {
                 return (
                   <BridgeElement
                     key={bridge}
@@ -93,6 +99,26 @@ const BridgeSelect = ({ isVisible, store }: any) => {
                   </BridgeElement>
                 );
               })}
+              <SwitchBridgesButton
+                fullWidth
+                onClick={()=> {
+                  switch (bridgeList) {
+                    case SUPPORTED_MAINNETS:
+                      setBridgeList(SUPPORTED_TESTNETS)
+                      setBridgeText('View Mainnet Bridges')
+                      break;
+                    case SUPPORTED_TESTNETS:
+                      setBridgeList(SUPPORTED_MAINNETS)
+                      setBridgeText('View Testnet Bridges')
+                      break;
+                    default:
+                      setBridgeList(SUPPORTED_MAINNETS)
+                      setBridgeText('View Testnet Bridges')
+                  }
+                }}
+              >
+                {bridgeText}
+              </SwitchBridgesButton>
             </Bridges>
           </Wrapper>
         )}
@@ -164,6 +190,21 @@ const BridgeButton = withStyles({
     paddingBottom: 5,
     "&:hover": {
       backgroundColor: "rgb(200, 83, 103, 0.45)",
+    },
+  },
+})(Button);
+
+const SwitchBridgesButton = withStyles({
+  root: {
+    textTransform: "none",
+    border: "1px solid rgb(66, 66, 66)",
+    borderRadius: 8,
+    marginTop: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
+    "&:hover": {
+      border: "1px solid " + theme.palette.primary.main,
+      backgroundColor: "rgb(13, 129, 207, 0.45)",
     },
   },
 })(Button);
