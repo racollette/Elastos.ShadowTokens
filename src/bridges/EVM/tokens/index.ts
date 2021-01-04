@@ -27,13 +27,13 @@ import { HT_ETH } from './ETH_HT/HT'
 import { DAI_HT } from './ETH_HT/DAI'
 import { USDT_HT } from './ETH_HT/USDT'
 import { USDC_HT } from './ETH_HT/USDC'
-import { HFIL_HT } from './ETH_HT/HFIL_HT'
+// import { HFIL_HT } from './ETH_HT/HFIL_HT'
 
 // Dev imports
 import { ETH_DEV_HT } from './ETH_HT_TESTNET/ETH_DEV'
 import { HT_DEV_ETH } from './ETH_HT_TESTNET/HT_DEV'
 import { USDT_DEV_HT } from './ETH_HT_TESTNET/USDT_DEV'
-import { HFIL_DEV_HT } from './ETH_HT_TESTNET/HFIL_DEV'
+// import { HFIL_DEV_HT } from './ETH_HT_TESTNET/HFIL_DEV'
 
 /////////////////////////////////////////////
 //////////// Ethereum and Elastos ///////////
@@ -118,7 +118,6 @@ export const ETH_HT_DEFAULTS = [
     DAI_HT,
     USDT_HT,
     USDC_HT,
-    HFIL_HT
 ]
 
 export const HT_ETH_DEFAULTS = [
@@ -127,7 +126,6 @@ export const HT_ETH_DEFAULTS = [
     DAI_HT,
     USDT_HT,
     USDC_HT,
-    HFIL_HT
 ]
 
 ////////////////////////////////////////////////
@@ -139,12 +137,10 @@ export const ETH_HT_DEV_DEFAULTS = [
     ETH_DEV_HT,
     HT_DEV_ETH,
     USDT_DEV_HT,
-    HFIL_DEV_HT,
 ]
 
 export const HT_ETH_DEV_DEFAULTS = [
     HT_DEV_ETH,
     ETH_DEV_HT,
     USDT_DEV_HT,
-    HFIL_DEV_HT,
 ]
