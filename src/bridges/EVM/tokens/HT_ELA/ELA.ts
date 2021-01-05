@@ -1,4 +1,4 @@
-import { HT_CONFIRMATIONS, ELA_CONFIRMATIONS, ELA_AMB_NATIVE_ERC_MIN_TX, ELA_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import { HT_CONFIRMATIONS, ELA_CONFIRMATIONS, ELA_AMB_NATIVE_ERC_MIN_TX, ELA_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN, AMB_NATIVE_ERC_FEE_HOME } from '../config';
 import ELA_ICON from "../../../../assets/ela.png"
 
 export const ELA_HT = {
@@ -22,7 +22,7 @@ export const ELA_HT = {
         networkID: 20,
         address: '',
         confirmations: ELA_CONFIRMATIONS,
-        fee: 0.1,
+        fee: AMB_NATIVE_ERC_FEE_HOME,
     },
     home: 1,
     foreign: 0,

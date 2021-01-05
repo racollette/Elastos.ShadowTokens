@@ -1,4 +1,4 @@
-import { ETH_CONFIRMATIONS, HT_CONFIRMATIONS, ETH_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import { ETH_CONFIRMATIONS, HT_CONFIRMATIONS, ETH_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN, AMB_NATIVE_ERC_FEE_HOME } from '../config';
 import ETH_ICON from "../../../../assets/eth.png"
 
 export const ETH_HT = {
@@ -11,7 +11,7 @@ export const ETH_HT = {
         networkID: 1,
         address: '',
         confirmations: ETH_CONFIRMATIONS,
-        fee: 0.1,
+        fee: AMB_NATIVE_ERC_FEE_HOME,
     },
     1: {
         symbol: 'ETH',

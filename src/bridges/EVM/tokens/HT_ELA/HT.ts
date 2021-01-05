@@ -1,4 +1,4 @@
-import { HT_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_AMB_NATIVE_ERC_MIN_TX, HT_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN } from '../config';
+import { HT_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_AMB_NATIVE_ERC_MIN_TX, HT_AMB_NATIVE_ERC_MAX_TX, AMB_NATIVE_ERC_FEE_FOREIGN, AMB_NATIVE_ERC_FEE_HOME } from '../config';
 import HT_ICON from "../../../../assets/ht.png";
 
 export const HT_ELA = {
@@ -11,7 +11,7 @@ export const HT_ELA = {
         networkID: 128,
         address: '',
         confirmations: HT_CONFIRMATIONS,
-        fee: 0.1,
+        fee: AMB_NATIVE_ERC_FEE_HOME,
     },
     1: {
         symbol: 'HT',
