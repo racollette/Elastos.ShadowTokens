@@ -5,6 +5,44 @@ import { SUPPORTED_RPC_URLS } from '../bridges/EVM/utils/config';
 import { formatValue } from '../bridges/EVM/utils/txUtils';
 
 
+// export const depositELA = async function() {
+//     const store = getStore();
+//     const address = store.get("localWeb3Address")
+//     if (address.length === 0) return
+//     store.set("depositInProgress", 0)
+//     store.set("depositStatus", "Sidechain.Deposit.Renewal.Waiting")
+//     store.set("monitoringTransfer", false)
+
+//     const req = {
+//         "user_did": address,
+//         "src_chain_id": 1,
+//         "back_addr": MAINCHAIN_RETURN_ADDRESS,
+//         "dst_chain_id": 3,
+//         "dst_addr": address
+//     };
+
+//     try {
+//         const generateAddress = await fetch("https://transfer.elaphant.net/api/1/ela_exchange/generator", {
+//             body: JSON.stringify(req),
+//             headers: {
+//                 'user-agent': 'Mozilla/4.0 MDN Example',
+//                 'content-type': 'application/json'
+//             },
+//             method: "POST",
+//         });
+//         const response = (await generateAddress.json())
+//         const depositAddress = response.data.src_chain_addr;
+//         const exchangeID = response.data.exchange_id;
+//         store.set("monitoringTransfer", true)
+//         store.set('depositMainchainAddress', depositAddress);
+//         store.set('exchangeID', exchangeID);
+//         checkDepositStatus();
+
+//     } catch (e) {
+//         console.error(e);
+//     }
+// }
+
 export const depositELA = async function() {
     const store = getStore();
     const address = store.get("localWeb3Address")

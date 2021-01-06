@@ -12,14 +12,14 @@ import ELA from "../assets/ela.png";
 import HT from "../assets/ht.png";
 
 const SUPPORTED_MAINNETS = [
-  "ETH_ELA",
   "HT_ELA",
+  "ETH_ELA",
   "ETH_HT",
 ];
 
 const SUPPORTED_TESTNETS = [
-  "ETH_ELA_TESTNET",
   "HT_ELA_TESTNET",
+  "ETH_ELA_TESTNET",
   "ETH_HT_TESTNET",
 ];
 

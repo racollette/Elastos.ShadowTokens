@@ -1,7 +1,7 @@
 import MetaMask from "../../../assets/metamask-fox.svg";
 import Elaphant from "../../../assets/elaphant.png";
 import WalletConnect from "../../../assets/walletconnect.svg";
-import { ETH_DEFAULTS } from '../tokens'
+import { HT_ELA_DEFAULTS } from '../tokens'
 
 export const VALIDATOR_TIMEOUT = 300000 // Milliseconds
 export const PREAUTHORIZE_AMOUNT = 1000000 // Tokens
@@ -52,13 +52,13 @@ export const INITIAL_STATE = {
     selectedWalletType: "MetaMask",
 
     // bridge selection
-    selectedBridge: "ETH_ELA",
+    selectedBridge: "HT_ELA",
     // selectedPair: "ela",
     confirmBridge: false,
 
     // token
-    token: ETH_DEFAULTS[0],
-    tokenList: ETH_DEFAULTS,
+    token: HT_ELA_DEFAULTS[0],
+    tokenList: HT_ELA_DEFAULTS,
 
     // modals
     bridgesOpen: false,
