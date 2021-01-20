@@ -2,6 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/styles";
 import { getStore } from "../services/storeService";
 import theme from "../theme/theme";
+import classNames from "classnames";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Tabs from "@material-ui/core/Tabs";
@@ -17,14 +18,17 @@ import DarkTooltip from "../components/DarkTooltip";
 import BigCurrencyInput from "../components/BigCurrencyInput";
 import Balance from "../components/Balance";
 import TextField from "@material-ui/core/TextField";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+// import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { useTranslation } from "react-i18next";
 import { depositELA, withdrawELA } from "../services/sidechain";
 import { searchCryptoName } from "../services/cryptoname";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import ELA_ICON from "../assets/ela.png";
+import Elaphant from "../assets/elaphant.png";
+import Elastos from "../assets/elawallet.png";
 
 const styles = () => ({
   root: {
@@ -63,10 +67,11 @@ const styles = () => ({
     minWidth: "100%",
   },
   statusText: {
+    fontSize: "0.9rem",
     color: theme.palette.info.contrastText,
-    [theme.breakpoints.down("xs")]: {
-      fontSize: "0.85rem",
-    },
+    // [theme.breakpoints.down("xs")]: {
+    //   fontSize: "0.85rem",
+    // },
   },
   icon: {
     marginLeft: theme.spacing(0.75),
@@ -74,18 +79,30 @@ const styles = () => ({
     height: 18,
     width: "auto",
   },
+  walletIcon: {
+    marginRight: theme.spacing(1.5),
+    height: 24,
+    width: "auto",
+  },
   actionButton: {
     borderRadius: 12,
     marginTop: theme.spacing(1.5),
   },
   address: {
-    fontSize: "0.90rem",
+    color: theme.palette.info.contrastText,
+    fontSize: "0.8rem",
     [theme.breakpoints.down("xs")]: {
-      fontSize: "0.65rem",
+      fontSize: "0.55rem",
     },
   },
   QRcode: {
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  mobileLink: {
+    textDecoration: "none",
+    color: theme.palette.info.contrastText,
+    fontSize: "0.9rem",
   },
   tooltip: {
     marginLeft: theme.spacing(0.75),
@@ -93,6 +110,9 @@ const styles = () => ({
   },
   spacer: {
     marginBottom: theme.spacing(0.75),
+  },
+  doubleSpacer: {
+    marginBottom: theme.spacing(1.5),
   },
   progress: {
     marginTop: theme.spacing(2),
@@ -140,7 +160,7 @@ const Sidechain: React.FC<Props> = function (props) {
     setValue(newValue);
   };
 
-  const help = t("Sidechain.Disclaimer");
+  // const help = t("Sidechain.Disclaimer");
   const clickToCopy = t("Sidechain.ClickToCopy");
   const copied = t("Sidechain.Copied");
 
@@ -150,7 +170,7 @@ const Sidechain: React.FC<Props> = function (props) {
   const wrongNetwork = store.get("wrongNetwork");
   const insufficientBalance = store.get("insufficientBalance");
 
-  const depositAddress = store.get("depositMainchainAddress");
+  const transferURL = store.get("transferURL");
   const localWeb3Address = store.get("localWeb3Address");
 
   const depositStatus = store.get("depositStatus");
@@ -158,10 +178,12 @@ const Sidechain: React.FC<Props> = function (props) {
   const withdrawalStatus = store.get("withdrawalStatus");
   const withdrawalInProgress = store.get("withdrawalInProgress");
 
+  const transferWallet = store.get("transferWallet");
   const monitoring = store.get("monitoringTransfer");
   const balance = store.get("elaBalance");
+  const depositAmount = store.get("depositAmount");
   const depositValue = store.get("depositValue");
-  const amount = store.get("withdrawalAmount");
+  const withdrawalAmount = store.get("withdrawalAmount");
   const withdrawalAddress = store.get("withdrawalAddress");
 
   const cryptoNameFound = store.get("cryptoNameAddress");
@@ -169,8 +191,8 @@ const Sidechain: React.FC<Props> = function (props) {
 
   let enableButton = false;
   if (
-    Number(amount) > 0.01 &&
-    Number(amount) <= Number(balance) &&
+    Number(withdrawalAmount) > 0.01 &&
+    Number(withdrawalAmount) <= Number(balance) &&
     withdrawalAddress.trim().length === 34
   ) {
     enableButton = true;
@@ -220,29 +242,124 @@ const Sidechain: React.FC<Props> = function (props) {
                     {t("Sidechain.Description.Title")}
                   </Typography>
                 </Grid>
-                <Grid item>
-                  <Grid
-                    container
-                    justify="flex-start"
-                    alignItems="center"
-                    className={classes.statusText}
-                  >
-                    {t("Sidechain.Deposit")}{" "}
-                    <Hidden xsDown>
-                      <img className={classes.icon} src={ELA_ICON} alt="ELA" />
-                    </Hidden>
-                    {t("Sidechain.Description.Deposit.Message")}
-                  </Grid>
+
+                <Grid
+                  container
+                  justify="flex-start"
+                  alignItems="center"
+                  className={classes.statusText}
+                >
+                  {t("Sidechain.Deposit")}{" "}
+                  <Hidden xsDown>
+                    <img className={classes.icon} src={ELA_ICON} alt="ELA" />
+                  </Hidden>
+                  {t("Sidechain.Description.Deposit.Message")}
                 </Grid>
               </Grid>
-              {depositAddress.length === 34 ? (
+              {localWeb3Address.length > 0 ? (
                 <>
-                  {depositInProgress === 0 && (
+                  {/* Wallet Selector */}
+                  {transferWallet.length === 0 && (
+                    <Grid item xs={12} className={classes.statusBox}>
+                      <Grid item className={classes.spacer}>
+                        <Typography className={classes.step}>
+                          {t("Sidechain.Deposit.SelectWallet")}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          disableRipple
+                          size="large"
+                          onClick={() => {
+                            store.set("transferWallet", "elaphant");
+                          }}
+                          className={classes.statusText}
+                        >
+                          <img
+                            className={classes.walletIcon}
+                            src={Elaphant}
+                            alt="Elaphant Wallet"
+                          />
+                          Elaphant {t("Sidechain.Deposit.Wallet")}
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          disableRipple
+                          size="large"
+                          onClick={() => {
+                            store.set("transferWallet", "elastos");
+                          }}
+                          className={classes.statusText}
+                        >
+                          <img
+                            className={classes.walletIcon}
+                            src={Elastos}
+                            alt="Elastos Official Wallet"
+                          />
+                          Elastos Official {t("Sidechain.Deposit.Wallet")}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  )}
+
+                  {transferWallet === "elaphant" && (
+                    <>
+                      <Grid item xs={12} className={classes.statusBox}>
+                        <Grid item className={classes.doubleSpacer}>
+                          <Typography className={classes.step}>
+                            {t("Sidechain.Deposit.Amount.Title")}
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.doubleSpacer}>
+                          <Grid container justify="flex-end">
+                            <BigCurrencyInput
+                              value={depositAmount}
+                              placeholder={"0.00 ELA"}
+                              onChange={(event: any) => {
+                                let value = event.value || "";
+                                store.set("depositAmount", value);
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                        <Grid item>
+                          <Typography className={classes.statusText}>
+                            {t("Sidechain.Deposit.TransferFee")}: 1 ELA
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.spacer}>
+                          <Button
+                            variant={"contained"}
+                            disableRipple
+                            color="primary"
+                            size="large"
+                            fullWidth
+                            className={classes.actionButton}
+                            onClick={() => {
+                              store.set("transferWallet", "elaphantQR");
+                              depositELA();
+                            }}
+                          >
+                            {t("Sidechain.Deposit")}{" "}
+                            {Number(depositAmount) <= 1
+                              ? 0.0
+                              : (depositAmount - 1).toLocaleString("en-IN", {
+                                  maximumSignificantDigits: 3,
+                                })}{" "}
+                            ELA
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </>
+                  )}
+
+                  {transferWallet === "elaphantQR" && (
                     <>
                       <Grid item xs={12} className={classes.statusBox}>
                         <Grid item className={classes.spacer}>
                           <Typography className={classes.step}>
-                            {t("Sidechain.Start.Title")}
+                            {t("Sidechain.Scan.Title")}
                           </Typography>
                         </Grid>
                         <Grid item className={classes.spacer}>
@@ -251,8 +368,11 @@ const Sidechain: React.FC<Props> = function (props) {
                             alignItems="center"
                             className={classes.statusText}
                           >
-                            {t("Sidechain.Start.Message")}
-                            <DarkTooltip
+                            <Hidden xsDown>
+                              {t("Sidechain.Start.Message")}
+                            </Hidden>
+
+                            {/* <DarkTooltip
                               placement="right"
                               title={help}
                               className={classes.icon}
@@ -261,7 +381,7 @@ const Sidechain: React.FC<Props> = function (props) {
                                 color="secondary"
                                 fontSize="small"
                               />
-                            </DarkTooltip>
+                            </DarkTooltip> */}
                           </Grid>
                         </Grid>
                         <Grid item className={classes.spacer}>
@@ -270,7 +390,7 @@ const Sidechain: React.FC<Props> = function (props) {
                               <QRCode
                                 className={classes.QRcode}
                                 size={350}
-                                value={depositAddress}
+                                value={transferURL}
                                 bgColor="#FFF"
                                 fgColor="rgb(32,32,32)"
                                 includeMargin={true}
@@ -281,8 +401,8 @@ const Sidechain: React.FC<Props> = function (props) {
                                 }}
                               />
                             </Hidden>
-                            <CopyToClipboard
-                              text={depositAddress}
+                            {/* <CopyToClipboard
+                              text={transferURL}
                               onCopy={() => {
                                 setCopy(true);
                                 setTimeout(() => {
@@ -300,7 +420,7 @@ const Sidechain: React.FC<Props> = function (props) {
                                   justify="flex-start"
                                 >
                                   <Typography className={classes.address}>
-                                    {depositAddress}
+                                    {transferURL}
                                   </Typography>
                                   {copy ? (
                                     <CheckCircleOutlineIcon
@@ -315,33 +435,191 @@ const Sidechain: React.FC<Props> = function (props) {
                                   )}
                                 </Grid>
                               </DarkTooltip>
-                            </CopyToClipboard>
+                            </CopyToClipboard> */}
+                            <a
+                              className={classes.mobileLink}
+                              href={transferURL}
+                            >
+                              {t("Sidechain.Deposit.Mobile")}
+                            </a>
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Grid item xs={12} className={classes.statusBox}>
-                        <Grid item className={classes.spacer}>
-                          <Typography className={classes.step}>
-                            {t("Sidechain.Status.Title")}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Grid
-                            container
-                            justify="flex-start"
-                            className={classes.statusText}
-                          >
-                            {t(depositStatus)}
+
+                      {monitoring ? (
+                        <Grid item xs={12} className={classes.statusBox}>
+                          <Grid item className={classes.spacer}>
+                            <Typography className={classes.step}>
+                              {t("Sidechain.Status.Title")}
+                            </Typography>
                           </Grid>
+                          <Grid item>
+                            <Grid
+                              container
+                              justify="flex-start"
+                              className={classes.statusText}
+                            >
+                              {t(depositStatus)}
+                            </Grid>
+                          </Grid>
+                          <Grid
+                            item
+                            className={classNames(
+                              classes.spacer,
+                              classes.progress
+                            )}
+                          >
+                            <LinearProgress color="primary" />
+                          </Grid>
+
+                          {depositInProgress === 2 && (
+                            <Grid container justify="flex-start">
+                              <Grid item className={classes.statusText}>
+                                {t("Sidechain.Notify.Time")}
+                              </Grid>
+                            </Grid>
+                          )}
                         </Grid>
-                        <Grid item className={classes.progress}>
-                          <LinearProgress color="primary" />
-                        </Grid>
+                      ) : (
+                        <>
+                          <Grid item xs={12} className={classes.statusBox}>
+                            <Grid item className={classes.spacer}>
+                              <Typography className={classes.step}>
+                                {t("Sidechain.Status.Title")}
+                              </Typography>
+                            </Grid>
+                            <Grid item className={classes.statusText}>
+                              {t("Sidechain.Deposit.Transfer.Finish")}
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} className={classes.statusBox}>
+                            <Grid item className={classes.spacer}>
+                              <Typography className={classes.step}>
+                                {t("Sidechain.Balance.Title")}
+                              </Typography>
+                            </Grid>
+
+                            <Grid item className={classes.statusText}>
+                              {balance} ELA
+                              {depositValue > 0 && (
+                                <span className={classes.green}>
+                                  &nbsp; (+{depositValue.toFixed(2)})
+                                </span>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </>
+                      )}
+
+                      <Grid container>
+                        <Button
+                          variant={"outlined"}
+                          disableRipple
+                          color="primary"
+                          fullWidth
+                          className={classes.actionButton}
+                          onClick={() => {
+                            store.set("depositAmount", "");
+                            store.set("transferWallet", "");
+                          }}
+                        >
+                          {t("Sidechain.Reset.Deposit")}
+                        </Button>
                       </Grid>
                     </>
                   )}
 
-                  {depositInProgress >= 1 && (
+                  {transferWallet === "elastos" && (
+                    <>
+                      <Grid item xs={12} className={classes.statusBox}>
+                        <Grid item className={classes.spacer}>
+                          <Typography className={classes.step}>
+                            {t("Sidechain.Deposit.Instructions.Title")}
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.spacer}>
+                          <Typography className={classes.statusText}>
+                            {t("Sidechain.Deposit.Instructions.Message")}
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.spacer}>
+                          <Typography className={classes.step}>
+                            {t("Sidechain.Deposit.Instructions.Step1")}
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.spacer}>
+                          <Typography className={classes.step}>
+                            {t("Sidechain.Deposit.Instructions.Step2")}
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.doubleSpacer}>
+                          <Typography className={classes.step}>
+                            {t("Sidechain.Deposit.Instructions.Step3")}
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.spacer}>
+                          <Grid container>
+                            <span className={classes.address}>
+                              toesc{localWeb3Address}
+                            </span>
+                            <span>
+                              <CopyToClipboard
+                                text={`toesc${localWeb3Address}`}
+                                onCopy={() => {
+                                  setCopy(true);
+                                  setTimeout(() => {
+                                    setCopy(false);
+                                  }, 1500);
+                                }}
+                              >
+                                <DarkTooltip
+                                  placement="top"
+                                  title={copy ? copied : clickToCopy}
+                                >
+                                  <div>
+                                    {copy ? (
+                                      <CheckCircleOutlineIcon
+                                        className={classes.icon}
+                                        fontSize="small"
+                                      />
+                                    ) : (
+                                      <FileCopyIcon
+                                        className={classes.icon}
+                                        fontSize="small"
+                                      />
+                                    )}
+                                  </div>
+                                </DarkTooltip>
+                              </CopyToClipboard>
+                            </span>
+                          </Grid>
+                        </Grid>
+                        <Grid item>
+                          <Typography className={classes.step}>
+                            {t("Sidechain.Deposit.Instructions.Step4")}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Button
+                          variant={"outlined"}
+                          disableRipple
+                          color="primary"
+                          fullWidth
+                          className={classes.actionButton}
+                          onClick={() => {
+                            store.set("depositAmount", "");
+                            store.set("transferWallet", "");
+                          }}
+                        >
+                          {t("Sidechain.Reset.Deposit")}
+                        </Button>
+                      </Grid>
+                    </>
+                  )}
+
+                  {/* {depositInProgress >= 1 && (
                     <>
                       <Grid item xs={12} className={classes.statusBox}>
                         <Grid item className={classes.spacer}>
@@ -396,8 +674,9 @@ const Sidechain: React.FC<Props> = function (props) {
                         )}
                       </Grid>
                     </>
-                  )}
-                  {depositInProgress === 2 && (
+                  )} */}
+
+                  {/* {depositInProgress === 2 && (
                     <Button
                       variant={"contained"}
                       disableRipple
@@ -412,7 +691,7 @@ const Sidechain: React.FC<Props> = function (props) {
                     >
                       {t("Sidechain.Reset.Deposit")}
                     </Button>
-                  )}
+                  )} */}
                 </>
               ) : (
                 <Button
@@ -446,19 +725,17 @@ const Sidechain: React.FC<Props> = function (props) {
                     {t("Sidechain.Description.Title")}
                   </Typography>
                 </Grid>
-                <Grid item>
-                  <Grid
-                    container
-                    justify="flex-start"
-                    alignItems="center"
-                    className={classes.statusText}
-                  >
-                    {t("Sidechain.Withdraw")}{" "}
-                    <Hidden xsDown>
-                      <img className={classes.icon} src={ELA_ICON} alt="ELA" />
-                    </Hidden>
-                    {t("Sidechain.Description.Withdaw.Message")}
-                  </Grid>
+                <Grid
+                  container
+                  justify="flex-start"
+                  alignItems="center"
+                  className={classes.statusText}
+                >
+                  {t("Sidechain.Withdraw")}{" "}
+                  <Hidden xsDown>
+                    <img className={classes.icon} src={ELA_ICON} alt="ELA" />
+                  </Hidden>
+                  {t("Sidechain.Description.Withdaw.Message")}
                 </Grid>
               </Grid>
               {localWeb3Address.length === 42 ? (
@@ -473,7 +750,7 @@ const Sidechain: React.FC<Props> = function (props) {
                           <Grid item xs={8}>
                             <Grid container justify="flex-end">
                               <BigCurrencyInput
-                                value={amount}
+                                value={withdrawalAmount}
                                 placeholder={"0.00"}
                                 onChange={(event: any) => {
                                   let value = event.value || "";
@@ -557,12 +834,12 @@ const Sidechain: React.FC<Props> = function (props) {
                           store.set("wrongNetwork", true);
                           return;
                         }
-                        if (amount > balance) {
+                        if (withdrawalAmount > balance) {
                           store.set("insufficientBalance", true);
                           return;
                         }
                         if (withdrawalAddress.length === 34) {
-                          withdrawELA(withdrawalAddress, amount);
+                          withdrawELA(withdrawalAddress, withdrawalAmount);
                         }
                       }}
                     >

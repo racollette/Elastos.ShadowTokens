@@ -105,10 +105,12 @@ export const INITIAL_STATE = {
 
     // sidechain deposit and withdraw
     page: "bridge",
-    depositMainchainAddress: "",
+    transferWallet: "",
+    transferURL: "",
     exchangeID: 0,
     depositStatus: "Sidechain.Deposit.Renewal.Waiting",
     depositInProgress: 0,
+    depositAmount: 0,
     monitoringTransfer: false,
     withdrawalAmount: 0,
     withdrawalAddress: "",

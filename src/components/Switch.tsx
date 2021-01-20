@@ -3,7 +3,6 @@ import { getStore } from "../services/storeService";
 import { Styles, withStyles } from "@material-ui/styles";
 import theme from "../theme/theme";
 import Switch from "@material-ui/core/Switch";
-import { depositELA } from "../services/sidechain";
 
 const styles: Styles<typeof theme, any> = (theme) => ({
   switchContainer: {
@@ -41,7 +40,6 @@ function SwitchMode(props: any) {
     } else {
       store.set("page", "sidechain");
       store.set("depositInProgress", 0);
-      depositELA();
     }
   };
 
