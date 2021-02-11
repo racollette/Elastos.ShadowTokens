@@ -29,8 +29,8 @@ export const ELA_HT = {
     icon: ELA_ICON,
     bridgeMode: 'amb_native_erc',
     decimals: 18,
-    minTx: ELA_AMB_NATIVE_ERC_MIN_TX,
-    maxTx: ELA_AMB_NATIVE_ERC_MAX_TX,
+    minTx: ELA_HT_AMB_NATIVE_ERC_MIN_TX,
+    maxTx: ELA_HT_AMB_NATIVE_ERC_MAX_TX,
     priceTicker: 'ela',
     priceFeed: 'https://api.coincap.io/v2/assets/elastos',
 }

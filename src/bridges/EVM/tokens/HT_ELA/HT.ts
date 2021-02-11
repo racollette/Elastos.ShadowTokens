@@ -29,8 +29,8 @@ export const HT_ELA = {
     icon: HT_ICON,
     bridgeMode: 'amb_native_erc',
     decimals: 18,
-    minTx: HT_AMB_NATIVE_ERC_MIN_TX,
-    maxTx: HT_AMB_NATIVE_ERC_MAX_TX,
+    minTx: ELA_HT_AMB_NATIVE_ERC_MIN_TX,
+    maxTx: ELA_HT_AMB_NATIVE_ERC_MAX_TX,
     priceTicker: 'ht',
     priceFeed: 'https://api.coincap.io/v2/assets/huobi-token',
 }
