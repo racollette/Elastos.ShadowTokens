@@ -11,11 +11,7 @@ import ETH from "../assets/eth.png";
 import ELA from "../assets/ela.png";
 import HT from "../assets/ht.png";
 
-const SUPPORTED_MAINNETS = [
-  "HT_ELA",
-  "ETH_ELA",
-  "ETH_HT",
-];
+const SUPPORTED_MAINNETS = ["HT_ELA", "ETH_ELA", "ETH_HT"];
 
 const SUPPORTED_TESTNETS = [
   "HT_ELA_TESTNET",
@@ -56,7 +52,7 @@ const BridgeSelect = ({ isVisible, store }: any) => {
   const selectedBridge = store.get("selectedBridge");
   const selectedDirection = store.get("selectedDirection");
   const [bridgeList, setBridgeList] = React.useState(SUPPORTED_MAINNETS);
-  const [bridgeText, setBridgeText] = React.useState('View Testnet Bridges');
+  const [bridgeText, setBridgeText] = React.useState("View Testnet Bridges");
 
   if (!isVisible) return null;
   return (
@@ -87,6 +83,9 @@ const BridgeSelect = ({ isVisible, store }: any) => {
                         codeToBridge(bridge)[0]
                       );
                       store.set("bridgesOpen", false);
+                      if (bridge === "ETH_HT") {
+                        store.set("hecoDisclaimer", true);
+                      }
                     }}
                   >
                     <BridgeImage src={BRIDGE_ICONS[bridge][0]}></BridgeImage>
@@ -101,19 +100,19 @@ const BridgeSelect = ({ isVisible, store }: any) => {
               })}
               <SwitchBridgesButton
                 fullWidth
-                onClick={()=> {
+                onClick={() => {
                   switch (bridgeList) {
                     case SUPPORTED_MAINNETS:
-                      setBridgeList(SUPPORTED_TESTNETS)
-                      setBridgeText('View Mainnet Bridges')
+                      setBridgeList(SUPPORTED_TESTNETS);
+                      setBridgeText("View Mainnet Bridges");
                       break;
                     case SUPPORTED_TESTNETS:
-                      setBridgeList(SUPPORTED_MAINNETS)
-                      setBridgeText('View Testnet Bridges')
+                      setBridgeList(SUPPORTED_MAINNETS);
+                      setBridgeText("View Testnet Bridges");
                       break;
                     default:
-                      setBridgeList(SUPPORTED_MAINNETS)
-                      setBridgeText('View Testnet Bridges')
+                      setBridgeList(SUPPORTED_MAINNETS);
+                      setBridgeText("View Testnet Bridges");
                   }
                 }}
               >

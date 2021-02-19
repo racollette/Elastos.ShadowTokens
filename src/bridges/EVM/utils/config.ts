@@ -78,6 +78,7 @@ export const INITIAL_STATE = {
     walletConnectWarning: false,
     validatorError: false,
     validatorTimeout: false,
+    hecoDisclaimer: false,
 
     // awaiting user
     waitingApproval: false,

@@ -91,9 +91,9 @@
   "Progress.Error.Message": "An error occurred while monitoring the transfer. Your funds will still arrive, please check the block explorer for confirmation.",
   "Progress.Accept": "OKAY",
 
-  "Warning.Title": "Warning",
-  "Warning.Message": "Please be advised that retrieving Ethereum-based assets from other blockchains requires a wallet capable of switching networks. Currently, this includes the MetaMask, etc etc wallets.",
-  "Warning.Accept": "Okay",
+  "Warning.Title": "Heco Bridge Disclaimer",
+  "Warning.Message": "Please be advised that ETH and the other Ethereum-based tokens supported on the Heco (Huobi) network are not the same as those minted by this bridge and will not be recognized by DeFi platforms such as FilDA or MDEX. If you wish to transfer your ETH to Heco, you must deposit to Huobi and withdraw to Heco.",
+  "Warning.Accept": "I understand",
 
   "Sidechain.Description.Title": "DESCRIPTION",
   "Sidechain.Description.Deposit.Message": "ELA to Smart Contract Chain",

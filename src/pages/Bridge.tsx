@@ -6,6 +6,7 @@ import TransferContainer from "../containers/TransferContainer";
 import ConfirmContainer from "../containers/ConfirmContainer";
 import WalletModal from "../components/WalletModal";
 import ErrorModal from "../components/ErrorModal";
+import WarningModal from "../components/WarningModal";
 // import { BRIDGE_SYMBOL_MAP } from "../bridges/bridges";
 
 const styles = () => ({});
@@ -39,6 +40,8 @@ class Bridge extends React.Component<Props> {
     const exceedsMaxTxLimit = store.get("exceedsMaxTxLimit");
     const txRejected = store.get("txRejected");
     const unknownError = store.get("unknownError");
+
+    const hecoDisclaimer = store.get("hecoDisclaimer");
 
     return (
       <React.Fragment>
@@ -117,6 +120,10 @@ class Bridge extends React.Component<Props> {
 
         {unknownError && (
           <ErrorModal store={store} errorType={"unknownError"} />
+        )}
+
+        {hecoDisclaimer && (
+          <WarningModal store={store} warningType={"hecoDisclaimer"} />
         )}
       </React.Fragment>
     );

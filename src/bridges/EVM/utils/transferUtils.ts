@@ -47,6 +47,7 @@ export const getMediatorContracts = function(confirmTx: any) {
         bridgeMode: bridgeMode,
         source: source,
         sourceMediator: new web3.eth.Contract(abi, source),
+        // sourceMediator: new web3.eth.Contract(abi, "0xdC841126328634220e01B98aeF2Ba1729f05C2f2"),
         dest: dest,
     }
 
@@ -67,14 +68,14 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any, gas
     const mediatorConfs = confirmTx.confirmations
     store.set("confirmationTotal", mediatorConfs)
 
-    if (confirmTx.type === 'mint') {
+    // const dailyLimit = await contracts.sourceMediator.methods.dailyLimit().call()
+    const minTx = await contracts.sourceMediator.methods.minPerTx().call()
+    const maxTx = await contracts.sourceMediator.methods.maxPerTx().call()
+    // console.log(dailyLimit)
+    console.log("minTx", minTx)
+    console.log("maxTx", maxTx)
 
-        // const dailyLimit = await contracts.sourceMediator.methods.dailyLimit().call()
-        // const minTx = await contracts.sourceMediator.methods.minPerTx().call()
-        // const maxTx = await contracts.sourceMediator.methods.maxPerTx().call()
-        // console.log(dailyLimit)
-        // console.log(minTx)
-        // console.log(maxTx)
+    if (confirmTx.type === 'mint') {
 
         store.set("transactionType", "relay")
         store.set("waitingApproval", true)

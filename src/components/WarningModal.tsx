@@ -33,14 +33,14 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     cursor: "pointer",
     transition: "all 0.2s ease-in-out",
     "& img": {
-      height: 75,
+      height: 55,
       width: "auto",
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(0.5),
     },
   },
   successText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
   },
   walletText: {
     color: "#fff",
@@ -51,14 +51,14 @@ const styles: Styles<typeof theme, any> = (theme) => ({
     paddingBottom: theme.spacing(1),
   },
   generalContainer: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     alignItems: "center",
     justifyContent: "center",
   },
-  confirmationText: {
-    // color: theme.palette.info.contrastText,
+  warningText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
+    textAlign: "justify",
   },
   confirmationCount: {
     color: "#fff",
@@ -104,21 +104,21 @@ const WarningModal: React.FC<Props> = function (props) {
         >
           <Fade in={true}>
             <div className={classes.container}>
-              {warningType === "wrongNetwork" && (
-                <div>
-                  <div className={classes.errorContainer}>
-                    <img src={Warning} alt="Warning" />
-                    <Typography className={classes.successText}>
-                      <Translate text="Warning.Title" />
-                    </Typography>
-                  </div>
-                  <div className={classes.generalContainer}>
-                    <Typography className={classes.confirmationText}>
-                      <Translate text="Warning.Message" />
-                    </Typography>
-                  </div>
+              {/* {warningType === "wrongNetwork" && ( */}
+              <div>
+                <div className={classes.errorContainer}>
+                  <img src={Warning} alt="Warning" />
+                  <Typography className={classes.successText}>
+                    <Translate text="Warning.Title" />
+                  </Typography>
                 </div>
-              )}
+                <div className={classes.generalContainer}>
+                  <Typography className={classes.warningText}>
+                    <Translate text="Warning.Message" />
+                  </Typography>
+                </div>
+              </div>
+              {/* )} */}
 
               <Grid
                 container
