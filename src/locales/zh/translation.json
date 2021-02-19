@@ -91,9 +91,9 @@
   "Progress.Error.Message": "查询状态时发生错误。 您的资金仍会到达，请检查区块浏览器进行确认.",
   "Progress.Accept": "好的",
 
-  "Warning.Title": "警告",
-  "Warning.Message": "请注意，从其他区块链中检索基于Ethereum的资产需要一个能够切换网络的钱包。目前，这包括MetaMask等钱包。",
-  "Warning.Accept": "好的",
+  "Warning.Title": "Heco Bridge免责声明",
+  "Warning.Message": "请注意，Heco（火币）网络上支持的ETH和其他基于以太坊的令牌与该网桥铸造的令牌不同，并且不会被DeFi平台（如FilDA或MDEX）识别。如果您希望将ETH转移到Heco，则必须存入Huobi并退出到Heco。",
+  "Warning.Accept": "我明白",
 
   "Sidechain.Description.Title": "描述",
   "Sidechain.Description.Deposit.Message": "ELA从主链到侧链",

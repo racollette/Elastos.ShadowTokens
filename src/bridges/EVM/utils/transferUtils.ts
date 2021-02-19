@@ -47,7 +47,6 @@ export const getMediatorContracts = function(confirmTx: any) {
         bridgeMode: bridgeMode,
         source: source,
         sourceMediator: new web3.eth.Contract(abi, source),
-        // sourceMediator: new web3.eth.Contract(abi, "0xdC841126328634220e01B98aeF2Ba1729f05C2f2"),
         dest: dest,
     }
 
