@@ -147,6 +147,31 @@ export const MEDIATOR_CONTRACTS: any = {
 
                 }
             }
+        },
+        'BNB_HT': {
+            bridgeMode: {
+                multi_amb_erc_erc: {
+                    'Binance': {
+                        release: '0x4a3170Ee4d54c99267b7eF28Ceb205ea84e273dE',  // Foreign, Heco (Huobi)
+                        mint: '0xb00fABF1525463A71988c5Ecdda97C306c762d67',  // Home, Binance
+                    },
+                    'Heco (Huobi)': {
+                        release: '0x0054351c99288D37B96878EDC2319ca006c8B910', // Foreign, Binance
+                        mint: '0x8Ca3C573a86230891A1BED63C00c928a9A355f0E', // Home, Heco (Huobi)
+                    }
+                },
+                amb_native_erc: {
+                    'Binance': {
+                        release: '0xA0fDd3e43a14205b8ef32C1dFca7EfAa2Bb1eD14', // Foreign, Heco (Huobi) 
+                        mint: '0xB3BD1624567F6e598061233760c868654c5c8495', // Home, Binance
+                    },
+                    'Heco (Huobi)': {
+                        release: '0xDd973cd01C7434965Eb14A864686566749bC027b', // Foreign, Binance
+                        mint: '0xac751979876BEeedF18cB65d1aC0d47FF8366500', // Home, Heco (Huobi)
+                    }
+
+                }
+            }
         }
     }
 }

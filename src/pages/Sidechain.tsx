@@ -29,6 +29,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import ELA_ICON from "../assets/ela.png";
 import Elaphant from "../assets/elaphant.png";
 import Elastos from "../assets/elawallet.png";
+import Ledger from "../assets/ledger.png";
 
 const styles = () => ({
   root: {
@@ -300,6 +301,23 @@ const Sidechain: React.FC<Props> = function (props) {
                           Elastos Official {t("Sidechain.Deposit.Wallet")}
                         </Button>
                       </Grid>
+                      <Grid item>
+                        <Button
+                          disableRipple
+                          size="large"
+                          onClick={() => {
+                            store.set("transferWallet", "ledger");
+                          }}
+                          className={classes.statusText}
+                        >
+                          <img
+                            className={classes.walletIcon}
+                            src={Ledger}
+                            alt="Elastos Light Wallet (Ledger)"
+                          />
+                          Elastos Light {t("Sidechain.Deposit.Wallet")} (Ledger)
+                        </Button>
+                      </Grid>
                     </Grid>
                   )}
 
@@ -530,7 +548,8 @@ const Sidechain: React.FC<Props> = function (props) {
                     </>
                   )}
 
-                  {transferWallet === "elastos" && (
+                  {(transferWallet === "elastos" ||
+                    transferWallet === "ledger") && (
                     <>
                       <Grid item xs={12} className={classes.statusBox}>
                         <Grid item className={classes.spacer}>
@@ -596,9 +615,16 @@ const Sidechain: React.FC<Props> = function (props) {
                           </Grid>
                         </Grid>
                         <Grid item>
-                          <Typography className={classes.step}>
-                            {t("Sidechain.Deposit.Instructions.Step4")}
-                          </Typography>
+                          {transferWallet === "elastos" && (
+                            <Typography className={classes.step}>
+                              {t("Sidechain.Deposit.Instructions.Step4")}
+                            </Typography>
+                          )}
+                          {transferWallet === "ledger" && (
+                            <Typography className={classes.step}>
+                              {t("Sidechain.Deposit.Instructions.Step4-1")}
+                            </Typography>
+                          )}
                         </Grid>
                       </Grid>
                       <Grid container>

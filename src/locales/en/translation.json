@@ -123,6 +123,7 @@
   "Sidechain.Deposit.Instructions.Step2": "2. Enter the deposit amount",
   "Sidechain.Deposit.Instructions.Step3": "3. Enter 'toesc' followed by your sidechain address into the memo field",
   "Sidechain.Deposit.Instructions.Step4": "4. Approve and submit the transaction",
+  "Sidechain.Deposit.Instructions.Step4-1": "4. Confirm the transaction via Ledger device or via password",
 
   "Sidechain.Deposit.Renewal.Waiting": "Monitoring for deposit",
   "Sidechain.Deposit.Renewal.Timeout": "Never received your ELA. If you have already transferred, please join the Telegram group and contact the admin for processing",

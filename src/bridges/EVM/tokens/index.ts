@@ -29,6 +29,11 @@ import { USDT_HT } from './ETH_HT/USDT'
 import { USDC_HT } from './ETH_HT/USDC'
 // import { HFIL_HT } from './ETH_HT/HFIL_HT'
 
+// Binance to Heco (Huobi) Bridge
+import { BNB_HT } from './BNB_HT/BNB'
+import { HT_BNB } from './BNB_HT/HT'
+import { FILDA_BNB } from './BNB_HT/FILDA'
+
 // Dev imports
 import { ETH_DEV_HT } from './ETH_HT_TESTNET/ETH_DEV'
 import { HT_DEV_ETH } from './ETH_HT_TESTNET/HT_DEV'
@@ -143,4 +148,20 @@ export const HT_ETH_DEV_DEFAULTS = [
     HT_DEV_ETH,
     ETH_DEV_HT,
     USDT_DEV_HT,
+]
+
+////////////////////////////////////////////////
+////////// Binance and Heco (Huobi)  ///////////
+////////////////////////////////////////////////
+
+export const BNB_HT_DEFAULTS = [
+    BNB_HT,
+    HT_BNB,
+    FILDA_BNB
+]
+
+export const HT_BNB_DEFAULTS = [
+    HT_BNB,
+    BNB_HT,
+    FILDA_BNB
 ]

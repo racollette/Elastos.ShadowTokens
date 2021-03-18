@@ -5,15 +5,16 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from '../tokens/config';
+import { ETH_CONFIRMATIONS, ELA_CONFIRMATIONS, HT_CONFIRMATIONS, BNB_CONFIRMATIONS, MULTI_AMB_ERC_ERC_MIN_TX, MULTI_AMB_ERC_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_HOME, MULTI_AMB_ERC_ERC_FEE_FOREIGN } from '../tokens/config';
 import { SUPPORTED_NETWORK_IDS, SUPPORTED_RPC_URLS } from './config';
-import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS, HT_ELA_DEFAULTS, ELA_HT_DEFAULTS, HT_ELA_DEV_DEFAULTS, ELA_HT_DEV_DEFAULTS, ETH_HT_DEFAULTS, ETH_HT_DEV_DEFAULTS, HT_ETH_DEFAULTS, HT_ETH_DEV_DEFAULTS } from "../tokens";
+import { ETH_DEFAULTS, ELA_DEFAULTS, ETH_DEV_DEFAULTS, ELA_DEV_DEFAULTS, HT_ELA_DEFAULTS, ELA_HT_DEFAULTS, HT_ELA_DEV_DEFAULTS, ELA_HT_DEV_DEFAULTS, ETH_HT_DEFAULTS, ETH_HT_DEV_DEFAULTS, HT_ETH_DEFAULTS, HT_ETH_DEV_DEFAULTS, BNB_HT_DEFAULTS, HT_BNB_DEFAULTS } from "../tokens";
 import { switchOriginChain, formatValue } from "./txUtils";
 import { depositELA } from "../../../services/sidechain";
 import ERC20_ABI from "../abis/ERC20_ABI.json";
 import ELA_ICON from "../../../assets/ela.png";
 import ETH_ICON from "../../../assets/eth.png";
 import HT_ICON from "../../../assets/ht.png";
+import BNB_ICON from "../../../assets/bnb.png";
 
 export const init = function() {
     const store = getStore();
@@ -83,9 +84,10 @@ export const initLocalWeb3 = async function(type?: any) {
             const provider: any = new WalletConnectProvider({
                 rpc: {
                     1: SUPPORTED_RPC_URLS["Ethereum"],
+                    3: SUPPORTED_RPC_URLS["Ropsten"],
                     20: SUPPORTED_RPC_URLS["Elastos"],
                     21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
-                    3: SUPPORTED_RPC_URLS["Ropsten"],
+                    56: SUPPORTED_RPC_URLS["Binance"],
                     128: SUPPORTED_RPC_URLS["Heco (Huobi)"],
                     256: SUPPORTED_RPC_URLS["Heco (Huobi) Testnet"],
                 }
@@ -264,8 +266,8 @@ export const appendCustomTokens = (defaultTokens: any) => {
         return
     }
     const customTokenList = localTokenList.filter(
-        (token: any) => token[direction].networkID === networkID && token[direction].address.length > 0 
-        && token[Number(!direction)].networkID === getPairNetwork(networkID, 'id')
+        (token: any) => token[direction].networkID === networkID && token[direction].address.length > 0
+            && token[Number(!direction)].networkID === getPairNetwork(networkID, 'id')
     );
     const tokenList = defaultTokens.concat(customTokenList);
     updateAllTokenBalances(tokenList)
@@ -324,16 +326,26 @@ export const getDefaultTokens = (network: string) => {
                 return HT_ELA_DEFAULTS
             } else if (bridge === "ETH_HT") {
                 return HT_ETH_DEFAULTS
+            } else if (bridge === "BNB_HT") {
+                return BNB_HT_DEFAULTS
             } else {
-                return HT_ELA_DEFAULTS
+                return BNB_HT_DEFAULTS
             }
         case 'Heco (Huobi) Testnet':
             if (bridge === "HT_ELA_TESTNET") {
-                    return HT_ELA_DEV_DEFAULTS
+                return HT_ELA_DEV_DEFAULTS
             } else if (bridge === "ETH_HT_TESTNET") {
-                    return HT_ETH_DEV_DEFAULTS
+                return HT_ETH_DEV_DEFAULTS
             } else {
-                    return HT_ELA_DEV_DEFAULTS
+                return HT_ELA_DEV_DEFAULTS
+            }
+        case 'Binance':
+            if (bridge === "BNB_HT") {
+                return BNB_HT_DEFAULTS
+            } else if (bridge === "HT_BNB") {
+                return HT_BNB_DEFAULTS
+            } else {
+                return BNB_HT_DEFAULTS
             }
         default:
             return ETH_DEFAULTS
@@ -341,12 +353,13 @@ export const getDefaultTokens = (network: string) => {
 }
 
 const detectBridgedToken = (name: string, symbol: string) => {
-    const prefix = symbol.substring(0, 3) === 'eth' || symbol.substring(0, 3) === 'ela' || symbol.substring(0, 2) === 'ht'
+    const prefix = symbol.substring(0, 3) === 'eth' || symbol.substring(0, 3) === 'ela' || symbol.substring(0, 2) === 'ht' || symbol.substring(0, 3) === 'bnb'
     const ela = name.includes('on Elastos')
     const eth = name.includes('on Ethereum')
     const ht = name.includes('on Heco (Huobi)')
+    const bnb = name.includes('on Binance')
 
-    if (prefix || ela || eth || ht) return true
+    if (prefix || ela || eth || ht || bnb) return true
     return false
 }
 
@@ -359,6 +372,8 @@ const getDestIcon = (home: number) => {
         return home ? ELA_ICON : HT_ICON
     } else if (bridge === "ETH_HT" || bridge === "ETH_HT_TESTNET") {
         return home ? HT_ICON : ETH_ICON
+    } else if (bridge === "BNB_HT") {
+        return home ? HT_ICON : BNB_ICON
     }
     return
 }
@@ -430,6 +445,27 @@ const getDestToken = (data: string, home: number, type: 'name' | 'symbol' | 'id'
                 }
                 return 'eth'.concat(data.toLowerCase())
         }
+    } else if (bridge === "BNB_HT") {
+        switch (type) {
+            case 'name':
+                if (alreadyBridged) return data.split(" ")[0]
+                if (home === 1) {
+                    return `${data} on Heco (Huobi)`
+                }
+                return `${data} on Binance`
+            case 'symbol':
+                if (alreadyBridged) return data.slice(3)
+                if (home === 0) {
+                    return 'ht'.concat(data)
+                }
+                return 'bnb'.concat(data)
+            case 'id':
+                if (alreadyBridged) return data.slice(3).toLowerCase()
+                if (home === 0) {
+                    return 'ht'.concat(data.toLowerCase())
+                }
+                return 'bnb'.concat(data.toLowerCase())
+        }
     }
 
 }
@@ -476,6 +512,15 @@ const getRequiredConfirmations = (home: number) => {
             default:
                 return ETH_CONFIRMATIONS
         }
+    } else if (bridge === "BNB_HT") {
+        switch (home) {
+            case 0:
+                return BNB_CONFIRMATIONS
+            case 1:
+                return HT_CONFIRMATIONS
+            default:
+                return BNB_CONFIRMATIONS
+        }
     }
 }
 
@@ -513,6 +558,13 @@ const getHomeNetwork = (networkID: number) => {
             case 128:
                 return 1
             case 256:
+                return 1
+        }
+    } else if (bridge === "BNB_HT") {
+        switch (networkID) {
+            case 56:
+                return 0
+            case 128:
                 return 1
         }
     }
@@ -567,6 +619,15 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
                 if (type === 'id') return 3
                 return 'Ropsten'
         }
+    } else if (bridge === "BNB_HT") {
+        switch (networkID) {
+            case 56:
+                if (type === 'id') return 128
+                return 'Heco (Huobi)'
+            case 128:
+                if (type === 'id') return 56
+                return 'Binance'
+        }
     }
 }
 
@@ -583,18 +644,18 @@ export const setBridgeDirection = async function(netId: number) {
     switch (netId) {
         case 1:
             store.set("localWeb3Network", "Ethereum")
-            if (bridge !== "ETH_ELA" && bridge !== "ETH_HT") { 
-                store.set("selectedBridge", "ETH_ELA")   
+            if (bridge !== "ETH_ELA" && bridge !== "ETH_HT") {
+                store.set("selectedBridge", "ETH_ELA")
                 switchOriginChain(selectedDirection)
-                return 
-             }
+                return
+            }
             if (selectedDirection === 0) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 3:
             store.set("localWeb3Network", "Ropsten")
-            if (bridge !== "ETH_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { 
-                store.set("selectedBridge", "ETH_ELA_TESTNET")    
+            if (bridge !== "ETH_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") {
+                store.set("selectedBridge", "ETH_ELA_TESTNET")
                 switchOriginChain(selectedDirection)
                 return
             }
@@ -603,39 +664,52 @@ export const setBridgeDirection = async function(netId: number) {
             break
         case 20:
             store.set("localWeb3Network", "Elastos")
-            if (bridge !== "ETH_ELA" && bridge !== "HT_ELA") { 
-                store.set("selectedBridge", "ETH_ELA")   
+            if (bridge !== "ETH_ELA" && bridge !== "HT_ELA") {
+                store.set("selectedBridge", "ETH_ELA")
                 switchOriginChain(selectedDirection)
-                return 
+                return
             }
             if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 21:
             store.set("localWeb3Network", "Elastos Testnet")
-            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_ELA_TESTNET") { 
-                store.set("selectedBridge", "ETH_ELA_TESTNET")   
+            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_ELA_TESTNET") {
+                store.set("selectedBridge", "ETH_ELA_TESTNET")
                 switchOriginChain(selectedDirection)
-                return 
+                return
             }
             if (selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
-        case 128:
-            store.set("localWeb3Network", "Heco (Huobi)")
-            if (bridge !== "HT_ELA" && bridge !== "ETH_HT") { 
-                store.set("selectedBridge", "HT_ELA")
+        case 56:
+            store.set("localWeb3Network", "Binance")
+            if (bridge !== "BNB_HT") {
+                store.set("selectedBridge", "BNB_HT")
                 switchOriginChain(selectedDirection)
                 return
             }
+            if (selectedDirection === 0) { fetchTokenBalance(token); return }
+            switchOriginChain(selectedDirection)
+            break
+        case 128:
+            store.set("localWeb3Network", "Heco (Huobi)")
+            if (bridge !== "HT_ELA" && bridge !== "ETH_HT" && bridge !== "BNB_HT") {
+                store.set("selectedBridge", "BNB_HT")
+                switchOriginChain(selectedDirection)
+                return
+            }
+            console.log(bridge)
+            console.log(selectedDirection)
+            if (bridge === "BNB_HT" && selectedDirection === 1) { fetchTokenBalance(token); return }
             if (bridge === "HT_ELA" && selectedDirection === 0) { fetchTokenBalance(token); return }
             if (bridge === "ETH_HT" && selectedDirection === 1) { fetchTokenBalance(token); return }
             switchOriginChain(selectedDirection)
             break
         case 256:
             store.set("localWeb3Network", "Heco (Huobi) Testnet")
-            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") { 
-                store.set("selectedBridge", "HT_ELA_TESTNET")    
+            if (bridge !== "HT_ELA_TESTNET" && bridge !== "ETH_HT_TESTNET") {
+                store.set("selectedBridge", "HT_ELA_TESTNET")
                 switchOriginChain(selectedDirection)
                 return
             }

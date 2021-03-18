@@ -10,8 +10,9 @@ import { switchOriginChain } from "../bridges/EVM/utils/txUtils";
 import ETH from "../assets/eth.png";
 import ELA from "../assets/ela.png";
 import HT from "../assets/ht.png";
+import BNB from "../assets/bnb.png";
 
-const SUPPORTED_MAINNETS = ["HT_ELA", "ETH_ELA", "ETH_HT"];
+const SUPPORTED_MAINNETS = ["BNB_HT", "HT_ELA", "ETH_ELA", "ETH_HT"];
 
 const SUPPORTED_TESTNETS = [
   "HT_ELA_TESTNET",
@@ -20,6 +21,7 @@ const SUPPORTED_TESTNETS = [
 ];
 
 const BRIDGE_ICONS: any = {
+  BNB_HT: [BNB, HT],
   ETH_ELA: [ETH, ELA],
   HT_ELA: [HT, ELA],
   ETH_HT: [ETH, HT],
@@ -30,6 +32,8 @@ const BRIDGE_ICONS: any = {
 
 const codeToBridge = (code: any) => {
   switch (code) {
+    case "BNB_HT":
+      return ["Binance", "Heco (Huobi)"];
     case "ETH_ELA":
       return ["Ethereum", "Elastos"];
     case "HT_ELA":
@@ -44,6 +48,30 @@ const codeToBridge = (code: any) => {
       return ["Heco (Huobi) Testnet", "Elastos Testnet"];
     default:
       return ["Ethereum", "Elastos"];
+  }
+};
+
+const setBackground = (background: any) => {
+  document.body.style.backgroundImage = `linear-gradient(${background[0]}deg, ${background[1]} ${background[2]}, ${background[3]} ${background[4]})`;
+};
+
+const switchPageColor = (code: string) => {
+  switch (code) {
+    case "BNB_HT":
+      setBackground(["315", "#404026", "0%", "#192334", "75%"]);
+      break;
+    case "ETH_ELA":
+      setBackground(["155", "#131820", "20%", "#1d3026", "100%"]);
+      break;
+    case "HT_ELA":
+      setBackground(["330", "#402640", "0%", "#1d2130", "80%"]);
+      break;
+    case "ETH_HT":
+      setBackground(["115", "#263040", "0%", "#2c2123", "80%"]);
+      break;
+    default:
+      setBackground(["115", "#131339", "0%", "#2c2621", "80%"]);
+      break;
   }
 };
 
@@ -82,6 +110,7 @@ const BridgeSelect = ({ isVisible, store }: any) => {
                         selectedDirection,
                         codeToBridge(bridge)[0]
                       );
+                      switchPageColor(bridge);
                       store.set("bridgesOpen", false);
                       if (bridge === "ETH_HT") {
                         store.set("hecoDisclaimer", true);

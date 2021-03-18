@@ -17,6 +17,8 @@ const styles: Styles<typeof theme, any> = (theme) => ({
   container: {
     textAlign: "center",
     background: "rgb(32,32,32)",
+    boxShadow:
+      "8px 8px 8px 0 rgb(0 0 0 / 20%), -4px -4px 4px 0 rgb(0 0 0 / 5%)",
     borderRadius: "30px",
     width: 500,
     margin: "0px auto " + theme.spacing(1) + "px",

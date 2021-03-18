@@ -22,7 +22,7 @@ export const ELA_HT = {
         networkID: 20,
         address: '',
         confirmations: ELA_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_HOME,
+        fee: AMB_NATIVE_ERC_FEE_FOREIGN,
     },
     home: 1,
     foreign: 0,
