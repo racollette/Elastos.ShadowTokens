@@ -1,11 +1,11 @@
 {
   "About.Title": "ShadowTokens",
-  "About.Message": "基于POA Token Bridge协议在以太坊与亦来云之间实现加密资产映射的跨链桥.",
+  "About.Message": "基于POA Token Bridge协议在以太坊与亦来云之间实现加密资产映射的跨链桥。",
   "About.Copyright": "@2020 ElaBank",
 
-  "Nav.About": "About",
-  "Nav.Docs": "Docs",
-  "Nav.Code": "Code",
+  "Nav.About": "关于",
+  "Nav.Docs": "文档",
+  "Nav.Code": "代码",
   "Nav.Connect": "连接钱包",
   "Nav.Bridge": "选择跨链桥",
   "Nav.Approve": "批准",
@@ -74,7 +74,7 @@
   "Waiting.Confirm": "授权合约操作",
   "Waiting.User": "正在等待用户回应...",
   "Waiting.SpendApproved1": "花费",
-  "Waiting.SpendApproved2": "已授权.",
+  "Waiting.SpendApproved2": "已授权。",
   "Waiting.Confirmations": "正在等待区块确认",
 
   "Progress.Success": "成功",
@@ -86,9 +86,9 @@
   "Progress.Blocks": "等待区块链确认",
   "Progress.Oracles": "见证人正在验证交易",
   "Progress.Busy.Title": "网络拥塞",
-  "Progress.Busy.Message": "转移所需时间比预期更长。 请在区块浏览器查看以确认.",
+  "Progress.Busy.Message": "转移所需时间比预期更长。 请在区块浏览器查看以确认。",
   "Progress.Error.Title": "网络错误",
-  "Progress.Error.Message": "查询状态时发生错误。 您的资金仍会到达，请检查区块浏览器进行确认.",
+  "Progress.Error.Message": "查询状态时发生错误。 您的资金仍会到达，请检查区块浏览器进行确认。",
   "Progress.Accept": "好的",
 
   "Warning.Title": "Heco Bridge免责声明",
@@ -126,7 +126,7 @@
   "Sidechain.Deposit.Instructions.Step4-1": "3. 通过分类账设备或密码确认交易",
 
   "Sidechain.Deposit.Renewal.Waiting": "等待充值",
-  "Sidechain.Deposit.Renewal.Timeout": "未收到您的ELA。如果您已经转账，请加入Telegram组并联系管理员进行处理",
+  "Sidechain.Deposit.Renewal.Timeout": "未收到您的ELA。如果您已经转账，请加入电报组并联系管理员进行处理",
   "Sidechain.Deposit.Transferring": "您充值的ELA已经收到，正在转移到侧链",
   "Sidechain.Deposit.Direct.Transfer.Finish": "跨链转账完成",
 
