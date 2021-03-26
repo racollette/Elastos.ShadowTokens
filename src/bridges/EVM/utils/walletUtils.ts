@@ -87,7 +87,7 @@ export const initLocalWeb3 = async function(type?: any) {
                     3: SUPPORTED_RPC_URLS["Ropsten"],
                     20: SUPPORTED_RPC_URLS["Elastos"],
                     21: SUPPORTED_RPC_URLS["Elastos Testnet"], // "https://rpc.elaeth.io",
-                    56: SUPPORTED_RPC_URLS["Binance"],
+                    56: SUPPORTED_RPC_URLS["BSC (Binance)"],
                     128: SUPPORTED_RPC_URLS["Heco (Huobi)"],
                     256: SUPPORTED_RPC_URLS["Heco (Huobi) Testnet"],
                 }
@@ -339,7 +339,7 @@ export const getDefaultTokens = (network: string) => {
             } else {
                 return HT_ELA_DEV_DEFAULTS
             }
-        case 'Binance':
+        case 'BSC (Binance)':
             if (bridge === "BNB_HT") {
                 return BNB_HT_DEFAULTS
             } else if (bridge === "HT_BNB") {
@@ -357,7 +357,7 @@ const detectBridgedToken = (name: string, symbol: string) => {
     const ela = name.includes('on Elastos')
     const eth = name.includes('on Ethereum')
     const ht = name.includes('on Heco (Huobi)')
-    const bnb = name.includes('on Binance')
+    const bnb = name.includes('on BSC (Binance)')
 
     if (prefix || ela || eth || ht || bnb) return true
     return false
@@ -452,7 +452,7 @@ const getDestToken = (data: string, home: number, type: 'name' | 'symbol' | 'id'
                 if (home === 1) {
                     return `${data} on Heco (Huobi)`
                 }
-                return `${data} on Binance`
+                return `${data} on BSC (Binance)`
             case 'symbol':
                 if (alreadyBridged) return data.slice(3)
                 if (home === 0) {
@@ -626,7 +626,7 @@ const getPairNetwork = (networkID: number, type: 'id' | 'name') => {
                 return 'Heco (Huobi)'
             case 128:
                 if (type === 'id') return 56
-                return 'Binance'
+                return 'BSC (Binance)'
         }
     }
 }
@@ -683,7 +683,7 @@ export const setBridgeDirection = async function(netId: number) {
             switchOriginChain(selectedDirection)
             break
         case 56:
-            store.set("localWeb3Network", "Binance")
+            store.set("localWeb3Network", "BSC (Binance)")
             if (bridge !== "BNB_HT") {
                 store.set("selectedBridge", "BNB_HT")
                 switchOriginChain(selectedDirection)

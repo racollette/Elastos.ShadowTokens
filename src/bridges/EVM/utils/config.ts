@@ -1,7 +1,7 @@
 import MetaMask from "../../../assets/metamask-fox.svg";
 import Elaphant from "../../../assets/elaphant.png";
 import WalletConnect from "../../../assets/walletconnect.svg";
-import { BNB_HT_DEFAULTS } from '../tokens'
+import { HT_ELA_DEFAULTS } from '../tokens'
 
 export const VALIDATOR_TIMEOUT = 300000 // Milliseconds
 export const PREAUTHORIZE_AMOUNT = 1000000 // Tokens
@@ -17,7 +17,7 @@ export const SUPPORTED_NETWORK_IDS: { [key in number]: string } = {
     3: 'Ropsten',
     20: 'Elastos',
     21: 'Elastos Testnet',
-    56: 'Binance',
+    56: 'BSC (Binance)',
     128: 'Heco (Huobi)',
     256: 'Heco (Huobi) Testnet',
 }
@@ -27,9 +27,9 @@ export const EXPLORER_URLS: { [key in string]: string } = {
     "Ropsten": "https://ropsten.etherscan.io",
     "Elastos": "https://explorer.elaeth.io",
     "Elastos Testnet": "https://testnet.elaeth.io",
-    "Binance": "https://bscscan.com/",
-    "Heco (Huobi)": "https://scan.hecochain.com",
-    "Heco (Huobi) Testnet": "https://scan-testnet.hecochain.com"
+    "BSC (Binance)": "https://bscscan.com/",
+    "Heco (Huobi)": "https://hecoinfo.com",
+    "Heco (Huobi) Testnet": "https://testnet.hecoinfo.com"
 }
 
 export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
@@ -37,7 +37,7 @@ export const SUPPORTED_RPC_URLS: { [key in string]: string } = {
     'Ropsten': `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     'Elastos': "https://api.elastos.io/eth", // "https://escrpc.elaphant.app", //  // https://mainrpc.elaeth.io
     'Elastos Testnet': "https://rpc.elaeth.io",
-    "Binance": "https://bsc-dataseed.binance.org",
+    "BSC (Binance)": "https://bsc-dataseed.binance.org",
     "Heco (Huobi)": "https://http-mainnet.hecochain.com",
     "Heco (Huobi) Testnet": "https://http-testnet.hecochain.com",
 }
@@ -55,13 +55,13 @@ export const INITIAL_STATE = {
     selectedWalletType: "MetaMask",
 
     // bridge selection
-    selectedBridge: "BNB_HT",
+    selectedBridge: "HT_ELA",
     // selectedPair: "ela",
     confirmBridge: false,
 
     // token
-    token: BNB_HT_DEFAULTS[0],
-    tokenList: BNB_HT_DEFAULTS,
+    token: HT_ELA_DEFAULTS[0],
+    tokenList: HT_ELA_DEFAULTS,
 
     // modals
     bridgesOpen: false,

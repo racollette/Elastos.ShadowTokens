@@ -29,7 +29,7 @@ import { USDT_HT } from './ETH_HT/USDT'
 import { USDC_HT } from './ETH_HT/USDC'
 // import { HFIL_HT } from './ETH_HT/HFIL_HT'
 
-// Binance to Heco (Huobi) Bridge
+// BSC (Binance) to Heco (Huobi) Bridge
 import { BNB_HT } from './BNB_HT/BNB'
 import { HT_BNB } from './BNB_HT/HT'
 import { FILDA_BNB } from './BNB_HT/FILDA'
@@ -151,7 +151,7 @@ export const HT_ETH_DEV_DEFAULTS = [
 ]
 
 ////////////////////////////////////////////////
-////////// Binance and Heco (Huobi)  ///////////
+////////// BSC (Binance) and Heco (Huobi)  ///////////
 ////////////////////////////////////////////////
 
 export const BNB_HT_DEFAULTS = [

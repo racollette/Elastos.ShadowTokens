@@ -12,7 +12,7 @@ import ELA from "../assets/ela.png";
 import HT from "../assets/ht.png";
 import BNB from "../assets/bnb.png";
 
-const SUPPORTED_MAINNETS = ["BNB_HT", "HT_ELA", "ETH_ELA", "ETH_HT"];
+const SUPPORTED_MAINNETS = ["HT_ELA", "BNB_HT", "ETH_ELA", "ETH_HT"];
 
 const SUPPORTED_TESTNETS = [
   "HT_ELA_TESTNET",
@@ -33,7 +33,7 @@ const BRIDGE_ICONS: any = {
 const codeToBridge = (code: any) => {
   switch (code) {
     case "BNB_HT":
-      return ["Binance", "Heco (Huobi)"];
+      return ["BSC (Binance)", "Heco (Huobi)"];
     case "ETH_ELA":
       return ["Ethereum", "Elastos"];
     case "HT_ELA":

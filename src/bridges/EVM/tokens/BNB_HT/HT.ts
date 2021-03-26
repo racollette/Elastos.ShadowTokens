@@ -4,10 +4,10 @@ import HT_ICON from "../../../../assets/ht.png"
 export const HT_BNB = {
     0: {
         symbol: 'HT',
-        name: 'HT on Binance',
+        name: 'HT on BSC (Binance)',
         id: 'bnbht',
         transferType: 'release',
-        network: 'Binance',
+        network: 'BSC (Binance)',
         networkID: 56,
         address: '0xad93dB5adEc663FC1D683A7982c621e217017cB2',
         confirmations: BNB_CONFIRMATIONS,

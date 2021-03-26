@@ -4,10 +4,10 @@ import BNB_ICON from "../../../../assets/bnb.png"
 export const BNB_HT = {
     0: {
         symbol: 'BNB',
-        name: 'Binance Coin',
+        name: 'BSC (Binance) Coin',
         id: 'bnb',
         transferType: 'mint',
-        network: 'Binance',
+        network: 'BSC (Binance)',
         networkID: 56,
         address: '',
         confirmations: BNB_CONFIRMATIONS,

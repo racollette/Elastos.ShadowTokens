@@ -4,10 +4,10 @@ import FILDA_ICON from "../../../../assets/filda.png"
 export const FILDA_BNB = {
     0: {
         symbol: 'htFILDA',
-        name: 'FILDA on Binance',
+        name: 'FILDA on BSC (Binance)',
         id: 'htfilda',
         transferType: 'release',
-        network: 'Binance',
+        network: 'BSC (Binance)',
         networkID: 56,
         address: '0x8b45796da30a87d8459e1b16fbf106b664ee01e1',
         confirmations: BNB_CONFIRMATIONS,

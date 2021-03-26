@@ -13,7 +13,7 @@ export const BRIDGE_NAME_MAP: { [key in string]: string } = {
     ela: "Elastos",
     eth: "Ethereum",
     ht: "Heco (Huobi)",
-    bnb: "Binance"
+    bnb: "BSC (Binance)"
 }
 
 export const BRIDGE_ICON_MAP: { [key in string]: string } = {
