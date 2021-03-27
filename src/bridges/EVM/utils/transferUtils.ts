@@ -71,8 +71,8 @@ export const nativeTransfer = async function(confirmTx: any, contracts: any, gas
     const minTx = await contracts.sourceMediator.methods.minPerTx().call()
     const maxTx = await contracts.sourceMediator.methods.maxPerTx().call()
     // console.log(dailyLimit)
-    // console.log("minTx", minTx)
-    // console.log("maxTx", maxTx)
+    console.log("minTx", minTx/(Math.pow(10, 18)))
+    console.log("maxTx", maxTx)
 
     if (confirmTx.type === 'mint') {
 

@@ -131,6 +131,8 @@
   "Sidechain.Deposit.Direct.Transfer.Finish": "跨链转账完成",
 
   "Sidechain.Withdraw": "提款",
+  "Sidechain.Withdraw.Warning": "警告",
+  "Sidechain.Withdraw.Warning.Message": "请勿直接将资金提取到交易所的存款地址。他们可能会阻止它。首先将现金提取到您的个人钱包中，然后转移到交易所。",
   "Sidechain.Withdraw.Input.Address": "主链地址或者CryptoName",
   "Sidechain.Withdraw.Waiting": "等待提款",
   "Sidechain.Withdraw.Confirming": "等待区块确认",

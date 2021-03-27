@@ -131,6 +131,8 @@
   "Sidechain.Deposit.Transfer.Finish": "Deposit completed",
 
   "Sidechain.Withdraw": "Withdraw",
+  "Sidechain.Withdraw.Warning": "Warning",
+  "Sidechain.Withdraw.Warning.Message": "Do not withdraw directly to an exchange deposit address. They may block it. Withdraw to a personal wallet first and then transfer to the exchange.",
   "Sidechain.Withdraw.Input.Address": "Mainchain Address or CryptoName",
   "Sidechain.Withdraw.Waiting": "Monitoring for Withdrawal",
   "Sidechain.Withdraw.Confirming": "Waiting for Block Confirmations",

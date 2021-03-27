@@ -121,6 +121,16 @@ const styles = () => ({
   green: {
     color: theme.palette.success.light,
   },
+  warn: {
+    fontSize: "0.85rem",
+    fontStyle: "italic",
+    marginLeft: "10px",
+    marginRight: "10px",
+    marginTop: "10px",
+  },
+  red: {
+    color: theme.palette.secondary.main,
+  }
 });
 
 interface TabPanelProps {
@@ -804,6 +814,7 @@ const Sidechain: React.FC<Props> = function (props) {
                       </Grid>
                     </Grid>
                   </Grid>
+                  <Typography className={classes.warn}><span className={classes.red}>{t("Sidechain.Withdraw.Warning")}:</span> {t("Sidechain.Withdraw.Warning.Message")}</Typography>
                   <Grid item xs={12} className={classes.statusBox}>
                     <Grid item>
                       <Typography className={classes.step}>
