@@ -17,6 +17,8 @@ import { ELA_DEV } from './ETH_ELA_TESTNET/ELA_DEV'
 // Heco (Huobi) to Elastos Bridge
 import { HT_ELA } from './HT_ELA/HT'
 import { ELA_HT } from './HT_ELA/ELA'
+import { FILDA_ELA } from './HT_ELA/FILDA'
+
 // Dev imports
 import { HT_DEV_ELA } from './HT_ELA_TESTNET/HT_DEV'
 import { ELA_DEV_HT } from './HT_ELA_TESTNET/ELA_DEV'
@@ -92,11 +94,13 @@ export const ELA_DEV_DEFAULTS = [
 export const HT_ELA_DEFAULTS = [
     HT_ELA,
     ELA_HT,
+    FILDA_ELA,
 ]
 
 export const ELA_HT_DEFAULTS = [
     ELA_HT,
     HT_ELA,
+    FILDA_ELA,
 ]
 
 ////////////////////////////////////////////////

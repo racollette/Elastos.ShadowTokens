@@ -1,21 +1,21 @@
-import { BNB_CONFIRMATIONS, HT_CONFIRMATIONS, BNB_HT_AMB_NATIVE_ERC_MIN_TX, BNB_HT_AMB_NATIVE_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_FOREIGN, MULTI_AMB_ERC_ERC_FEE_HOME } from '../config';
+import { ELA_CONFIRMATIONS, HT_CONFIRMATIONS, ELA_HT_AMB_NATIVE_ERC_MIN_TX, ELA_HT_AMB_NATIVE_ERC_MAX_TX, MULTI_AMB_ERC_ERC_FEE_FOREIGN, MULTI_AMB_ERC_ERC_FEE_HOME } from '../config';
 import FILDA_ICON from "../../../../assets/filda.png"
 
-export const FILDA_BNB = {
-    0: {
+export const FILDA_ELA = {
+    1: {
         symbol: 'htFILDA',
-        name: 'FILDA on BSC (Binance)',
+        name: 'FILDA on Heco on Elastos',
         id: 'htfilda',
         transferType: 'release',
-        network: 'BSC (Binance)',
-        networkID: 56,
-        address: '0x8b45796da30a87d8459e1b16fbf106b664ee01e1',
-        confirmations: BNB_CONFIRMATIONS,
+        network: 'Elastos',
+        networkID: 20,
+        address: '0xb9ae03e3320235d3a8ae537f87ff8529b445b590',
+        confirmations: ELA_CONFIRMATIONS,
         fee: MULTI_AMB_ERC_ERC_FEE_FOREIGN,
     },
-    1: {
+    0: {
         symbol: 'FILDA',
-        name: 'FILDA',
+        name: 'FILDA on Heco',
         id: 'filda',
         transferType: 'mint',
         network: 'Heco (Huobi)',
@@ -24,13 +24,13 @@ export const FILDA_BNB = {
         confirmations: HT_CONFIRMATIONS,
         fee: MULTI_AMB_ERC_ERC_FEE_HOME,
     },
-    home: 1,
-    foreign: 0,
+    home: 0,
+    foreign: 1,
     icon: FILDA_ICON,
     bridgeMode: 'multi_amb_erc_erc',
     decimals: 18,
-    minTx: BNB_HT_AMB_NATIVE_ERC_MIN_TX,
-    maxTx: BNB_HT_AMB_NATIVE_ERC_MAX_TX,
+    minTx: ELA_HT_AMB_NATIVE_ERC_MIN_TX,
+    maxTx: ELA_HT_AMB_NATIVE_ERC_MAX_TX,
     priceTicker: 'filda',
     priceFeed: '',
 }

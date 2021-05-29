@@ -11,7 +11,7 @@ export const ETH = {
         networkID: 1,
         address: '',
         confirmations: ETH_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_HOME,
+        fee: 1,
     },
     1: {
         symbol: 'ETH',
@@ -22,7 +22,7 @@ export const ETH = {
         networkID: 20,
         address: '0x802c3e839e4fdb10af583e3e759239ec7703501e',
         confirmations: ELA_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_FOREIGN,
+        fee: 1,
     },
     home: 0,
     foreign: 1,
