@@ -11,7 +11,7 @@ export const ELA_HT = {
         networkID: 128,
         address: '0xa1ecFc2beC06E4b43dDd423b94Fef84d0dBc8F5c',
         confirmations: HT_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_FOREIGN,
+        fee: 0.1,
     },
     1: {
         symbol: 'ELA',
@@ -22,7 +22,7 @@ export const ELA_HT = {
         networkID: 20,
         address: '',
         confirmations: ELA_CONFIRMATIONS,
-        fee: AMB_NATIVE_ERC_FEE_FOREIGN,
+        fee: 0.1,
     },
     home: 1,
     foreign: 0,
